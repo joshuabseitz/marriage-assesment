@@ -1,16 +1,5 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
-  ],
   "rewrites": [
-    {
-      "source": "/api/(.*)",
-      "destination": "/server.js"
-    },
     {
       "source": "/signup",
       "destination": "/signup.html"
@@ -46,13 +35,26 @@
     {
       "source": "/page:number",
       "destination": "/page:number.html"
-    },
-    {
-      "source": "/",
-      "destination": "/index.html"
     }
   ],
   "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    },
     {
       "source": "/(.*)",
       "headers": [
@@ -71,15 +73,11 @@
       ]
     },
     {
-      "source": "/lib/(.*)",
+      "source": "/lib/(.*)\\.js",
       "headers": [
         {
           "key": "Content-Type",
           "value": "application/javascript; charset=utf-8"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
         }
       ]
     },
