@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYMBIS Report - Page 11: Attitude</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase for authentication -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/auth-check.js"></script>
+  <script src="/navigation.js"></script>
+  <script src="/status-manager.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --symbis-red: #E54D42;
+            --symbis-teal: #4FB8B1;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e5e7eb;
+            color: #333;
+        }
+        .report-container {
+            max-width: 950px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .header-rule {
+            border-bottom: 2px dashed #d1d5db;
+            margin: 1.5rem 0;
+        }
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        .nav-button {
+            transition: all 0.2s ease;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .resilience-circle {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+    </style>
+</head>
+<body class="p-0 sm:p-4">
+    <!-- Navigation Bar -->
+    <div id="symbis-navigation"></div>
+
+    <div class="report-container p-8 sm:p-14">
+        <!-- Navigation -->
+        <div class="flex justify-between items-center mb-6">
+            <a href="page10" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">← Previous</a>
+            <span class="text-gray-400 text-sm font-bold">Page 11</span>
+            <a href="page12" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">Next →</a>
+        </div>
+
+        <!-- Header -->
+        <section class="mb-10">
+            <div class="flex items-start gap-6">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-[#4FB8B1] rounded-xl flex items-center justify-center">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 3v18m-9-9h18"/>
+                            <circle cx="12" cy="12" r="9"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-2">DYNAMICS: ATTITUDE</h1>
+                    <p class="text-gray-600 italic text-[15px] leading-relaxed">
+                        Marriage was never intended to make you happy–you make your marriage happy. How? It all comes down to attitude and adaptability, in other words, your ability to adjust to things outside your control.
+                    </p>
+                </div>
+            </div>
+            <div class="header-rule"></div>
+        </section>
+
+        <!-- Resilience Scores -->
+        <div class="mb-12">
+            <p class="text-center text-gray-600 italic mb-8 text-sm">
+                The percentages depict how optimistic, adaptable and resilient you are when faced with a challenge.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-12 max-w-3xl mx-auto mb-12">
+                <!-- Toni -->
+                <div class="text-center">
+                    <div class="resilience-circle mx-auto mb-6" style="background: conic-gradient(#E88B88 0% 72%, #e5e7eb 72% 100%);">
+                        <div class="bg-white rounded-full w-[160px] h-[160px] flex flex-col items-center justify-center">
+                            <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-16 h-16 rounded-full border-4 border-[#E88B88] object-cover mb-2">
+                            <div class="text-5xl font-black text-[#E88B88]" style="font-family: 'Montserrat', sans-serif;">72%</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-700 leading-relaxed">
+                        Maintaining resilience can be challenging for you. When faced with an unforeseen difficulty, you occasionally struggle to maintain an up-beat attitude. Worry can sometimes get the best of you and your attitude.
+                    </div>
+                </div>
+
+                <!-- Chris -->
+                <div class="text-center">
+                    <div class="resilience-circle mx-auto mb-6" style="background: conic-gradient(#4FB8B1 0% 80%, #e5e7eb 80% 100%);">
+                        <div class="bg-white rounded-full w-[160px] h-[160px] flex flex-col items-center justify-center">
+                            <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-16 h-16 rounded-full border-4 border-[#4FB8B1] object-cover mb-2">
+                            <div class="text-5xl font-black text-[#4FB8B1]" style="font-family: 'Montserrat', sans-serif;">80%</div>
+                        </div>
+                    </div>
+                    <div class="text-sm text-gray-700 leading-relaxed">
+                        Your resilience level is high. Relative to others, you are an optimistic person and you generally do a good job of adjusting to circumstances beyond your control. You're generally up-beat and positive.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Box -->
+            <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg flex gap-4">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                        What do you think about your results? What about your partner's? In specific terms, how will the two of you adjust to an unfavorable circumstance? Real life examples?
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- You at Your Best -->
+        <div class="mb-12">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-8" style="font-family: 'Montserrat', sans-serif;">
+                You at Your Best When Facing a Challenge
+            </h2>
+            <p class="text-center text-sm text-gray-600 italic mb-8">
+                Based on your personality profiles, here are your most constructive natural coping tendencies when life becomes demanding.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Cooperating Spouse -->
+                <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-8 border-2 border-red-200">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-16 h-16 rounded-full border-4 border-white object-cover shadow-md">
+                        <div>
+                            <h3 class="text-lg font-black text-[#E54D42] uppercase">Cooperating</h3>
+                            <h4 class="text-lg font-black text-[#E54D42] uppercase">Spouse</h4>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span><strong>PATIENT</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span><strong>DIPLOMATIC</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span><strong>STEADY</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span><strong>METHODICAL</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span><strong>DEPENDABLE</strong></span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Affirming Spouse -->
+                <div class="bg-gradient-to-br from-teal-50 to-blue-50 rounded-xl p-8 border-2 border-teal-200">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-16 h-16 rounded-full border-4 border-white object-cover shadow-md">
+                        <div>
+                            <h3 class="text-lg font-black text-[#4FB8B1] uppercase">Affirming</h3>
+                            <h4 class="text-lg font-black text-[#4FB8B1] uppercase">Spouse</h4>
+                        </div>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span><strong>POSITIVE</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span><strong>UPBEAT</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span><strong>ENCOURAGING</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span><strong>RESPECTFUL</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span><strong>EASY-GOING</strong></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Under Stress -->
+        <div class="mb-10">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-8" style="font-family: 'Montserrat', sans-serif;">
+                How Your Partner May Perceive You Under Stress
+            </h2>
+
+            <div class="bg-gradient-to-r from-red-100 via-white to-blue-100 rounded-xl p-8">
+                <div class="flex items-center justify-center gap-12">
+                    <div class="flex-1 text-right">
+                        <div class="space-y-2 text-sm font-bold text-red-700">
+                            <div>FEARFUL</div>
+                            <div>HESITANT</div>
+                            <div>INTIMIDATED</div>
+                        </div>
+                    </div>
+                    <div class="flex-shrink-0">
+                        <div class="w-20 h-20 bg-gray-700 rounded-full flex items-center justify-center">
+                            <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M12 2L14 8L12 14L10 8Z"/>
+                                <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex-1">
+                        <div class="space-y-2 text-sm font-bold text-blue-700">
+                            <div>TALKATIVE</div>
+                            <div>POOR LISTENER</div>
+                            <div>SELF-PROMOTER</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Question -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-8 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    What do you agree or disagree with? Why? Think of a real life scenario where you saw this to be true. What could you have done to be easier to live with?
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-8 border-t border-gray-100">
+            <div class="flex flex-col sm:flex-row justify-between items-center text-[13px] text-gray-500">
+                <div class="italic mb-4 sm:mb-0">
+                    Refer to Chapter 3 of SYMBIS: "Have You Developed the Habit of Happiness?"
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="logo-text text-gray-800 text-3xl">SYMBIS</span>
+                    <span class="text-[var(--symbis-red)] text-2xl font-black mb-1 mx-0.5">♥</span>
+                    <span class="text-gray-400 font-black text-[11px] mt-2 tracking-[0.2em]">ASSESSMENT</span>
+                    <span class="ml-6 text-gray-800 text-3xl font-black">11</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+  <script src="/report-renderer.js"></script>
+  <!-- Report Navigation -->
+  <div id="report-navigation"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof SymbisNav !== 'undefined') {
+        SymbisNav.init('report', 11);
+      }
+    });
+  </script>
+</body>
+</html>
+

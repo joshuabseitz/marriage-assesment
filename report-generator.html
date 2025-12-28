@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate SYMBIS Report</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/lib/responses-api-browser.js"></script>
+  <script src="/lib/partnerships-api-browser.js"></script>
+  <script src="/lib/reports-api-browser.js"></script>
+  <script src="/auth-check.js"></script>
+  <script src="/navigation.js"></script>
+  <style>
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="bg-[#fcfaf8]">
+  <div id="app">
+    <!-- Initial loading state -->
+    <div class="min-h-screen flex items-center justify-center">
+      <div class="text-center">
+        <div class="spinner w-12 h-12 border-4 border-slate-900 border-t-transparent rounded-full mx-auto mb-4"></div>
+        <p class="text-slate-600">Loading report generator...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Note: All API functions will be loaded from separate script files
+    // requireAuth is in supabase-client-browser.js as window.supabaseAuth.requireAuth
+
+    let partnership = null;
+    let existingReport = null;
+    let currentStage = 0;
+
+    /**
+     * Wait for required APIs to load
+     */
+    async function waitForAPIs() {
+      const maxWait = 5000; // 5 seconds
+      const startTime = Date.now();
+      
+      while (!window.supabaseAuth || !window.partnershipsApi || !window.reportsApi) {
+        if (Date.now() - startTime > maxWait) {
+          throw new Error('Required APIs failed to load. Please refresh the page.');
+        }
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+
+    /**
+     * Render error state
+     */
+    function renderError(message) {
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        ${createNavBar()}
+        <div class="min-h-screen flex items-center justify-center p-4">
+          <div class="max-w-md text-center">
+            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h1 class="text-2xl font-bold mb-4 text-slate-900">Unable to Load</h1>
+            <p class="text-slate-600 mb-8">${message}</p>
+            <button onclick="window.location.reload()" 
+                    class="px-8 py-3 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition-all">
+              Refresh Page
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    async function init() {
+      try {
+        // Wait for APIs to load
+        await waitForAPIs();
+        
+        // Get current user (auth-check.js handles redirects for unauthenticated users)
+        const user = await window.supabaseAuth.getCurrentUser();
+        if (!user) {
+          // Show a message while redirect happens
+          renderError('Checking authentication...');
+          return;
+        }
+
+        // Load partnership and report data
+        await loadData();
+        render();
+      } catch (error) {
+        console.error('Initialization error:', error);
+        renderError(error.message || 'An unexpected error occurred.');
+      }
+    }
+
+    async function loadData() {
+      try {
+        partnership = await window.partnershipsApi.getAcceptedPartnership();
+        if (partnership) {
+          existingReport = await window.reportsApi.getPartnershipReport();
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
+        // Set defaults so the page can still render empty states
+        partnership = null;
+        existingReport = null;
+        throw error; // Re-throw to be caught by init()
+      }
+    }
+
+    function render() {
+      const app = document.getElementById('app');
+      
+      if (!partnership) {
+        app.innerHTML = renderNoPartnership();
+        return;
+      }
+
+      if (existingReport) {
+        app.innerHTML = renderExistingReport();
+        setupExistingReportListeners();
+        return;
+      }
+
+      app.innerHTML = renderGeneratorUI();
+      checkSurveyStatus();
+      setupGeneratorListeners();
+    }
+
+    function renderNoPartnership() {
+      return `
+        ${createNavBar()}
+        
+        <div class="min-h-screen flex flex-col items-center justify-center p-4">
+          <div class="max-w-md text-center">
+            <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
+            
+            <h1 class="text-3xl font-bold mb-4 text-slate-900">Connect With Your Partner</h1>
+            <p class="text-slate-600 mb-8">
+              You need to connect with your partner before generating a report. 
+              Search for them by email and send a connection request.
+            </p>
+            
+            <a href="/partner-connect" 
+               class="inline-block px-8 py-3 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition-all">
+              Find Your Partner
+            </a>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderExistingReport() {
+      return `
+        ${createNavBar()}
+        
+        <div class="min-h-screen flex flex-col items-center py-8 px-4">
+          <div class="max-w-3xl w-full">
+            <div class="text-center mb-8">
+              <div class="w-12 h-12 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              
+              <h1 class="text-3xl font-bold mb-3 text-slate-900">Report Available</h1>
+              <p class="text-slate-600 mb-2">
+                Your SYMBIS report has already been generated and is ready to view.
+              </p>
+              <p class="text-xs text-slate-500">
+                Generated ${new Date(existingReport.generated_at).toLocaleString()}
+              </p>
+            </div>
+
+            <!-- Partner Info -->
+            <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 p-6 mb-6">
+              <h2 class="text-xl font-bold text-slate-900 mb-4">Partnership</h2>
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center text-white font-bold">
+                  ${partnership.partner?.full_name?.charAt(0) || '?'}
+                </div>
+                <div>
+                  <p class="font-bold text-slate-900">${partnership.partner?.full_name || 'Partner'}</p>
+                  <p class="text-sm text-slate-600">${partnership.partner?.email}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button id="view-report-btn"
+                class="flex-1 px-8 py-3 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition-all">
+                View Report
+              </button>
+              <button id="download-json-btn"
+                class="px-8 py-3 rounded-xl bg-white text-slate-600 border-2 border-slate-200 font-bold hover:bg-slate-50 transition-all">
+                Download Data
+              </button>
+              <button id="regenerate-btn"
+                class="px-8 py-3 rounded-xl bg-white text-slate-600 border-2 border-slate-200 font-bold hover:bg-slate-50 transition-all">
+                Regenerate
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderGeneratorUI() {
+      return `
+        ${createNavBar()}
+        
+        <div class="min-h-screen flex flex-col items-center py-8 px-4">
+          <div class="max-w-3xl w-full">
+            
+            <!-- Header -->
+            <div class="text-center mb-8">
+              <div class="w-12 h-12 bg-slate-100 text-slate-900 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+              </div>
+              
+              <h1 class="text-3xl font-bold mb-3 text-slate-900">Generate Your Report</h1>
+              <p class="text-slate-600">
+                Your personalized SYMBIS assessment awaits. Check survey completion below.
+              </p>
+            </div>
+
+            <!-- Partner Info -->
+            <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 p-6 mb-6">
+              <h2 class="text-xl font-bold text-slate-900 mb-4">Partnership</h2>
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center text-white font-bold">
+                  ${partnership.partner?.full_name?.charAt(0) || '?'}
+                </div>
+                <div>
+                  <p class="font-bold text-slate-900">${partnership.partner?.full_name || 'Partner'}</p>
+                  <p class="text-sm text-slate-600">${partnership.partner?.email}</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Survey Status -->
+            <div id="status-container" class="mb-6">
+              <p class="text-center text-slate-500">Checking survey status...</p>
+            </div>
+
+            <!-- Generate Button -->
+            <div id="button-container" class="text-center">
+              <button id="generate-btn" disabled
+                class="px-8 py-3 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                Generate Your Report
+              </button>
+              <p class="text-xs text-slate-500 mt-2">Report generation takes 60-90 seconds</p>
+            </div>
+
+            <!-- Loading State -->
+            <div id="loading-state" class="hidden text-center">
+              <div class="spinner w-12 h-12 border-4 border-slate-900 border-t-transparent rounded-full mx-auto mb-4"></div>
+              <h3 class="text-2xl font-bold text-slate-900 mb-2">Generating Your Report...</h3>
+              <p class="text-slate-600 mb-6 pulse text-sm" id="loading-message">Multi-pass AI generation in progress...</p>
+              
+              <!-- Progress Bar -->
+              <div class="mb-6 max-w-md mx-auto">
+                <div class="flex justify-between mb-2">
+                  <span class="text-xs font-bold text-slate-700" id="current-stage">Extracting Data...</span>
+                  <span class="text-xs font-bold text-slate-700" id="progress-percent">0%</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                  <div id="progress-bar" class="bg-slate-900 h-2 transition-all duration-1000" style="width: 0%"></div>
+                </div>
+              </div>
+
+              <p class="text-slate-500 text-xs">Please don't close this page. This may take 60-90 seconds.</p>
+            </div>
+
+            <!-- Error State -->
+            <div id="error-state" class="hidden text-center">
+              <div class="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </div>
+              
+              <h1 class="text-2xl font-bold mb-3 text-slate-900">Generation Failed</h1>
+              <p class="text-slate-600 mb-8 text-sm" id="error-message">An error occurred. Please try again.</p>
+              
+              <button id="retry-btn"
+                class="px-8 py-3 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition-all">
+                Try Again
+              </button>
+            </div>
+
+            <footer class="mt-8 text-slate-300 text-xs font-bold uppercase tracking-wider text-center">
+              SYMBIS Journey
+            </footer>
+          </div>
+        </div>
+      `;
+    }
+
+    async function checkSurveyStatus() {
+      const statusContainer = document.getElementById('status-container');
+      const generateBtn = document.getElementById('generate-btn');
+
+      try {
+        const myComplete = await window.reportsApi.isSurveyComplete();
+        const partnerCount = await window.reportsApi.getResponseCountForUser(partnership.partner.id);
+        const partnerSurveyComplete = partnerCount >= 290;
+
+        statusContainer.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div class="p-4 border-2 rounded-xl ${myComplete ? 'border-green-400 bg-green-50' : 'border-amber-400 bg-amber-50'}">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-semibold text-slate-900">Your Survey</h3>
+                <div class="text-2xl">${myComplete ? '✅' : '⏳'}</div>
+              </div>
+              <p class="text-xs text-slate-600">${myComplete ? 'Complete!' : 'In progress'}</p>
+            </div>
+
+            <div class="p-4 border-2 rounded-xl ${partnerSurveyComplete ? 'border-green-400 bg-green-50' : 'border-amber-400 bg-amber-50'}">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-semibold text-slate-900">${partnership.partner?.full_name}'s Survey</h3>
+                <div class="text-2xl">${partnerSurveyComplete ? '✅' : '⏳'}</div>
+              </div>
+              <p class="text-xs text-slate-600">${partnerSurveyComplete ? 'Complete!' : `${partnerCount}/290 questions answered`}</p>
+            </div>
+          </div>
+        `;
+
+        if (myComplete && partnerSurveyComplete) {
+          generateBtn.disabled = false;
+        } else {
+          generateBtn.disabled = true;
+          generateBtn.textContent = 'Complete Both Surveys First';
+        }
+      } catch (error) {
+        statusContainer.innerHTML = `
+          <div class="p-4 border-2 border-red-200 bg-red-50 rounded-xl">
+            <p class="text-sm text-red-600">Error checking survey status: ${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function setupGeneratorListeners() {
+      document.getElementById('generate-btn').addEventListener('click', handleGenerate);
+    }
+
+    function setupExistingReportListeners() {
+      document.getElementById('view-report-btn').addEventListener('click', async () => {
+        await window.reportsApi.loadReportForRendering(existingReport.id);
+        window.location.href = '/index';
+      });
+
+      document.getElementById('download-json-btn').addEventListener('click', () => {
+        window.reportsApi.downloadReportJSON(existingReport.id);
+      });
+
+      document.getElementById('regenerate-btn').addEventListener('click', async () => {
+        if (confirm('Are you sure you want to regenerate the report? This will replace the existing report.')) {
+          // Delete existing report and regenerate
+          existingReport = null;
+          render();
+        }
+      });
+    }
+
+    async function handleGenerate() {
+      const buttonContainer = document.getElementById('button-container');
+      const loadingState = document.getElementById('loading-state');
+      const errorState = document.getElementById('error-state');
+
+      // Show loading
+      buttonContainer.classList.add('hidden');
+      loadingState.classList.remove('hidden');
+      errorState.classList.add('hidden');
+
+      try {
+        // Simulate multi-stage progress
+        updateProgress(0, 'Extracting Data...');
+        
+        await new Promise(resolve => setTimeout(resolve, 500));
+        updateProgress(25, 'Analyzing Personality...');
+        
+        // Call the API
+        const report = await window.reportsApi.generateAndSaveReport();
+        
+        updateProgress(50, 'Assessing Wellbeing...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        updateProgress(75, 'Evaluating Communication...');
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        updateProgress(100, 'Finalizing Report...');
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        // Load report for rendering and redirect
+        await window.reportsApi.loadReportForRendering(report.id);
+        window.location.href = '/index';
+
+      } catch (error) {
+        console.error('Generation error:', error);
+        loadingState.classList.add('hidden');
+        errorState.classList.remove('hidden');
+        document.getElementById('error-message').textContent = error.message || 'An error occurred. Please try again.';
+        
+        document.getElementById('retry-btn').addEventListener('click', () => {
+          errorState.classList.add('hidden');
+          buttonContainer.classList.remove('hidden');
+        });
+      }
+    }
+
+    function updateProgress(percent, stage) {
+      document.getElementById('progress-bar').style.width = `${percent}%`;
+      document.getElementById('progress-percent').textContent = `${percent}%`;
+      document.getElementById('current-stage').textContent = stage;
+    }
+
+    // Initialize
+    init();
+  </script>
+</body>
+</html>

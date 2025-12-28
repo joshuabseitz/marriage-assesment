@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - SYMBIS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/lib/demographics-api-browser.js"></script>
+  <script src="/lib/responses-api-browser.js"></script>
+  <script src="/lib/storage-api-browser.js"></script>
+  <script src="/navigation.js"></script>
+  <script src="/auth-check.js"></script>
+</head>
+<body class="bg-[#fcfaf8]">
+  <div id="app"></div>
+
+  <script>
+    // Note: Using global window.supabaseAuth instead of ES6 imports
+
+    async function init() {
+      // Check authentication
+      const user = await window.supabaseAuth.getCurrentUser();
+      if (!user) return;
+
+      // Load profile data
+      const profile = await window.supabaseAuth.getUserProfile();
+      const surveyProgress = await window.responsesApi.getSurveyProgress();
+      const partnership = await getAcceptedPartnership();
+
+      render(user, profile, surveyProgress, partnership);
+    }
+
+    // Helper function to get accepted partnership
+    async function getAcceptedPartnership() {
+      try {
+        const supabase = await window.supabaseAuth.getSupabase();
+        const user = await window.supabaseAuth.getCurrentUser();
+        if (!user) return null;
+
+        const { data, error } = await supabase
+          .from('partnerships')
+          .select('*')
+          .or(`user1_id.eq.${user.id},user2_id.eq.${user.id}`)
+          .eq('status', 'accepted')
+          .maybeSingle();
+
+        if (error) throw error;
+        
+        // Fetch partner profile separately
+        if (data) {
+          const partnerId = data.user1_id === user.id ? data.user2_id : data.user1_id;
+          const { data: partnerData, error: partnerError } = await supabase
+            .from('user_profiles')
+            .select('*')
+            .eq('id', partnerId)
+            .single();
+          
+          if (partnerError) throw partnerError;
+          return { ...data, partner: partnerData };
+        }
+        return null;
+      } catch (error) {
+        console.error('Error getting partnership:', error);
+        return null;
+      }
+    }
+
+    function render(user, profile, surveyProgress, partnership) {
+      const app = document.getElementById('app');
+      
+      app.innerHTML = `
+        ${createNavBar()}
+        
+        <div class="max-w-4xl mx-auto p-4 sm:p-8 pt-24">
+          <!-- Header -->
+          <div class="mb-8">
+            <h1 class="text-3xl font-bold text-slate-900 mb-2">My Profile</h1>
+            <p class="text-slate-600">Manage your account and survey progress</p>
+          </div>
+
+          <!-- Profile Card -->
+          <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 p-6 mb-6">
+            <div class="flex items-start justify-between mb-6">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900 mb-1">Account Information</h2>
+                <p class="text-sm text-slate-500">Your personal details</p>
+              </div>
+              <button onclick="editProfile()" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 border-2 border-slate-200 rounded-xl hover:border-slate-300 transition-colors">
+                Edit
+              </button>
+            </div>
+
+            <!-- Profile Picture Section -->
+            <div class="flex items-center gap-6 mb-6 pb-6 border-b border-slate-100">
+              <div class="relative">
+                <div id="profile-picture-container" class="w-24 h-24 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center">
+                  ${profile?.profile_picture_url ? `
+                    <img src="${profile.profile_picture_url}" alt="Profile" class="w-full h-full object-cover">
+                  ` : `
+                    <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  `}
+                </div>
+                <div id="upload-spinner" class="hidden absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
+                  <div class="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                </div>
+              </div>
+              <div class="flex-1">
+                <h3 class="text-sm font-bold text-slate-900 mb-2">Profile Picture</h3>
+                <div class="flex gap-2">
+                  <label class="px-4 py-2 text-sm font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 rounded-xl cursor-pointer transition-colors">
+                    ${profile?.profile_picture_url ? 'Change' : 'Upload'} Photo
+                    <input type="file" id="profile-picture-input" accept="image/*" class="hidden" onchange="handleProfilePictureUpload(event)">
+                  </label>
+                  ${profile?.profile_picture_url ? `
+                    <button onclick="handleDeleteProfilePicture()" class="px-4 py-2 text-sm font-bold text-red-600 hover:bg-red-50 border-2 border-red-200 rounded-xl transition-colors">
+                      Remove
+                    </button>
+                  ` : ''}
+                </div>
+                <p class="text-xs text-slate-500 mt-2">JPG, PNG or GIF. Max 5MB.</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Full Name</label>
+                <p id="profile-name" class="text-lg text-slate-900">${profile?.full_name || 'Not set'}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Email</label>
+                <p class="text-lg text-slate-900">${user.email}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Gender</label>
+                <p class="text-lg text-slate-900">${profile?.gender || 'Not set'}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Age</label>
+                <p class="text-lg text-slate-900">${profile?.age || 'Not set'}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Education</label>
+                <p class="text-lg text-slate-900">${profile?.education || 'Not set'}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Employment Status</label>
+                <p class="text-lg text-slate-900">${profile?.employment_status || 'Not set'}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Employment Category</label>
+                <p class="text-lg text-slate-900">${profile?.employment_category || 'Not set'}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Religious Affiliation</label>
+                <p class="text-lg text-slate-900">${profile?.religious_affiliation || 'Not set'}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Relationship Status</label>
+                <p class="text-lg text-slate-900">${profile?.relationship_status || 'Not set'}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Living Together</label>
+                <p class="text-lg text-slate-900">${profile?.living_together ? 'Yes' : 'No'}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Long Distance</label>
+                <p class="text-lg text-slate-900">${profile?.long_distance ? 'Yes' : 'No'}</p>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Demographics Complete</label>
+                <p class="text-lg ${profile?.demographics_complete ? 'text-green-600' : 'text-amber-600'} font-bold">
+                  ${profile?.demographics_complete ? '✓ Complete' : '⚠ Incomplete'}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Survey Progress Card -->
+          <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 p-6 mb-6">
+            <div class="flex items-start justify-between mb-4">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900 mb-1">Survey Progress</h2>
+                <p class="text-sm text-slate-500">Your assessment completion status</p>
+              </div>
+              <a href="/survey" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 border-2 border-slate-200 rounded-xl hover:border-slate-300 transition-colors">
+                Continue
+              </a>
+            </div>
+
+            <div class="space-y-3">
+              <div class="flex justify-between text-sm">
+                <span class="text-slate-600">Questions Answered</span>
+                <span class="font-bold text-slate-900">${surveyProgress.answered} / ${surveyProgress.total}</span>
+              </div>
+              <div class="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
+                <div class="bg-slate-900 h-full transition-all duration-500" style="width: ${surveyProgress.percentage}%"></div>
+              </div>
+              <div class="flex justify-between text-xs text-slate-500">
+                <span>${surveyProgress.percentage}% Complete</span>
+                ${surveyProgress.isComplete ? '<span class="text-green-600 font-bold">✓ Complete</span>' : ''}
+              </div>
+            </div>
+          </div>
+
+          <!-- Partnership Status Card -->
+          <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 p-6 mb-6">
+            <div class="flex items-start justify-between mb-4">
+              <div>
+                <h2 class="text-xl font-bold text-slate-900 mb-1">Partnership Status</h2>
+                <p class="text-sm text-slate-500">Your connection with your partner</p>
+              </div>
+              <a href="/partner-connect" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 border-2 border-slate-200 rounded-xl hover:border-slate-300 transition-colors">
+                ${partnership ? 'View' : 'Connect'}
+              </a>
+            </div>
+
+            ${partnership ? `
+              <div class="flex items-center gap-3 p-4 bg-green-50 border-2 border-green-200 rounded-xl">
+                <div class="w-10 h-10 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">
+                  ${partnership.partner?.full_name?.charAt(0) || '?'}
+                </div>
+                <div class="flex-1">
+                  <p class="font-bold text-green-900">${partnership.partner?.full_name || 'Partner'}</p>
+                  <p class="text-sm text-green-700">${partnership.partner?.email}</p>
+                </div>
+                <div class="text-green-600 font-bold">
+                  ✓
+                </div>
+              </div>
+            ` : `
+              <div class="p-4 bg-amber-50 border-2 border-amber-200 rounded-xl">
+                <p class="text-sm text-amber-800">
+                  <span class="font-bold">No partner connected yet.</span><br>
+                  Connect with your partner to generate your relationship report.
+                </p>
+              </div>
+            `}
+          </div>
+
+          <!-- Actions -->
+          <div class="space-y-3">
+            <button 
+              onclick="handleSignOut()" 
+              class="w-full px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all">
+              Sign Out
+            </button>
+            
+            <button 
+              onclick="handleDeleteAccount()" 
+              class="w-full px-6 py-3 text-red-600 border-2 border-red-200 rounded-xl font-bold hover:bg-red-50 transition-all">
+              Delete Account
+            </button>
+          </div>
+        </div>
+
+        <!-- Edit Profile Modal -->
+        <div id="edit-modal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <div class="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
+            <h3 class="text-xl font-bold text-slate-900 mb-4">Edit Profile</h3>
+            <form onsubmit="handleUpdateProfile(event)">
+              <div class="mb-4">
+                <label class="block text-sm font-medium text-slate-700 mb-2">Full Name</label>
+                <input 
+                  type="text" 
+                  id="edit-name"
+                  value="${profile?.full_name || ''}"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all">
+              </div>
+              <div class="flex gap-3">
+                <button 
+                  type="button"
+                  onclick="closeEditModal()"
+                  class="flex-1 px-4 py-3 border-2 border-slate-200 rounded-xl font-bold text-slate-700 hover:bg-slate-50">
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  class="flex-1 px-4 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800">
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      `;
+    }
+
+    // Global functions
+    window.currentProfile = null; // Store current profile for updates
+
+    window.editProfile = function() {
+      document.getElementById('edit-modal').classList.remove('hidden');
+    };
+
+    window.handleProfilePictureUpload = async function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // Show loading spinner
+      document.getElementById('upload-spinner').classList.remove('hidden');
+
+      try {
+        const publicUrl = await window.storageApi.uploadProfilePicture(file);
+        
+        // Update the UI with the new image
+        const container = document.getElementById('profile-picture-container');
+        container.innerHTML = `<img src="${publicUrl}" alt="Profile" class="w-full h-full object-cover">`;
+        
+        // Store the updated profile
+        window.currentProfile = await window.supabaseAuth.getUserProfile();
+        
+        // Show success message
+        showToast('Profile picture updated successfully!', 'success');
+        
+        // Reload the page to update all UI elements
+        setTimeout(() => location.reload(), 1500);
+      } catch (error) {
+        console.error('Upload error:', error);
+        showToast(error.message || 'Failed to upload image. Please try again.', 'error');
+      } finally {
+        // Hide loading spinner
+        document.getElementById('upload-spinner').classList.add('hidden');
+        // Reset file input
+        event.target.value = '';
+      }
+    };
+
+    window.handleDeleteProfilePicture = async function() {
+      if (!confirm('Are you sure you want to remove your profile picture?')) return;
+
+      // Show loading spinner
+      document.getElementById('upload-spinner').classList.remove('hidden');
+
+      try {
+        await window.storageApi.deleteProfilePicture();
+        
+        // Update the UI to show default avatar
+        const container = document.getElementById('profile-picture-container');
+        container.innerHTML = `
+          <svg class="w-12 h-12 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        `;
+        
+        showToast('Profile picture removed successfully!', 'success');
+        
+        // Reload the page to update all UI elements
+        setTimeout(() => location.reload(), 1500);
+      } catch (error) {
+        console.error('Delete error:', error);
+        showToast(error.message || 'Failed to remove image. Please try again.', 'error');
+      } finally {
+        document.getElementById('upload-spinner').classList.add('hidden');
+      }
+    };
+
+    // Toast notification helper
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg font-bold text-sm transition-all transform ${
+        type === 'success' ? 'bg-green-500 text-white' :
+        type === 'error' ? 'bg-red-500 text-white' :
+        'bg-slate-900 text-white'
+      }`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    window.closeEditModal = function() {
+      document.getElementById('edit-modal').classList.add('hidden');
+    };
+
+    window.handleUpdateProfile = async function(event) {
+      event.preventDefault();
+      const name = document.getElementById('edit-name').value;
+      
+      try {
+        await window.supabaseAuth.updateUserProfile({ full_name: name });
+        document.getElementById('profile-name').textContent = name;
+        closeEditModal();
+        
+        // Show success message
+        showToast('Profile updated successfully!', 'success');
+      } catch (error) {
+        showToast('Failed to update profile: ' + error.message, 'error');
+      }
+    };
+
+    window.handleSignOut = async function() {
+      if (confirm('Are you sure you want to sign out?')) {
+        try {
+          await window.supabaseAuth.signOut();
+        } catch (error) {
+          console.error('Error signing out:', error);
+          alert('Failed to sign out. Please try again.');
+        }
+      }
+    };
+
+    window.handleDeleteAccount = async function() {
+      if (confirm('Are you sure you want to delete your account? This action cannot be undone. All your data including survey responses and reports will be permanently deleted.')) {
+        if (confirm('This is your last chance. Delete account?')) {
+          try {
+            // Note: Account deletion requires admin privileges
+            // This should be done via a backend API endpoint for security
+            alert('Account deletion must be requested through support. Please contact us to delete your account.');
+          } catch (error) {
+            alert('Failed to delete account. Please contact support.');
+            console.error('Delete error:', error);
+          }
+        }
+      }
+    };
+
+    // Initialize
+    init();
+  </script>
+</body>
+</html>
+

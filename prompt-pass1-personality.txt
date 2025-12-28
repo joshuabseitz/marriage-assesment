@@ -1,0 +1,142 @@
+You are an expert relationship psychologist analyzing personality types and core dynamics for a pre-marriage assessment.
+
+# YOUR TASK
+
+Generate ONLY the personality and mindset sections of a couples report based on their survey responses. You will receive:
+1. Base report data (demographics, already extracted)
+2. Relevant survey question responses
+
+Return ONLY the JSON sections specified below. Be concise (1-2 sentences per description).
+
+# SURVEY RESPONSES
+
+## Person 1: {person1_name}
+{person1_relevant_responses}
+
+## Person 2: {person2_name}
+{person2_relevant_responses}
+
+# BASE REPORT CONTEXT
+{base_report_json}
+
+# REQUIRED OUTPUT STRUCTURE
+
+Return a JSON object with EXACTLY these sections (and ONLY these):
+
+```json
+{
+  "dynamics": {
+    "overall_type": "Combined description like 'Cooperating Spouse + Affirming Spouse'",
+    "overall_description": "1-2 paragraphs about how their dynamics work together",
+    
+    "person_1": {
+      "type": "Cooperating Spouse or Affirming Spouse or other type based on Q151-200",
+      "full_description": "1-2 sentences about their personality",
+      "love_view": "How they view love based on their type",
+      "strengths": ["Array of 5 strength descriptions"]
+    },
+    "person_2": {
+      "type": "...",
+      "full_description": "...",
+      "love_view": "...",
+      "strengths": ["..."]
+    },
+    
+    "styles": {
+      "solving_problems": {
+        "person_1_position": 0-100,
+        "person_2_position": 0-100,
+        "scale_left": "Reflective",
+        "scale_right": "Aggressive"
+      },
+      "influencing_each_other": {
+        "person_1_position": 0-100,
+        "person_2_position": 0-100,
+        "scale_left": "Facts",
+        "scale_right": "Feelings"
+      },
+      "reacting_to_change": {
+        "person_1_position": 0-100,
+        "person_2_position": 0-100,
+        "scale_left": "Accept",
+        "scale_right": "Resist"
+      },
+      "making_decisions": {
+        "person_1_position": 0-100,
+        "person_2_position": 0-100,
+        "scale_left": "Spontaneous",
+        "scale_right": "Cautious"
+      }
+    }
+  },
+  
+  "momentum": {
+    "mindset": {
+      "person_1": {
+        "type": "Romantic Mindset or Resolute Mindset or Balanced Mindset",
+        "description": "1-2 sentences about their marriage mindset based on Q31-50"
+      },
+      "person_2": {
+        "type": "...",
+        "description": "..."
+      }
+    },
+    "how_mindsets_mesh": "1-2 sentences analyzing compatibility"
+  },
+  
+  "attitude": {
+    "person_1": {
+      "resilience_score": 0-100,
+      "resilience_level": "High or Moderate or Low",
+      "description": "1 sentence about their resilience",
+      "best_qualities_under_challenge": ["Array from Q67-69"],
+      "perceived_under_stress": ["Array from Q73-75"]
+    },
+    "person_2": {
+      "resilience_score": 0-100,
+      "resilience_level": "...",
+      "description": "...",
+      "best_qualities_under_challenge": ["..."],
+      "perceived_under_stress": ["..."]
+    }
+  }
+}
+```
+
+# CALCULATION GUIDELINES
+
+## Mindset (Q31-50)
+- Romantic score = average(Q31-35): Questions about "perfect person", "love conquers all", "magical connection"
+- Resolute score = average(Q36-40): Questions about "divorce not an option", "commitment over feelings"
+- If Romantic > Resolute + 0.5: "Romantic Mindset"
+- If Resolute > Romantic + 0.5: "Resolute Mindset"  
+- Otherwise: "Balanced Mindset"
+
+## Dynamics Positions (Q151-200)
+Calculate 0-100 positions based on their answers:
+- Solving problems: Q151-160 (reflective vs aggressive problem-solving)
+- Influencing: Q159-160, Q191-192 (facts vs feelings)
+- Change: Q161-162 (accept vs resist change)
+- Decisions: Q153-154 (spontaneous vs cautious)
+
+Higher scores on "aggressive/feelings/resist/cautious" questions → higher position (toward right side)
+
+## Resilience (Q55-57, Q63)
+- Average Q55-57 (positive resilience), reverse Q63 (negative)
+- Convert to 0-100 scale: (avg / 5) * 100
+- High: 75+, Moderate: 50-74, Low: <50
+
+# CRITICAL RULES
+
+1. Use actual names from base_report
+2. Be CONCISE - 1-2 sentences max per description
+3. Reference specific question numbers when relevant
+4. Return ONLY valid JSON - no markdown, no text before/after
+5. Start with `{` and end with `}`
+6. No trailing commas
+7. All strings in quotes, numbers as numbers, booleans as true/false
+
+# OUTPUT
+
+Return ONLY the JSON object. Begin with `{` and end with `}`.
+

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SYMBIS Report - Page 1</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase for authentication -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/auth-check.js"></script>
+    <script src="/navigation.js"></script>
+    <script src="/status-manager.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --symbis-red: #E54D42;
+            --symbis-teal: #4FB8B1;
+            --bg-gray: #F0F2F4;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e5e7eb;
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+        .report-container {
+            max-width: 950px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1, h2, h3, .name-label {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .header-rule {
+            border-bottom: 2px dashed #d1d5db;
+            margin: 1.5rem 0;
+        }
+        .table-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 1fr;
+            font-size: 14px;
+        }
+        .row-label {
+            padding: 10px 0;
+            font-weight: 500;
+            color: #444;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .data-cell {
+            padding: 10px 20px;
+            border-bottom: 1px solid #dee2e6;
+            color: #222;
+            background-color: var(--bg-gray);
+        }
+        .data-cell.left-col {
+            border-right: 1px solid #d1d5db;
+        }
+        .section-header {
+            font-style: italic;
+            font-weight: 800;
+            font-family: 'Montserrat', sans-serif;
+            color: #444;
+            font-size: 1.1rem;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .goal-icon {
+            background-color: var(--symbis-teal);
+            color: white;
+            width: 42px;
+            height: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        .nav-button {
+            transition: all 0.2s ease;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        /* Mobile adjustments */
+        @media (max-width: 768px) {
+            .table-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .row-label {
+                grid-column: span 2;
+                background: #f9f9f9;
+                padding-left: 10px;
+                font-weight: 700;
+                border-bottom: none;
+            }
+            .data-cell {
+                border-bottom: 1px solid #eee;
+            }
+        }
+    </style>
+</head>
+<body class="p-0 sm:p-4">
+    <!-- Navigation Bar -->
+    <div id="symbis-navigation"></div>
+
+    <div class="report-container p-8 sm:p-14">
+        <!-- Navigation -->
+        <div class="flex justify-between items-center mb-6">
+            <div class="w-32"></div>
+            <span class="text-gray-400 text-sm font-bold">Page 1</span>
+            <a href="page2" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">Next →</a>
+        </div>
+
+        <!-- Header -->
+        <header>
+            <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none">GETTING THE MOST FROM YOUR SYMBIS REPORT</h1>
+            <p class="text-gray-500 italic text-[15px] mt-3 leading-relaxed font-medium">
+                What you're about to experience through this report will help you launch one of the greatest adventures of your life: marriage. With the help of your certified facilitator, you will discover countless new insights and dozens of new skills to strengthen your bond.
+            </p>
+            <div class="header-rule"></div>
+        </header>
+
+        <!-- About Us & Table Headers -->
+        <section class="mt-6">
+            <div class="table-grid items-end">
+                <div class="pb-2">
+                    <h2 class="text-[28px] font-extrabold text-[#222] tracking-tight leading-none mb-2">ABOUT US</h2>
+                    <div class="text-[14px] text-gray-500 italic font-medium">
+                        <p>Date Completed: 9/12/2014</p>
+                        <p>Invite Code: CXYZXYZ</p>
+                    </div>
+                </div>
+
+                <!-- Toni Header -->
+                <div class="flex flex-col items-center gap-4 pb-4">
+                    <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-24 h-24 rounded-full border-[6px] border-[#F0F2F4] object-cover shadow-sm">
+                    <span class="name-label text-[28px] font-black text-[#222] tracking-tighter">TONI</span>
+                </div>
+
+                <!-- Chris Header -->
+                <div class="flex flex-col items-center gap-4 pb-4">
+                    <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-24 h-24 rounded-full border-[6px] border-[#F0F2F4] object-cover shadow-sm">
+                    <span class="name-label text-[28px] font-black text-[#222] tracking-tighter">CHRIS</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Tables -->
+        <div class="mt-10">
+            <!-- General -->
+            <div class="section-header">General</div>
+            <div class="relative">
+                <div class="table-grid">
+                    <div class="row-label">Age</div>
+                    <div class="data-cell left-col">27</div>
+                    <div class="data-cell">29</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Ethnic Background</div>
+                    <div class="data-cell left-col">Caucasian</div>
+                    <div class="data-cell">Caucasian</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Religious Affiliation</div>
+                    <div class="data-cell left-col">Christian/Non-denominational</div>
+                    <div class="data-cell">Christian/Non-denominational</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Education</div>
+                    <div class="data-cell left-col">College</div>
+                    <div class="data-cell">College</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Employment Status</div>
+                    <div class="data-cell left-col">Full Time</div>
+                    <div class="data-cell">Full Time</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Employment Category</div>
+                    <div class="data-cell left-col border-b-0">Education</div>
+                    <div class="data-cell border-b-0">Professional Services</div>
+                </div>
+            </div>
+
+            <!-- Family of Origin -->
+            <div class="section-header">Family of Origin</div>
+            <div class="relative">
+                <div class="table-grid">
+                    <div class="row-label">Parents' marital status</div>
+                    <div class="data-cell left-col">Divorced</div>
+                    <div class="data-cell">Married</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">How you were raised</div>
+                    <div class="data-cell left-col">Raised by mother</div>
+                    <div class="data-cell">Both biological parents</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Birth order in family</div>
+                    <div class="data-cell left-col">Third born</div>
+                    <div class="data-cell">Fifth born</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Number of kids in family</div>
+                    <div class="data-cell left-col border-b-0">3</div>
+                    <div class="data-cell border-b-0">5</div>
+                </div>
+            </div>
+
+            <!-- Relationship -->
+            <div class="section-header">Relationship</div>
+            <div class="relative">
+                <div class="table-grid">
+                    <div class="row-label">Wedding Date</div>
+                    <div class="data-cell left-col">10/1/14</div>
+                    <div class="data-cell">10/1/14</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Relationship Status</div>
+                    <div class="data-cell left-col">Engaged (not living together)</div>
+                    <div class="data-cell">Engaged (not living together)</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Previous Marriages</div>
+                    <div class="data-cell left-col">0</div>
+                    <div class="data-cell">0</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Number of children</div>
+                    <div class="data-cell left-col">0</div>
+                    <div class="data-cell">0</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Expecting a child</div>
+                    <div class="data-cell left-col">No</div>
+                    <div class="data-cell">No</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Length of dating relationship</div>
+                    <div class="data-cell left-col">18-24 months</div>
+                    <div class="data-cell">18-24 months</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Stability of dating relationship</div>
+                    <div class="data-cell left-col">Smooth & steady</div>
+                    <div class="data-cell">Smooth & steady</div>
+                </div>
+                <div class="table-grid">
+                    <div class="row-label">Long distance relationship</div>
+                    <div class="data-cell left-col border-b-0">No</div>
+                    <div class="data-cell border-b-0">No</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-16 pt-8 border-t border-gray-100">
+            <div class="bg-[#F1F4F6] p-6 rounded-lg flex items-start gap-6 mb-10">
+                <div class="goal-icon">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                        <path d="M12 2l2.4 7.2h7.6l-6.2 4.5 2.4 7.3-6.2-4.5-6.2 4.5 2.4-7.3-6.2-4.5h7.6z"/>
+                    </svg>
+                </div>
+                <div class="text-[14px] italic text-gray-600 font-medium leading-snug">
+                    <p class="font-bold mb-1">Our Goals Together with SYMBIS</p>
+                    <p>1. Obtain a clear picture of your personal and relational momentum for marriage.</p>
+                    <p>2. Gain new insights into your personalities and how they work together.</p>
+                    <p>3. Gain new skills to strengthen your relationship for lifelong love.</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-between items-center text-[13px] text-gray-400 font-bold uppercase tracking-tight">
+                <div class="font-medium capitalize italic">&copy; Drs. Les and Leslie Parrott</div>
+                <div class="flex items-center gap-1 mt-4 sm:mt-0">
+                    <span class="logo-text text-gray-800 text-3xl">SYMBIS</span>
+                    <span class="text-[var(--symbis-red)] text-2xl font-black mb-1 mx-0.5">♥</span>
+                    <span class="text-gray-400 font-black text-[11px] mt-2 tracking-[0.2em]">ASSESSMENT</span>
+                    <span class="ml-6 text-gray-800 text-3xl font-black">1</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+  <!-- Report Navigation -->
+  <div id="report-navigation"></div>
+
+  <script src="/report-renderer.js"></script>
+  <script>
+    // Initialize navigation for report page
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof SymbisNav !== 'undefined') {
+        SymbisNav.init('report', 1);
+      }
+    });
+  </script>
+</body>
+</html>

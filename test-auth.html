@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auth Test - SYMBIS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/auth-check.js"></script>
+</head>
+<body class="bg-gray-100 p-8">
+  <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-8">
+    <h1 class="text-3xl font-bold mb-6 text-green-600">✅ Authentication Working!</h1>
+    
+    <div class="space-y-4">
+      <div class="bg-green-50 border-2 border-green-200 rounded-lg p-4">
+        <p class="text-sm font-medium text-green-800">If you can see this page, authentication is working correctly!</p>
+      </div>
+
+      <div id="user-info" class="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
+        <p class="text-sm font-medium text-blue-800">Loading user info...</p>
+      </div>
+
+      <div class="space-y-2">
+        <button onclick="testSignOut()" class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 font-medium">
+          Sign Out (Test Redirect)
+        </button>
+        <a href="/survey" class="block w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-medium text-center">
+          Go to Survey
+        </a>
+        <a href="/auth-signin" class="block w-full px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 font-medium text-center">
+          Go to Auth Page (Should Redirect Back)
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    async function loadUserInfo() {
+      const user = await window.supabaseAuth.getCurrentUser();
+      const userInfoDiv = document.getElementById('user-info');
+      
+      if (user) {
+        userInfoDiv.innerHTML = `
+          <p class="text-sm font-medium text-blue-800 mb-2">Logged in as:</p>
+          <p class="text-xs text-blue-600 font-mono">${user.email}</p>
+          <p class="text-xs text-blue-500 mt-2">User ID: ${user.id.substring(0, 8)}...</p>
+        `;
+      } else {
+        userInfoDiv.innerHTML = `
+          <p class="text-sm font-medium text-red-800">No user found (this shouldn't happen on this page!)</p>
+        `;
+      }
+    }
+
+    async function testSignOut() {
+      if (confirm('Sign out? You will be redirected to the auth page.')) {
+        await window.supabaseAuth.signOut();
+      }
+    }
+
+    // Load user info when page loads
+    window.addEventListener('load', loadUserInfo);
+  </script>
+</body>
+</html>
+

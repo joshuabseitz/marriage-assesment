@@ -1,0 +1,1971 @@
+{
+  "assessment_configuration": {
+    "title": "Pre-Marriage Assessment",
+    "version": "1.0",
+    "target_audience": "Couples",
+    "completion_time_estimate": "30-45 minutes",
+    "total_questions": 286,
+    "instructions": "Answer individually and honestly. There are no wrong answers."
+  },
+  "sections": [
+    {
+      "section_id": 1,
+      "title": "Demographics & Metadata",
+      "description": "Profile customization and family background.",
+      "questions": [
+        {
+          "id": 1,
+          "text": "What is your ethnic background?",
+          "type": "choice",
+          "options": [
+            "Caucasian",
+            "African American",
+            "Asian",
+            "Hispanic",
+            "Native American",
+            "Multi-racial",
+            "Other"
+          ],
+          "mapping": "couple.person.ethnic_background"
+        },
+        {
+          "id": 2,
+          "text": "What is the marital status of your biological parents?",
+          "type": "choice",
+          "options": [
+            "Married",
+            "Divorced",
+            "Separated",
+            "Widowed",
+            "Never Married"
+          ],
+          "mapping": "family_of_origin.person.parents_marital_status"
+        },
+        {
+          "id": 3,
+          "text": "How were you primarily raised?",
+          "type": "choice",
+          "options": [
+            "Both biological parents",
+            "Raised by mother",
+            "Raised by father",
+            "Joint custody",
+            "Grandparents",
+            "Adoptive parents"
+          ],
+          "mapping": "family_of_origin.person.how_raised"
+        },
+        {
+          "id": 4,
+          "text": "How many siblings do you have?",
+          "type": "number",
+          "mapping": "family_of_origin.person.number_of_siblings"
+        },
+        {
+          "id": 5,
+          "text": "What is your birth order?",
+          "type": "choice",
+          "options": [
+            "First born",
+            "Second born",
+            "Third born",
+            "Fourth born",
+            "Fifth born",
+            "Youngest",
+            "Only child"
+          ],
+          "mapping": "family_of_origin.person.birth_order"
+        },
+        {
+          "id": 6,
+          "text": "What is your wedding date?",
+          "type": "date_optional",
+          "mapping": "report_metadata.wedding_date"
+        }
+      ]
+    },
+    {
+      "section_id": 2,
+      "title": "Relationship History",
+      "description": "Context about your relationship journey.",
+      "questions": [
+        {
+          "id": 7,
+          "text": "How long have you been dating?",
+          "type": "choice",
+          "options": [
+            "0-6 months",
+            "6-12 months",
+            "12-18 months",
+            "18-24 months",
+            "2+ years"
+          ],
+          "mapping": "relationship.dating_length"
+        },
+        {
+          "id": 8,
+          "text": "How many times have you been married previously?",
+          "type": "number",
+          "mapping": "relationship.previous_marriages.person"
+        },
+        {
+          "id": 9,
+          "text": "How many children do you have from previous relationships?",
+          "type": "number",
+          "mapping": "relationship.children.person"
+        },
+        {
+          "id": 10,
+          "text": "Are you currently expecting a child?",
+          "type": "boolean",
+          "mapping": "relationship.expecting"
+        },
+        {
+          "id": 11,
+          "text": "How would you describe the stability of your relationship?",
+          "type": "scale_1_5",
+          "labels": {
+            "1": "Rocky/On-and-Off",
+            "5": "Smooth & steady"
+          },
+          "mapping": "relationship.stability"
+        },
+        {
+          "id": 12,
+          "text": "I feel our relationship is moving at the right pace.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 13,
+          "text": "I have no regrets about the time we've spent dating.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 14,
+          "text": "We have discussed our past relationships openly.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 15,
+          "text": "I believe we have dated long enough to know we are ready for marriage.",
+          "type": "scale_1_5",
+          "mapping": "relationship.longevity_logic"
+        },
+        {
+          "id": 16,
+          "text": "Which best describes your conflict history?",
+          "type": "choice",
+          "options": [
+            "Rarely fight",
+            "Fight often but resolve quickly",
+            "Fight often with lingering resentment",
+            "Smooth sailing"
+          ],
+          "mapping": "relationship.stability_logic"
+        }
+      ]
+    },
+    {
+      "section_id": 3,
+      "title": "Mindset & Momentum",
+      "description": "Attitudes toward marriage. Rate agreement 1 (Strongly Disagree) to 5 (Strongly Agree).",
+      "questions": [
+        {
+          "id": 17,
+          "text": "There is only one perfect person for me in the world.",
+          "type": "scale_1_5",
+          "mapping": "momentum.mindset_logic_romantic"
+        },
+        {
+          "id": 18,
+          "text": "True love should conquer all obstacles without much effort.",
+          "type": "scale_1_5",
+          "mapping": "momentum.mindset_logic_romantic"
+        },
+        {
+          "id": 19,
+          "text": "I expect marriage to bring me unending bliss.",
+          "type": "scale_1_5",
+          "mapping": "momentum.mindset_logic_romantic"
+        },
+        {
+          "id": 20,
+          "text": "I believe in a soul-mate connection that feels magical.",
+          "type": "scale_1_5",
+          "mapping": "momentum.mindset_logic_romantic"
+        },
+        {
+          "id": 21,
+          "text": "If you love each other enough, you won't have to work hard at the relationship.",
+          "type": "scale_1_5",
+          "mapping": "momentum.mindset_logic_romantic"
+        },
+        {
+          "id": 22,
+          "text": "Divorce is absolutely not an option for me.",
+          "type": "scale_1_5",
+          "mapping": "momentum.mindset_logic_resolute"
+        },
+        {
+          "id": 23,
+          "text": "Marriage is primarily about commitment and dedication, even when feelings fade.",
+          "type": "scale_1_5",
+          "mapping": "momentum.mindset_logic_resolute"
+        },
+        {
+          "id": 24,
+          "text": "I am marrying for life, no matter what happens.",
+          "type": "scale_1_5",
+          "mapping": "momentum.mindset_logic_resolute"
+        },
+        {
+          "id": 25,
+          "text": "I deeply resonate with the vows 'for better or for worse'.",
+          "type": "scale_1_5",
+          "mapping": "momentum.mindset_logic_resolute"
+        },
+        {
+          "id": 26,
+          "text": "I want to have children in the future.",
+          "type": "scale_1_5",
+          "mapping": "momentum.mindset_logic_resolute"
+        },
+        {
+          "id": 27,
+          "text": "Love is a decision, not just a feeling.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 28,
+          "text": "I am willing to sacrifice my personal happiness for the marriage.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 29,
+          "text": "My partner completes me.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 30,
+          "text": "I believe we are destined to be together.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 31,
+          "text": "Marriage is a contract that requires daily work.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 32,
+          "text": "I view our relationship as a team effort.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 33,
+          "text": "I am realistic about the difficulties of marriage.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 34,
+          "text": "Passion is more important than stability.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 35,
+          "text": "Stability is more important than passion.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 36,
+          "text": "I am optimistic about our future together.",
+          "type": "scale_1_5"
+        }
+      ]
+    },
+    {
+      "section_id": 4,
+      "title": "Individual Wellbeing",
+      "description": "Self-assessment of emotional health. Rate how well this describes you 1 (Not at all) to 5 (Very well).",
+      "questions": [
+        {
+          "id": 37,
+          "text": "I have a strong sense of who I am.",
+          "type": "scale_1_5",
+          "mapping": "wellbeing.self_concept"
+        },
+        {
+          "id": 38,
+          "text": "I am confident in my abilities.",
+          "type": "scale_1_5",
+          "mapping": "wellbeing.self_concept"
+        },
+        {
+          "id": 39,
+          "text": "I rarely doubt my worth as a person.",
+          "type": "scale_1_5",
+          "mapping": "wellbeing.self_concept"
+        },
+        {
+          "id": 40,
+          "text": "I feel secure in myself.",
+          "type": "scale_1_5",
+          "mapping": "wellbeing.self_concept"
+        },
+        {
+          "id": 41,
+          "text": "I am generally an optimistic person.",
+          "type": "scale_1_5",
+          "mapping": "attitude.resilience"
+        },
+        {
+          "id": 42,
+          "text": "When things go wrong, I bounce back quickly.",
+          "type": "scale_1_5",
+          "mapping": "attitude.resilience"
+        },
+        {
+          "id": 43,
+          "text": "I maintain an upbeat attitude even in difficult times.",
+          "type": "scale_1_5",
+          "mapping": "attitude.resilience"
+        },
+        {
+          "id": 44,
+          "text": "I rely on my parents to help me make big decisions.",
+          "type": "scale_1_5",
+          "reverse_score": true,
+          "mapping": "wellbeing.independence"
+        },
+        {
+          "id": 45,
+          "text": "I feel minimal unresolved pain regarding my parents.",
+          "type": "scale_1_5",
+          "mapping": "wellbeing.independence"
+        },
+        {
+          "id": 46,
+          "text": "I am my own person, separate from my family's expectations.",
+          "type": "scale_1_5",
+          "mapping": "wellbeing.independence"
+        },
+        {
+          "id": 47,
+          "text": "I often feel unstable or unsure of myself.",
+          "type": "scale_1_5",
+          "reverse_score": true,
+          "mapping": "wellbeing.self_concept"
+        },
+        {
+          "id": 48,
+          "text": "I worry that I am not good enough.",
+          "type": "scale_1_5",
+          "mapping": "attitude.stress_response"
+        },
+        {
+          "id": 49,
+          "text": "I find it hard to stay positive when stressed.",
+          "type": "scale_1_5",
+          "mapping": "attitude.resilience"
+        },
+        {
+          "id": 50,
+          "text": "I am often fearful or intimidated by challenges.",
+          "type": "scale_1_5",
+          "mapping": "attitude.stress_response"
+        },
+        {
+          "id": 51,
+          "text": "I consider myself to be emotionally mature.",
+          "type": "scale_1_5",
+          "mapping": "wellbeing.maturity"
+        },
+        {
+          "id": 52,
+          "text": "I handle criticism well.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 53,
+          "text": "I am patient when under pressure.",
+          "type": "scale_1_5",
+          "mapping": "attitude.best_qualities"
+        },
+        {
+          "id": 54,
+          "text": "I am diplomatic in sticky situations.",
+          "type": "scale_1_5",
+          "mapping": "attitude.best_qualities"
+        },
+        {
+          "id": 55,
+          "text": "I am methodical and steady.",
+          "type": "scale_1_5",
+          "mapping": "attitude.best_qualities"
+        },
+        {
+          "id": 56,
+          "text": "I rarely antagonize others.",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 57,
+          "text": "I prefer to stay out of the spotlight.",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 58,
+          "text": "I am comfortable being vulnerable.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 59,
+          "text": "I tend to be talkative when stressed.",
+          "type": "scale_1_5",
+          "mapping": "attitude.perceived_under_stress"
+        },
+        {
+          "id": 60,
+          "text": "I become a poor listener when I am stressed.",
+          "type": "scale_1_5",
+          "mapping": "attitude.perceived_under_stress"
+        },
+        {
+          "id": 61,
+          "text": "I withdraw when I am stressed.",
+          "type": "scale_1_5",
+          "mapping": "attitude.perceived_under_stress"
+        },
+        {
+          "id": 62,
+          "text": "I get defensive easily.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 63,
+          "text": "I am generally happy with my life.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 64,
+          "text": "I have good coping mechanisms for stress.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 65,
+          "text": "I am physically healthy.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 66,
+          "text": "I struggle with anxiety.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 67,
+          "text": "Have you ever experienced abuse between your parents?",
+          "type": "boolean",
+          "mapping": "wellbeing.caution_flags"
+        },
+        {
+          "id": 68,
+          "text": "Do you struggle with depression?",
+          "type": "boolean",
+          "mapping": "wellbeing.caution_flags"
+        },
+        {
+          "id": 69,
+          "text": "Does your partner have an annoying habit that worries you?",
+          "type": "boolean",
+          "mapping": "wellbeing.caution_flags"
+        },
+        {
+          "id": 70,
+          "text": "Do you have an addiction (alcohol, drugs, gambling, porn)?",
+          "type": "boolean",
+          "mapping": "wellbeing.caution_flags"
+        },
+        {
+          "id": 71,
+          "text": "Do you have significant secret debt?",
+          "type": "boolean",
+          "mapping": "wellbeing.caution_flags"
+        },
+        {
+          "id": 72,
+          "text": "Do you have anger management issues?",
+          "type": "boolean",
+          "mapping": "wellbeing.caution_flags"
+        },
+        {
+          "id": 73,
+          "text": "Is there a history of divorce in your immediate family?",
+          "type": "boolean",
+          "mapping": "wellbeing.caution_flags"
+        },
+        {
+          "id": 74,
+          "text": "Do you have unconfessed secrets from your partner?",
+          "type": "boolean",
+          "mapping": "wellbeing.caution_flags"
+        },
+        {
+          "id": 75,
+          "text": "Do you have unresolved trauma?",
+          "type": "boolean",
+          "mapping": "wellbeing.caution_flags"
+        },
+        {
+          "id": 76,
+          "text": "Do you have trust issues?",
+          "type": "boolean",
+          "mapping": "wellbeing.caution_flags"
+        }
+      ]
+    },
+    {
+      "section_id": 5,
+      "title": "Social Support",
+      "description": "Assess the support network around your relationship.",
+      "questions": [
+        {
+          "id": 77,
+          "text": "My family fully supports this relationship.",
+          "type": "scale_1_5",
+          "mapping": "social_support.friends_family_support"
+        },
+        {
+          "id": 78,
+          "text": "My friends fully support this relationship.",
+          "type": "scale_1_5",
+          "mapping": "social_support.friends_family_support"
+        },
+        {
+          "id": 79,
+          "text": "I get along well with my partner's parents (in-laws).",
+          "type": "scale_1_5",
+          "mapping": "social_support.in_laws_relationship"
+        },
+        {
+          "id": 80,
+          "text": "My partner's parents like me.",
+          "type": "scale_1_5",
+          "mapping": "social_support.in_laws_relationship"
+        },
+        {
+          "id": 81,
+          "text": "I feel optimistic about my relationship with my in-laws.",
+          "type": "scale_1_5",
+          "mapping": "social_support.in_laws_relationship"
+        },
+        {
+          "id": 82,
+          "text": "My partner likes my friends.",
+          "type": "scale_1_5",
+          "mapping": "social_support.mutual_friends"
+        },
+        {
+          "id": 83,
+          "text": "I like my partner's friends.",
+          "type": "scale_1_5",
+          "mapping": "social_support.mutual_friends"
+        },
+        {
+          "id": 84,
+          "text": "Our social networks are melding well.",
+          "type": "scale_1_5",
+          "mapping": "social_support.mutual_friends"
+        },
+        {
+          "id": 85,
+          "text": "We have mutual friends who support us.",
+          "type": "scale_1_5",
+          "mapping": "social_support.mutual_friends"
+        },
+        {
+          "id": 86,
+          "text": "My faith community supports our marriage.",
+          "type": "scale_1_5",
+          "mapping": "social_support.faith_community"
+        },
+        {
+          "id": 87,
+          "text": "The people I worship with are a significant support system.",
+          "type": "scale_1_5",
+          "mapping": "social_support.faith_community"
+        },
+        {
+          "id": 88,
+          "text": "We have a mentor couple or pastor we can talk to.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 89,
+          "text": "I feel isolated from my friends since dating.",
+          "type": "scale_1_5",
+          "reverse_score": true
+        },
+        {
+          "id": 90,
+          "text": "My family causes tension in our relationship.",
+          "type": "scale_1_5",
+          "reverse_score": true
+        },
+        {
+          "id": 91,
+          "text": "I value the approval of my friends and family regarding my marriage.",
+          "type": "scale_1_5"
+        }
+      ]
+    },
+    {
+      "section_id": 6,
+      "title": "Finances",
+      "description": "Financial habits and history.",
+      "questions": [
+        {
+          "id": 92,
+          "text": "How would you describe your money style?",
+          "type": "choice",
+          "options": [
+            "Saver",
+            "Spender"
+          ],
+          "mapping": "finances.person.money_style"
+        },
+        {
+          "id": 93,
+          "text": "Which best describes your budgeting approach?",
+          "type": "choice",
+          "options": [
+            "I live by a budget religiously",
+            "I track generally",
+            "I don't budget"
+          ],
+          "mapping": "finances.person.budget_approach"
+        },
+        {
+          "id": 94,
+          "text": "How much debt do you currently have (excluding mortgage)?",
+          "type": "choice",
+          "options": [
+            "None",
+            "Less than $10,000",
+            "$10,000 - $50,000",
+            "More than $50,000"
+          ],
+          "mapping": "finances.person.debt"
+        },
+        {
+          "id": 95,
+          "text": "I am comfortable with the amount of debt I have.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 96,
+          "text": "I am comfortable with the amount of debt my partner has.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 97,
+          "text": "We have discussed our financial goals.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 98,
+          "text": "We agree on how to spend money.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 99,
+          "text": "I fear a Lack of Influence regarding money.",
+          "type": "boolean",
+          "mapping": "finances.person.financial_fears"
+        },
+        {
+          "id": 100,
+          "text": "I fear a Lack of Security regarding money.",
+          "type": "boolean",
+          "mapping": "finances.person.financial_fears"
+        },
+        {
+          "id": 101,
+          "text": "I fear a Lack of Respect regarding money.",
+          "type": "boolean",
+          "mapping": "finances.person.financial_fears"
+        },
+        {
+          "id": 102,
+          "text": "I fear Not Realizing Dreams regarding money.",
+          "type": "boolean",
+          "mapping": "finances.person.financial_fears"
+        },
+        {
+          "id": 103,
+          "text": "Growing up, money was a source of stress.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 104,
+          "text": "I am anxious about our financial future.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 105,
+          "text": "I trust my partner with money.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 106,
+          "text": "I want to combine all our finances (joint accounts).",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 107,
+          "text": "I want to keep our finances separate.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 108,
+          "text": "I expect to be the primary breadwinner.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 109,
+          "text": "I expect my partner to be the primary breadwinner.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 110,
+          "text": "We should tithe/donate a portion of our income.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 111,
+          "text": "We have an emergency fund.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 112,
+          "text": "Spending money makes me feel good.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 113,
+          "text": "Saving money makes me feel safe.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 114,
+          "text": "I hide purchases from my partner.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 115,
+          "text": "My partner is too stingy.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 116,
+          "text": "My partner spends too frivolously.",
+          "type": "scale_1_5"
+        }
+      ]
+    },
+    {
+      "section_id": 7,
+      "title": "Role Expectations",
+      "description": "Who will do what? Select: Me, You, Both, or Neither.",
+      "questions": [
+        {
+          "id": 117,
+          "text": "Staying home with children",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 118,
+          "text": "Paying bills and handling finances",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 119,
+          "text": "Yard work",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 120,
+          "text": "Gassing up the car",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 121,
+          "text": "Fixing things around the house",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 122,
+          "text": "Laundry",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 123,
+          "text": "Making the bed",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 124,
+          "text": "Cooking meals",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 125,
+          "text": "Grocery shopping",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 126,
+          "text": "Caring for a pet",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 127,
+          "text": "Decorating the house",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 128,
+          "text": "Disciplining the children",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.agreed_roles"
+        },
+        {
+          "id": 129,
+          "text": "Doing the dishes",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.needs_discussion"
+        },
+        {
+          "id": 130,
+          "text": "Taking out the trash",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.needs_discussion"
+        },
+        {
+          "id": 131,
+          "text": "Cleaning the house",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.needs_discussion"
+        },
+        {
+          "id": 132,
+          "text": "Providing income",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.needs_discussion"
+        },
+        {
+          "id": 133,
+          "text": "Planning vacations & holidays",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.needs_discussion"
+        },
+        {
+          "id": 134,
+          "text": "Talking about spiritual matters",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.needs_discussion"
+        },
+        {
+          "id": 135,
+          "text": "Auto maintenance",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.needs_discussion"
+        },
+        {
+          "id": 136,
+          "text": "Scheduling social events",
+          "type": "role_selection",
+          "options": [
+            "Me",
+            "You",
+            "Both",
+            "Neither"
+          ],
+          "mapping": "expectations.needs_discussion"
+        }
+      ]
+    },
+    {
+      "section_id": 8,
+      "title": "Personality & Dynamics",
+      "description": "Rate how accurately this describes you: 1 (Does not describe me) to 5 (Describes me perfectly).",
+      "questions": [
+        {
+          "id": 137,
+          "text": "Good listener",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.strengths"
+        },
+        {
+          "id": 138,
+          "text": "Talkative",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 139,
+          "text": "Cautious decision maker",
+          "type": "scale_1_5",
+          "mapping": "dynamics.styles.making_decisions"
+        },
+        {
+          "id": 140,
+          "text": "Spontaneous decision maker",
+          "type": "scale_1_5",
+          "mapping": "dynamics.styles.making_decisions"
+        },
+        {
+          "id": 141,
+          "text": "Steady and reliable",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.strengths"
+        },
+        {
+          "id": 142,
+          "text": "Fun-loving and energetic",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.strengths"
+        },
+        {
+          "id": 143,
+          "text": "Avoids conflict",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 144,
+          "text": "Persuasive",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.strengths"
+        },
+        {
+          "id": 145,
+          "text": "Needs facts to decide",
+          "type": "scale_1_5",
+          "mapping": "dynamics.styles.influencing_each_other"
+        },
+        {
+          "id": 146,
+          "text": "Follows gut feelings",
+          "type": "scale_1_5",
+          "mapping": "dynamics.styles.influencing_each_other"
+        },
+        {
+          "id": 147,
+          "text": "Resist change",
+          "type": "scale_1_5",
+          "mapping": "dynamics.styles.reacting_to_change"
+        },
+        {
+          "id": 148,
+          "text": "Embrace change",
+          "type": "scale_1_5",
+          "mapping": "dynamics.styles.reacting_to_change"
+        },
+        {
+          "id": 149,
+          "text": "Modest / Quiet",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 150,
+          "text": "Likes the spotlight",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 151,
+          "text": "Passive resistance",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 152,
+          "text": "Impulsive",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 153,
+          "text": "Diplomatic",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.strengths"
+        },
+        {
+          "id": 154,
+          "text": "Entertaining",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.strengths"
+        },
+        {
+          "id": 155,
+          "text": "Detail-oriented",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 156,
+          "text": "Big-picture thinker",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 157,
+          "text": "Systematic",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.style_description"
+        },
+        {
+          "id": 158,
+          "text": "Creative",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.style_description"
+        },
+        {
+          "id": 159,
+          "text": "Patient",
+          "type": "scale_1_5",
+          "mapping": "communication.person.description"
+        },
+        {
+          "id": 160,
+          "text": "Intense",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.style_description"
+        },
+        {
+          "id": 161,
+          "text": "Cooperative",
+          "type": "scale_1_5",
+          "mapping": "dynamics.overall_type"
+        },
+        {
+          "id": 162,
+          "text": "Competitive",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 163,
+          "text": "Need to process before talking",
+          "type": "scale_1_5",
+          "mapping": "communication.person.style"
+        },
+        {
+          "id": 164,
+          "text": "Need to talk to process",
+          "type": "scale_1_5",
+          "mapping": "communication.person.style"
+        },
+        {
+          "id": 165,
+          "text": "Prefer routine",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 166,
+          "text": "Prefer variety",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 167,
+          "text": "I am a 'Win-win' negotiator",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.strengths"
+        },
+        {
+          "id": 168,
+          "text": "I like to motivate others",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.strengths"
+        },
+        {
+          "id": 169,
+          "text": "I tend to give in to keep peace",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 170,
+          "text": "I tend to dominate conversations",
+          "type": "scale_1_5",
+          "mapping": "communication.person.improvement_areas"
+        },
+        {
+          "id": 171,
+          "text": "I am often late",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 172,
+          "text": "I am always on time",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 173,
+          "text": "I struggle to finish things I start",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 174,
+          "text": "I am very organized",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.style_description"
+        },
+        {
+          "id": 175,
+          "text": "I perceive the glass as half-empty",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 176,
+          "text": "I perceive the glass as half-full",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 177,
+          "text": "I express feelings easily",
+          "type": "scale_1_5",
+          "mapping": "dynamics.styles.influencing_each_other"
+        },
+        {
+          "id": 178,
+          "text": "I keep feelings inside",
+          "type": "scale_1_5",
+          "mapping": "dynamics.styles.influencing_each_other"
+        },
+        {
+          "id": 179,
+          "text": "I prioritize tasks over people",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 180,
+          "text": "I prioritize people over tasks",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 181,
+          "text": "I apologize easily",
+          "type": "scale_1_5",
+          "mapping": "communication.person.improvement_areas"
+        },
+        {
+          "id": 182,
+          "text": "I struggle to admit I'm wrong",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 183,
+          "text": "I value accuracy",
+          "type": "scale_1_5",
+          "mapping": "dynamics.styles.solving_problems"
+        },
+        {
+          "id": 184,
+          "text": "I value popularity/recognition",
+          "type": "scale_1_5",
+          "mapping": "dynamics.person.full_description"
+        },
+        {
+          "id": 185,
+          "text": "I am an introvert",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 186,
+          "text": "I am an extrovert",
+          "type": "scale_1_5"
+        }
+      ]
+    },
+    {
+      "section_id": 9,
+      "title": "Love & Sexuality",
+      "description": "Preferences and expectations for intimacy.",
+      "questions": [
+        {
+          "id": 187,
+          "text": "Rank these definitions of love in order of importance to you.",
+          "type": "rank_order",
+          "options": [
+            "Kindness",
+            "Trust",
+            "Longing",
+            "Honesty",
+            "Excitement",
+            "Friendship",
+            "Commitment",
+            "Respect"
+          ],
+          "mapping": "love.person.top_5_definitions"
+        },
+        {
+          "id": 188,
+          "text": "Are you currently abstaining from sex?",
+          "type": "choice",
+          "options": [
+            "Yes",
+            "No"
+          ],
+          "mapping": "love.sexuality.person.abstaining"
+        },
+        {
+          "id": 189,
+          "text": "How would you rate your sexual desire?",
+          "type": "scale_1_10",
+          "labels": {
+            "1": "Low",
+            "10": "High"
+          },
+          "mapping": "love.sexuality.person.desire_rating"
+        },
+        {
+          "id": 190,
+          "text": "Who do you expect to initiate sex in marriage?",
+          "type": "choice",
+          "options": [
+            "Me",
+            "You",
+            "Both"
+          ],
+          "mapping": "love.sexuality.person.initiate_expectation"
+        },
+        {
+          "id": 191,
+          "text": "What is your expected frequency of sex?",
+          "type": "choice",
+          "options": [
+            "Daily",
+            "Every other day",
+            "Weekly",
+            "Monthly"
+          ],
+          "mapping": "love.sexuality.person.frequency_expectation"
+        },
+        {
+          "id": 192,
+          "text": "I am comfortable talking about sex.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 193,
+          "text": "I have anxiety about our sexual compatibility.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 194,
+          "text": "I feel cherished by my partner.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.needs_to_know"
+        },
+        {
+          "id": 195,
+          "text": "I feel respected by my partner.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.needs_to_know"
+        },
+        {
+          "id": 196,
+          "text": "We connect emotionally by doing things together.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.needs_to_know"
+        },
+        {
+          "id": 197,
+          "text": "We connect emotionally through conversation.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.needs_to_know"
+        },
+        {
+          "id": 198,
+          "text": "Rate the importance of Sex to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 199,
+          "text": "Rate the importance of Affection to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 200,
+          "text": "Rate the importance of Companionship to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 201,
+          "text": "Rate the importance of Respect to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 202,
+          "text": "Rate the importance of Rootedness/Security to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 203,
+          "text": "Rate the importance of Intimacy to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 204,
+          "text": "Rate the importance of Conversation to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 205,
+          "text": "Rate the importance of Commitment to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 206,
+          "text": "Rate the importance of Recreational Companionship to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 207,
+          "text": "Rate the importance of Domestic Support to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 208,
+          "text": "Rate the importance of Admiration to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 209,
+          "text": "Rate the importance of Honesty to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 210,
+          "text": "Rate the importance of Physical Attractiveness to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 211,
+          "text": "Rate the importance of Financial Support to you.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.top_5_needs"
+        },
+        {
+          "id": 212,
+          "text": "I understand how men/women generally differ in communication.",
+          "type": "scale_1_5",
+          "mapping": "gender.person.needs_to_know"
+        },
+        {
+          "id": 213,
+          "text": "I expect my partner to meet all my emotional needs.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 214,
+          "text": "I am willing to learn what makes my partner feel loved.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 215,
+          "text": "I feel my partner understands my unique needs as a man/woman.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 216,
+          "text": "We have discussed our expectations for romance after marriage.",
+          "type": "scale_1_5"
+        }
+      ]
+    },
+    {
+      "section_id": 10,
+      "title": "Conflict & Communication",
+      "description": "How you navigate differences.",
+      "questions": [
+        {
+          "id": 217,
+          "text": "Rank the topics that cause the most tension in your relationship.",
+          "type": "rank_order",
+          "options": [
+            "Chores",
+            "Money",
+            "Sex",
+            "Communication",
+            "Priorities",
+            "Children",
+            "In-laws",
+            "Careers",
+            "Religion",
+            "Leisure time"
+          ],
+          "mapping": "conflict.person.hot_topics"
+        },
+        {
+          "id": 218,
+          "text": "I prefer to plan sufficient time to talk and listen.",
+          "type": "boolean",
+          "mapping": "communication.person.partner_communication_preferences"
+        },
+        {
+          "id": 219,
+          "text": "I prefer immediate rewards for accomplishments.",
+          "type": "boolean",
+          "mapping": "communication.person.partner_communication_preferences"
+        },
+        {
+          "id": 220,
+          "text": "I prefer to talk about expectations explicitly.",
+          "type": "boolean",
+          "mapping": "communication.person.partner_communication_preferences"
+        },
+        {
+          "id": 221,
+          "text": "I prefer conversations to be stimulating and fun-loving.",
+          "type": "boolean",
+          "mapping": "communication.person.partner_communication_preferences"
+        },
+        {
+          "id": 222,
+          "text": "I prefer being asked for my opinions and ideas.",
+          "type": "boolean",
+          "mapping": "communication.person.partner_communication_preferences"
+        },
+        {
+          "id": 223,
+          "text": "I prefer taking time to reach an agreement.",
+          "type": "boolean",
+          "mapping": "communication.person.partner_communication_preferences"
+        },
+        {
+          "id": 224,
+          "text": "I prefer to be isolated from interruptions when talking.",
+          "type": "boolean",
+          "mapping": "communication.person.partner_communication_preferences"
+        },
+        {
+          "id": 225,
+          "text": "I hesitate to act unless the solution is clear.",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 226,
+          "text": "I become evasive when I am unsure.",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 227,
+          "text": "I yield my position to avoid controversy.",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 228,
+          "text": "I am not attentive to details.",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 229,
+          "text": "I spend money impulsively.",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 230,
+          "text": "I interrupt others often.",
+          "type": "scale_1_5",
+          "mapping": "communication.person.improvement_areas"
+        },
+        {
+          "id": 231,
+          "text": "I become too enthusiastic/impulsive.",
+          "type": "scale_1_5",
+          "mapping": "conflict.person.challenges"
+        },
+        {
+          "id": 232,
+          "text": "I withdraw and give the silent treatment.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 233,
+          "text": "I criticize/blame in an argument.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 234,
+          "text": "I get contemptuous (roll eyes, mock).",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 235,
+          "text": "I accept influence from my partner.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 236,
+          "text": "We know how to take a 'timeout' when fighting.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 237,
+          "text": "I am a good listener.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 238,
+          "text": "I express genuine interest in what others say.",
+          "type": "scale_1_5",
+          "mapping": "communication.person.improvement_areas"
+        },
+        {
+          "id": 239,
+          "text": "I come across as personally warm.",
+          "type": "scale_1_5",
+          "mapping": "communication.person.improvement_areas"
+        },
+        {
+          "id": 240,
+          "text": "I struggle to identify my feelings.",
+          "type": "scale_1_5",
+          "mapping": "communication.person.improvement_areas"
+        },
+        {
+          "id": 241,
+          "text": "I invite and receive feedback well.",
+          "type": "scale_1_5",
+          "mapping": "communication.person.improvement_areas"
+        },
+        {
+          "id": 242,
+          "text": "I avoid confrontation.",
+          "type": "scale_1_5",
+          "mapping": "communication.person.description"
+        },
+        {
+          "id": 243,
+          "text": "I create a safe environment for conversation.",
+          "type": "scale_1_5",
+          "mapping": "communication.person.description"
+        },
+        {
+          "id": 244,
+          "text": "I love to talk.",
+          "type": "scale_1_5",
+          "mapping": "communication.person.description"
+        },
+        {
+          "id": 245,
+          "text": "I feel loved when I am listened to.",
+          "type": "scale_1_5",
+          "mapping": "communication.person.description"
+        },
+        {
+          "id": 246,
+          "text": "Communication is the primary way I feel love.",
+          "type": "scale_1_5",
+          "mapping": "communication.person.description"
+        }
+      ]
+    },
+    {
+      "section_id": 11,
+      "title": "Spirituality",
+      "description": "Shared faith and values.",
+      "questions": [
+        {
+          "id": 247,
+          "text": "I feel closest to God through...",
+          "type": "choice",
+          "options": [
+            "Being compassionate/Helping others",
+            "Nature",
+            "Worship",
+            "Study/Intellect",
+            "Accountability/Small Groups",
+            "Solitude",
+            "Tradition/Ritual"
+          ],
+          "mapping": "spirituality.person.feels_closest_to_god_through"
+        },
+        {
+          "id": 248,
+          "text": "We attend church weekly.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.spiritual_practices"
+        },
+        {
+          "id": 249,
+          "text": "We go to the same church.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.spiritual_practices"
+        },
+        {
+          "id": 250,
+          "text": "We discuss spiritual issues regularly.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.spiritual_practices"
+        },
+        {
+          "id": 251,
+          "text": "We receive communion regularly.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.spiritual_practices"
+        },
+        {
+          "id": 252,
+          "text": "We agree on theology.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.spiritual_practices"
+        },
+        {
+          "id": 253,
+          "text": "We give a financial tithe.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.spiritual_practices"
+        },
+        {
+          "id": 254,
+          "text": "We pray for each other.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.spiritual_practices"
+        },
+        {
+          "id": 255,
+          "text": "We pray together daily.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.spiritual_practices"
+        },
+        {
+          "id": 256,
+          "text": "We serve others together.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.spiritual_practices"
+        },
+        {
+          "id": 257,
+          "text": "We study the Bible together.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.spiritual_practices"
+        },
+        {
+          "id": 258,
+          "text": "My faith is the most important thing in my life.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 259,
+          "text": "I am comfortable leading spiritual activities.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 260,
+          "text": "We are spiritually 'in sync'.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.spiritual_sync"
+        },
+        {
+          "id": 261,
+          "text": "I respect my partner's spiritual journey.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 262,
+          "text": "I am energized by fellowship with other believers.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.feels_closest_to_god_through"
+        },
+        {
+          "id": 263,
+          "text": "I am energized by meeting the needs of others.",
+          "type": "scale_1_5",
+          "mapping": "spirituality.person.feels_closest_to_god_through"
+        },
+        {
+          "id": 264,
+          "text": "I struggle to pray on my own.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 265,
+          "text": "I struggle to understand the Bible.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 266,
+          "text": "Shared faith is essential for our marriage success.",
+          "type": "scale_1_5"
+        }
+      ]
+    },
+    {
+      "section_id": 12,
+      "title": "Reflections & Open Ended",
+      "description": "Final thoughts to generate discussion prompts.",
+      "questions": [
+        {
+          "id": 267,
+          "text": "Complete the sentence: In my home growing up, money was...",
+          "type": "text",
+          "mapping": "finances.money_talks_prompts"
+        },
+        {
+          "id": 268,
+          "text": "Complete the sentence: When I think about our financial future...",
+          "type": "text",
+          "mapping": "finances.money_talks_prompts"
+        },
+        {
+          "id": 269,
+          "text": "Complete the sentence: What you may not know about money and me is...",
+          "type": "text",
+          "mapping": "finances.money_talks_prompts"
+        },
+        {
+          "id": 270,
+          "text": "Complete the sentence: The thing I appreciate about you in relationship to money is...",
+          "type": "text",
+          "mapping": "finances.money_talks_prompts"
+        },
+        {
+          "id": 271,
+          "text": "Complete the sentence: When it comes to money, I'd like to improve my...",
+          "type": "text",
+          "mapping": "finances.money_talks_prompts"
+        },
+        {
+          "id": 272,
+          "text": "Complete the sentence: One specific action we could take right now that would help me is...",
+          "type": "text",
+          "mapping": "finances.money_talks_prompts"
+        },
+        {
+          "id": 273,
+          "text": "Complete the sentence: My spiritual life has been...",
+          "type": "text",
+          "mapping": "reflection_questions"
+        },
+        {
+          "id": 274,
+          "text": "Complete the sentence: When it comes to our shared spiritual life...",
+          "type": "text",
+          "mapping": "reflection_questions"
+        },
+        {
+          "id": 275,
+          "text": "I feel most loved when you...",
+          "type": "text"
+        },
+        {
+          "id": 276,
+          "text": "My biggest fear about marriage is...",
+          "type": "text"
+        },
+        {
+          "id": 277,
+          "text": "I answered these questions honestly.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 278,
+          "text": "I feel good about taking this assessment.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 279,
+          "text": "I am willing to discuss the results with a facilitator.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 280,
+          "text": "I am committed to working on our weak areas.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 281,
+          "text": "I believe we have a high chance of success.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 282,
+          "text": "I feel prepared for the wedding day.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 283,
+          "text": "I feel prepared for married life.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 284,
+          "text": "I have a support system outside the marriage.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 285,
+          "text": "I understand that my partner is different from me.",
+          "type": "scale_1_5"
+        },
+        {
+          "id": 286,
+          "text": "I choose to love my partner every day.",
+          "type": "scale_1_5"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYMBIS Report - Page 3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase for authentication -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/auth-check.js"></script>
+  <script src="/navigation.js"></script>
+  <script src="/status-manager.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --symbis-red: #E54D42;
+            --symbis-teal: #4FB8B1;
+            --symbis-yellow: #E8C547;
+            --resolute-green: #8BA95C;
+            --rational-green: #BCD471;
+            --romantic-blue: #7CB8D8;
+            --restless-blue: #93BFCF;
+            --reluctant-gray: #9BA0A5;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e5e7eb;
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+        .report-container {
+            max-width: 950px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1, h2, h3, .name-label {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .header-rule {
+            border-bottom: 2px dashed #d1d5db;
+            margin: 1.5rem 0;
+        }
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        .nav-button {
+            transition: all 0.2s ease;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .mindset-card {
+            border-radius: 12px;
+            padding: 12px;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .mindset-icon {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        .mindset-label {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: white;
+            text-align: center;
+            font-size: 15px;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+        }
+        .mindset-sublabel {
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .name-in-card {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-style: italic;
+            font-size: 24px;
+            color: #333;
+            margin-top: auto;
+            padding-top: 12px;
+        }
+    </style>
+</head>
+<body class="p-0 sm:p-4">
+    <!-- Navigation Bar -->
+    <div id="symbis-navigation"></div>
+
+    <div class="report-container p-8 sm:p-14">
+        <!-- Header with Navigation -->
+        <div class="flex justify-between items-center mb-6">
+            <a href="page2" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">← Previous</a>
+            <span class="text-gray-400 text-sm font-bold">Page 3</span>
+            <a href="page4" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">Next →</a>
+        </div>
+
+        <!-- Mindset Header -->
+        <section class="mb-8">
+            <div class="flex items-start gap-6">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-[#E8C547] rounded-xl flex items-center justify-center">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="8"/>
+                            <path d="M12 2 L 14 8 M 12 2 L 10 8" stroke-linecap="round"/>
+                            <circle cx="12" cy="12" r="4" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-2">MINDSET</h1>
+                    <p class="text-gray-600 italic text-[15px] leading-relaxed">
+                        What's your attitude toward marriage? Research reveals the course of your relationship will be impacted by the combination of your two mindsets toward marriage. Which of the five are you?
+                    </p>
+                </div>
+            </div>
+            <div class="header-rule"></div>
+        </section>
+
+        <!-- Mindset Cards -->
+        <div class="grid grid-cols-5 gap-4 mb-10">
+            <!-- Resolute -->
+            <div class="mindset-card" style="background-color: var(--resolute-green);">
+                <div class="mindset-icon">
+                    <svg class="w-10 h-10 text-[#8BA95C]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C11 2 10 3 10 4V8C10 9 11 10 12 10C13 10 14 9 14 8V4C14 3 13 2 12 2Z"/>
+                        <circle cx="12" cy="15" r="3" stroke="currentColor" fill="none" stroke-width="2"/>
+                        <rect x="11" y="10" width="2" height="5" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div class="mindset-label">
+                    <div>RESOLUTE</div>
+                    <div class="mindset-sublabel">MINDSET</div>
+                </div>
+                <div class="name-in-card">Chris</div>
+            </div>
+
+            <!-- Rational -->
+            <div class="mindset-card" style="background-color: var(--rational-green);">
+                <div class="mindset-icon">
+                    <svg class="w-10 h-10 text-[#BCD471]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M7 2 L 9 6 L 7 10 L 9 10 L 10 6 L 8 2 Z"/>
+                        <circle cx="12" cy="14" r="4"/>
+                        <path d="M9 18 L 6 22 M 15 18 L 18 22"/>
+                    </svg>
+                </div>
+                <div class="mindset-label">
+                    <div>RATIONAL</div>
+                    <div class="mindset-sublabel">MINDSET</div>
+                </div>
+            </div>
+
+            <!-- Romantic -->
+            <div class="mindset-card" style="background-color: var(--romantic-blue);">
+                <div class="mindset-icon">
+                    <svg class="w-10 h-10 text-[#7CB8D8]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 21C12 21 4 15 4 9C4 6 6 4 8 4C10 4 11 5 12 7C13 5 14 4 16 4C18 4 20 6 20 9C20 15 12 21 12 21Z"/>
+                    </svg>
+                </div>
+                <div class="mindset-label">
+                    <div>ROMANTIC</div>
+                    <div class="mindset-sublabel">MINDSET</div>
+                </div>
+                <div class="name-in-card">Toni</div>
+            </div>
+
+            <!-- Restless -->
+            <div class="mindset-card" style="background-color: var(--restless-blue);">
+                <div class="mindset-icon">
+                    <svg class="w-10 h-10 text-[#93BFCF]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2 L 16 8 L 22 10 L 16 12 L 12 18 L 8 12 L 2 10 L 8 8 Z" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="12" cy="10" r="3"/>
+                    </svg>
+                </div>
+                <div class="mindset-label">
+                    <div>RESTLESS</div>
+                    <div class="mindset-sublabel">MINDSET</div>
+                </div>
+            </div>
+
+            <!-- Reluctant -->
+            <div class="mindset-card" style="background-color: var(--reluctant-gray);">
+                <div class="mindset-icon">
+                    <svg class="w-10 h-10 text-[#9BA0A5]" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2 L 14 6 L 12 10 L 10 6 Z"/>
+                        <circle cx="12" cy="14" r="4" fill="none" stroke="currentColor" stroke-width="2"/>
+                        <line x1="8" y1="14" x2="16" y2="14" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <div class="mindset-label">
+                    <div>RELUCTANT</div>
+                    <div class="mindset-sublabel">MINDSET</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Profiles -->
+        <div class="grid grid-cols-2 gap-8 mb-10">
+            <!-- Toni - Romantic -->
+            <div>
+                <div class="flex items-center gap-4 mb-4">
+                    <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-16 h-16 rounded-full border-4 border-[#F0F2F4] object-cover">
+                    <div>
+                        <h2 class="text-[22px] font-black text-[#333] tracking-tight uppercase leading-none">ROMANTIC</h2>
+                        <h3 class="text-[22px] font-black text-[#333] tracking-tight uppercase leading-none">MINDSET</h3>
+                    </div>
+                </div>
+                <p class="text-[14px] text-gray-700 leading-relaxed">
+                    You approach marriage with more idealism than most. In some respects, you're living out your own romantic script with the "soul mate" of your dreams. In fact, you are nearly twice as likely as the average person to say, "There's only one perfect person for me." Love conquers all for you. You believe in a soul-to-soul connection that doesn't require much effort and you expect it to not only last forever but to bring you both unending bliss.
+                </p>
+            </div>
+
+            <!-- Chris - Resolute -->
+            <div>
+                <div class="flex items-center gap-4 mb-4">
+                    <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-16 h-16 rounded-full border-4 border-[#F0F2F4] object-cover">
+                    <div>
+                        <h2 class="text-[22px] font-black text-[#333] tracking-tight uppercase leading-none">RESOLUTE</h2>
+                        <h3 class="text-[22px] font-black text-[#333] tracking-tight uppercase leading-none">MINDSET</h3>
+                    </div>
+                </div>
+                <p class="text-[14px] text-gray-700 leading-relaxed">
+                    You are a true believer when it comes to matrimony. In fact, you have the highest marriage motivation of any other category. You are more than twice as likely as your peers to say: "Divorce is not an option." You are marrying for life. You resonate with words like devotion, dedication, and commitment. More than others, you are likely to want to have children at some point, too. In fact, only 2% of Resolutes say they never want children.
+                </p>
+            </div>
+        </div>
+
+        <!-- How Your Mindsets Mesh -->
+        <div class="bg-white border-t-4 border-gray-200 pt-6 mb-8">
+            <div class="text-center mb-4">
+                <svg class="w-8 h-8 text-gray-300 mx-auto mb-2" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2 L 15 9 L 9 9 Z"/>
+                </svg>
+            </div>
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-6" style="font-family: 'Montserrat', sans-serif;">
+                HOW YOUR MINDSETS MESH
+            </h2>
+            <div class="space-y-4 text-[14px] text-gray-700 leading-relaxed">
+                <p>
+                    You don't share the same mindset, but you both share a passion for a loving marriage. The two of you bring together a combination of dedication and idealism. This can work well as long as both of you are sensitive to your different attitudes and are willing to work as a team. A Romantic mindset is often tempted to ignore real-life work because it doesn't fit their "love story." Yet the Resolute perspective can learn from the Romantic how to lean a bit more into the softer side of love. The key is honest discussions about your values and your commitment to each other – even when times get tough. That's not always as easy with a Romantic mindset, but it's crucial.
+                </p>
+                <p>
+                    Bottom line? While you're not exactly a like-minded match, your prospects for life-long love are good. You'll have some differences to work out. But if you are willing to make some compromises and adjust some expectations (as noted later in this report) a bit you will learn from each other and build a life-long marriage together.
+                </p>
+            </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-8 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    <span class="font-semibold">What do you think about your results?</span><br>
+                    What makes you feel good and what concerns you at this stage and why?
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-8 border-t border-gray-100">
+            <div class="flex flex-col sm:flex-row justify-between items-center text-[13px] text-gray-500">
+                <div class="italic mb-4 sm:mb-0">
+                    Refer to Chapter 1 of SYMBIS: "Have You Faced the Myths of Marriage with Honesty?"
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="logo-text text-gray-800 text-3xl">SYMBIS</span>
+                    <span class="text-[var(--symbis-red)] text-2xl font-black mb-1 mx-0.5">♥</span>
+                    <span class="text-gray-400 font-black text-[11px] mt-2 tracking-[0.2em]">ASSESSMENT</span>
+                    <span class="ml-6 text-gray-800 text-3xl font-black">3</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+  <script src="/report-renderer.js"></script>
+  <!-- Report Navigation -->
+  <div id="report-navigation"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof SymbisNav !== 'undefined') {
+        SymbisNav.init('report', 3);
+      }
+    });
+  </script>
+</body>
+</html>

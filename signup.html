@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Your Account - SYMBIS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/lib/demographics-api-browser.js"></script>
+  <script src="/lib/storage-api-browser.js"></script>
+  <script src="/navigation.js"></script>
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+    .progress-step {
+      transition: all 0.3s ease;
+    }
+    .progress-step.active {
+      background-color: #0f172a;
+    }
+    .progress-step.completed {
+      background-color: #10b981;
+    }
+  </style>
+</head>
+<body class="bg-[#fcfaf8]">
+  <div class="min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <!-- Logo/Brand -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-slate-900 tracking-tight mb-2">SYMBIS</h1>
+        <p class="text-sm text-slate-500">Pre-Marriage Assessment</p>
+      </div>
+
+      <!-- Progress Indicator -->
+      <div id="progress-container" class="mb-8">
+        <div class="flex items-center justify-between mb-2">
+          <div class="progress-step w-1/5 h-2 bg-slate-200 rounded-full mx-1" data-step="1"></div>
+          <div class="progress-step w-1/5 h-2 bg-slate-200 rounded-full mx-1" data-step="1.5"></div>
+          <div class="progress-step w-1/5 h-2 bg-slate-200 rounded-full mx-1" data-step="2"></div>
+          <div class="progress-step w-1/5 h-2 bg-slate-200 rounded-full mx-1" data-step="3"></div>
+          <div class="progress-step w-1/5 h-2 bg-slate-200 rounded-full mx-1" data-step="4"></div>
+        </div>
+        <p class="text-xs text-center text-slate-500 font-medium" id="progress-text">Step 1 of 5: Create Account</p>
+      </div>
+
+      <!-- Sign-Up Card -->
+      <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 overflow-hidden">
+        
+        <!-- Step 1: Account Creation -->
+        <div id="step-1" class="p-6 fade-in">
+          <h2 class="text-xl font-bold text-slate-900 mb-2">Create Your Account</h2>
+          <p class="text-sm text-slate-500 mb-6">Start your pre-marriage assessment journey</p>
+          
+          <form onsubmit="handleStep1(event)">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Full Name</label>
+                <input 
+                  type="text" 
+                  id="step1-name"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all"
+                  placeholder="Your full name">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                <input 
+                  type="email" 
+                  id="step1-email"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all"
+                  placeholder="you@example.com">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                <input 
+                  type="password" 
+                  id="step1-password"
+                  required
+                  minlength="6"
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all"
+                  placeholder="At least 6 characters">
+                <p class="mt-1 text-xs text-slate-500">Minimum 6 characters</p>
+              </div>
+            </div>
+
+            <button 
+              type="submit"
+              id="step1-btn"
+              class="w-full mt-6 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg">
+              Continue
+            </button>
+          </form>
+
+          <div id="step1-error" class="hidden mt-4 p-3 bg-red-50 border-2 border-red-200 rounded-xl">
+            <p class="text-sm text-red-600 font-medium"></p>
+          </div>
+
+          <p class="mt-4 text-center text-sm text-slate-500">
+            Already have an account? <a href="/auth-signin" class="text-slate-900 font-medium hover:underline">Sign In</a>
+          </p>
+        </div>
+
+        <!-- Step 1.5: Email Confirmation -->
+        <div id="step-1-5" class="p-6 hidden fade-in">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+            <h2 class="text-xl font-bold text-slate-900 mb-2">Check Your Email</h2>
+            <p class="text-sm text-slate-600 mb-4">
+              We sent a confirmation link to<br>
+              <span id="confirmation-email" class="font-bold text-slate-900"></span>
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Email Provider Link -->
+            <div id="email-provider-link" class="hidden">
+              <a id="provider-link" href="#" target="_blank" class="block w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl font-bold hover:from-blue-700 hover:to-blue-800 transition-all shadow-lg text-center">
+                <span class="flex items-center justify-center gap-2">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                  <span id="provider-text">Open Gmail</span>
+                </span>
+              </a>
+            </div>
+
+            <!-- Instructions -->
+            <div class="bg-slate-50 rounded-xl p-4 border-2 border-slate-100">
+              <h3 class="text-sm font-bold text-slate-900 mb-2">What to do next:</h3>
+              <ol class="text-sm text-slate-600 space-y-2">
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-slate-900 min-w-[20px]">1.</span>
+                  <span>Check your email inbox and spam folder</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-slate-900 min-w-[20px]">2.</span>
+                  <span>Click the confirmation link in the email</span>
+                </li>
+                <li class="flex items-start gap-2">
+                  <span class="font-bold text-slate-900 min-w-[20px]">3.</span>
+                  <span>You'll be redirected back here to continue</span>
+                </li>
+              </ol>
+            </div>
+
+            <!-- Resend Link -->
+            <div class="text-center">
+              <p class="text-xs text-slate-500 mb-2">Didn't receive the email?</p>
+              <button 
+                onclick="resendConfirmationEmail()"
+                id="resend-btn"
+                class="text-sm font-bold text-slate-700 hover:text-slate-900 underline">
+                Resend confirmation email
+              </button>
+            </div>
+
+            <!-- Change Email -->
+            <button 
+              onclick="goToStep(1)"
+              class="w-full px-6 py-3 text-slate-600 hover:text-slate-900 font-medium transition-colors">
+              ← Use a different email address
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: Basic Info -->
+        <div id="step-2" class="p-6 hidden fade-in">
+          <h2 class="text-xl font-bold text-slate-900 mb-2">Tell Us About Yourself</h2>
+          <p class="text-sm text-slate-500 mb-6">Basic information to personalize your experience</p>
+          
+          <form onsubmit="handleStep2(event)">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Gender <span class="text-red-500">*</span></label>
+                <select 
+                  id="step2-gender"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all">
+                  <option value="">Select gender...</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Age <span class="text-red-500">*</span></label>
+                <input 
+                  type="number" 
+                  id="step2-age"
+                  required
+                  min="18"
+                  max="100"
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all"
+                  placeholder="Enter your age">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Profile Picture <span class="text-red-500">*</span></label>
+                
+                <!-- Profile Picture Upload -->
+                <div class="flex items-center gap-4">
+                  <div class="relative">
+                    <div id="step2-photo-preview" class="w-20 h-20 rounded-full overflow-hidden bg-slate-100 flex items-center justify-center border-2 border-slate-200">
+                      <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                    <div id="step2-upload-spinner" class="hidden absolute inset-0 bg-black/50 rounded-full flex items-center justify-center">
+                      <div class="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                  </div>
+                  
+                  <div class="flex-1">
+                    <label class="inline-block px-4 py-2 text-sm font-bold text-slate-700 bg-slate-50 hover:bg-slate-100 border-2 border-slate-200 rounded-xl cursor-pointer transition-colors">
+                      <span id="step2-upload-text">Upload Photo</span>
+                      <input type="file" id="step2-photo-file" accept="image/*" class="hidden" onchange="handleSignupPhotoUpload(event)">
+                    </label>
+                    <button 
+                      type="button"
+                      id="step2-remove-photo"
+                      onclick="handleRemoveSignupPhoto()"
+                      class="hidden ml-2 px-3 py-2 text-sm font-bold text-red-600 hover:bg-red-50 border-2 border-red-200 rounded-xl transition-colors">
+                      Remove
+                    </button>
+                  </div>
+                </div>
+                <p class="mt-2 text-xs text-slate-500">JPG, PNG or GIF. Max 5MB. <span class="font-bold text-slate-700">Required for signup.</span></p>
+                <div id="step2-photo-required-error" class="hidden mt-2 p-2 bg-red-50 border border-red-200 rounded-lg">
+                  <p class="text-xs text-red-600 font-medium">⚠️ Please upload a profile picture to continue</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+              <button 
+                type="button"
+                onclick="goToStep(1)"
+                class="flex-1 px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-300 transition-all">
+                Back
+              </button>
+              <button 
+                type="submit"
+                id="step2-btn"
+                class="flex-1 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg">
+                Continue
+              </button>
+            </div>
+          </form>
+
+          <div id="step2-error" class="hidden mt-4 p-3 bg-red-50 border-2 border-red-200 rounded-xl">
+            <p class="text-sm text-red-600 font-medium"></p>
+          </div>
+        </div>
+
+        <!-- Step 3: Background -->
+        <div id="step-3" class="p-6 hidden fade-in">
+          <h2 class="text-xl font-bold text-slate-900 mb-2">Your Background</h2>
+          <p class="text-sm text-slate-500 mb-6">Help us understand your life context</p>
+          
+          <form onsubmit="handleStep3(event)">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Education <span class="text-red-500">*</span></label>
+                <select 
+                  id="step3-education"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all">
+                  <option value="">Select education level...</option>
+                  <option value="High School">High School</option>
+                  <option value="Some College">Some College</option>
+                  <option value="College">College</option>
+                  <option value="Graduate School">Graduate School</option>
+                  <option value="Doctorate">Doctorate</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Employment Status <span class="text-red-500">*</span></label>
+                <select 
+                  id="step3-employment-status"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all">
+                  <option value="">Select employment status...</option>
+                  <option value="Full Time">Full Time</option>
+                  <option value="Part Time">Part Time</option>
+                  <option value="Student">Student</option>
+                  <option value="Unemployed">Unemployed</option>
+                  <option value="Retired">Retired</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Employment Category <span class="text-red-500">*</span></label>
+                <select 
+                  id="step3-employment-category"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all">
+                  <option value="">Select category...</option>
+                  <option value="Education">Education</option>
+                  <option value="Professional Services">Professional Services</option>
+                  <option value="Technology">Technology</option>
+                  <option value="Healthcare">Healthcare</option>
+                  <option value="Government">Government</option>
+                  <option value="Arts">Arts</option>
+                  <option value="Service Industry">Service Industry</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Religious Affiliation <span class="text-red-500">*</span></label>
+                <select 
+                  id="step3-religion"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all">
+                  <option value="">Select affiliation...</option>
+                  <option value="Christian/Non-denominational">Christian/Non-denominational</option>
+                  <option value="Catholic">Catholic</option>
+                  <option value="Jewish">Jewish</option>
+                  <option value="Muslim">Muslim</option>
+                  <option value="Hindu">Hindu</option>
+                  <option value="Buddhist">Buddhist</option>
+                  <option value="Agnostic">Agnostic</option>
+                  <option value="Atheist">Atheist</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+              <button 
+                type="button"
+                onclick="goToStep(2)"
+                class="flex-1 px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-300 transition-all">
+                Back
+              </button>
+              <button 
+                type="submit"
+                id="step3-btn"
+                class="flex-1 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg">
+                Continue
+              </button>
+            </div>
+          </form>
+
+          <div id="step3-error" class="hidden mt-4 p-3 bg-red-50 border-2 border-red-200 rounded-xl">
+            <p class="text-sm text-red-600 font-medium"></p>
+          </div>
+        </div>
+
+        <!-- Step 4: Relationship -->
+        <div id="step-4" class="p-6 hidden fade-in">
+          <h2 class="text-xl font-bold text-slate-900 mb-2">Your Relationship</h2>
+          <p class="text-sm text-slate-500 mb-6">Tell us about your current relationship status</p>
+          
+          <form onsubmit="handleStep4(event)">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Relationship Status <span class="text-red-500">*</span></label>
+                <select 
+                  id="step4-status"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all">
+                  <option value="">Select status...</option>
+                  <option value="Dating">Dating</option>
+                  <option value="Engaged (not living together)">Engaged (not living together)</option>
+                  <option value="Engaged (living together)">Engaged (living together)</option>
+                  <option value="Married">Married</option>
+                </select>
+              </div>
+              <div>
+                <label class="flex items-center space-x-3 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    id="step4-living-together"
+                    class="w-5 h-5 rounded border-2 border-slate-300 text-slate-900 focus:ring-2 focus:ring-slate-200">
+                  <span class="text-sm font-medium text-slate-700">We are currently living together</span>
+                </label>
+              </div>
+              <div>
+                <label class="flex items-center space-x-3 cursor-pointer">
+                  <input 
+                    type="checkbox" 
+                    id="step4-long-distance"
+                    class="w-5 h-5 rounded border-2 border-slate-300 text-slate-900 focus:ring-2 focus:ring-slate-200">
+                  <span class="text-sm font-medium text-slate-700">This is a long-distance relationship</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+              <button 
+                type="button"
+                onclick="goToStep(3)"
+                class="flex-1 px-6 py-3 bg-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-300 transition-all">
+                Back
+              </button>
+              <button 
+                type="submit"
+                id="step4-btn"
+                class="flex-1 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg">
+                Complete Setup
+              </button>
+            </div>
+          </form>
+
+          <div id="step4-error" class="hidden mt-4 p-3 bg-red-50 border-2 border-red-200 rounded-xl">
+            <p class="text-sm text-red-600 font-medium"></p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer -->
+      <p class="mt-6 text-center text-xs text-slate-400 font-medium uppercase tracking-wider">
+        SYMBIS Journey
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // Debug: Check if critical dependencies are loaded
+    window.addEventListener('load', () => {
+      console.log('=== Signup Page Debug Info ===');
+      console.log('window.supabase:', !!window.supabase);
+      console.log('window.supabaseClient:', !!window.supabaseClient);
+      console.log('window.supabaseAuth:', !!window.supabaseAuth);
+      console.log('window.demographicsApi:', !!window.demographicsApi);
+      console.log('window.storageApi:', !!window.storageApi);
+      console.log('window.SUPABASE_CONFIG:', !!window.SUPABASE_CONFIG);
+      
+      if (!window.supabaseAuth) {
+        console.error('❌ CRITICAL: window.supabaseAuth is not defined! Check if lib/supabase-client-browser.js is loading correctly.');
+      } else {
+        console.log('✅ All auth functions loaded successfully');
+      }
+    });
+
+    // State management
+    let currentStep = 1;
+    let formData = {
+      name: '',
+      email: '',
+      password: '',
+      gender: '',
+      age: null,
+      profile_picture_url: '',
+      education: '',
+      employment_status: '',
+      employment_category: '',
+      religious_affiliation: '',
+      relationship_status: '',
+      living_together: false,
+      long_distance: false
+    };
+
+    // Email provider detection
+    function getEmailProvider(email) {
+      const domain = email.split('@')[1]?.toLowerCase();
+      const providers = {
+        'gmail.com': { name: 'Gmail', url: 'https://mail.google.com' },
+        'googlemail.com': { name: 'Gmail', url: 'https://mail.google.com' },
+        'yahoo.com': { name: 'Yahoo Mail', url: 'https://mail.yahoo.com' },
+        'outlook.com': { name: 'Outlook', url: 'https://outlook.live.com' },
+        'hotmail.com': { name: 'Outlook', url: 'https://outlook.live.com' },
+        'live.com': { name: 'Outlook', url: 'https://outlook.live.com' },
+        'icloud.com': { name: 'iCloud Mail', url: 'https://www.icloud.com/mail' },
+        'me.com': { name: 'iCloud Mail', url: 'https://www.icloud.com/mail' },
+        'aol.com': { name: 'AOL Mail', url: 'https://mail.aol.com' },
+        'protonmail.com': { name: 'ProtonMail', url: 'https://mail.protonmail.com' },
+        'zoho.com': { name: 'Zoho Mail', url: 'https://mail.zoho.com' }
+      };
+      return providers[domain] || null;
+    }
+
+    // Check if user is already authenticated and has incomplete demographics
+    (async function checkAuth() {
+      const user = await window.supabaseAuth.getCurrentUser();
+      if (user) {
+        // User is already authenticated, check if demographics are complete
+        const profile = await window.supabaseAuth.getUserProfile();
+        if (profile && profile.demographics_complete) {
+          // Already complete, redirect to survey
+          window.location.href = '/survey';
+        } else {
+          // Check URL for step parameter (e.g., returning from email confirmation)
+          const urlParams = new URLSearchParams(window.location.search);
+          const step = urlParams.get('step');
+          if (step) {
+            goToStep(parseInt(step));
+          } else {
+            // Start at step 2 (skip account creation and email confirmation)
+            goToStep(2);
+          }
+        }
+      } else {
+        // Not authenticated - check for step parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const step = urlParams.get('step');
+        if (step) {
+          goToStep(parseFloat(step)); // Use parseFloat to handle 1.5
+        }
+      }
+    })();
+
+    // Photo upload handlers
+    window.handleSignupPhotoUpload = async function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const spinner = document.getElementById('step2-upload-spinner');
+      const preview = document.getElementById('step2-photo-preview');
+      const uploadText = document.getElementById('step2-upload-text');
+      const removeBtn = document.getElementById('step2-remove-photo');
+
+      try {
+        // Check if user is authenticated
+        const user = await window.supabaseAuth.getCurrentUser();
+        if (!user) {
+          alert('Please confirm your email first before uploading a profile picture.');
+          event.target.value = '';
+          return;
+        }
+
+        spinner.classList.remove('hidden');
+        uploadText.textContent = 'Uploading...';
+
+        // Upload to Supabase Storage
+        const publicUrl = await window.storageApi.uploadProfilePicture(file);
+        
+        // Update preview with uploaded image
+        preview.innerHTML = `<img src="${publicUrl}" alt="Profile" class="w-full h-full object-cover">`;
+        
+        // Store URL in form data
+        formData.profile_picture_url = publicUrl;
+        
+        // Show remove button and update text
+        removeBtn.classList.remove('hidden');
+        uploadText.textContent = 'Change Photo';
+      } catch (error) {
+        console.error('Upload error:', error);
+        const errorMsg = error.message || 'Failed to upload image. Please try again.';
+        // Show error in the UI instead of toast
+        alert(errorMsg);
+      } finally {
+        spinner.classList.add('hidden');
+        event.target.value = ''; // Reset file input
+      }
+    };
+
+    window.handleRemoveSignupPhoto = async function() {
+      const preview = document.getElementById('step2-photo-preview');
+      const uploadText = document.getElementById('step2-upload-text');
+      const removeBtn = document.getElementById('step2-remove-photo');
+
+      try {
+        // Check if user is authenticated
+        const user = await window.supabaseAuth.getCurrentUser();
+        if (user) {
+          // Only delete from storage if user is authenticated
+          await window.storageApi.deleteProfilePicture();
+        }
+        
+        // Reset preview to default
+        preview.innerHTML = `
+          <svg class="w-10 h-10 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+          </svg>
+        `;
+        
+        // Clear form data
+        formData.profile_picture_url = '';
+        
+        // Hide remove button and reset text
+        removeBtn.classList.add('hidden');
+        uploadText.textContent = 'Upload Photo';
+      } catch (error) {
+        console.error('Remove error:', error);
+        alert(error.message || 'Failed to remove image.');
+      }
+    };
+
+    // Toast notification helper
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `fixed top-4 right-4 z-50 px-6 py-3 rounded-xl shadow-lg font-bold text-sm transition-all transform ${
+        type === 'success' ? 'bg-green-500 text-white' :
+        type === 'error' ? 'bg-red-500 text-white' :
+        'bg-slate-900 text-white'
+      }`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Step navigation
+    function goToStep(step) {
+      // Hide all steps
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById(`step-${i}`).classList.add('hidden');
+      }
+      document.getElementById('step-1-5')?.classList.add('hidden');
+      
+      // Show target step
+      const stepId = step === 1.5 ? 'step-1-5' : `step-${step}`;
+      document.getElementById(stepId).classList.remove('hidden');
+      currentStep = step;
+      
+      // Update progress
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const steps = document.querySelectorAll('.progress-step');
+      steps.forEach((el, index) => {
+        const stepNum = index + 1;
+        const stepValue = index === 1 ? 1.5 : (index < 1 ? 1 : index);
+        
+        if (currentStep === 1.5) {
+          if (index === 0) {
+            el.classList.add('completed');
+            el.classList.remove('active');
+          } else if (index === 1) {
+            el.classList.add('active');
+            el.classList.remove('completed');
+          } else {
+            el.classList.remove('active', 'completed');
+          }
+        } else {
+          if (stepNum < currentStep || (currentStep > 1.5 && stepNum === 2)) {
+            el.classList.add('completed');
+            el.classList.remove('active');
+          } else if (stepNum === Math.floor(currentStep) || (currentStep >= 2 && stepNum === 3 && index === 2)) {
+            el.classList.add('active');
+            el.classList.remove('completed');
+          } else {
+            el.classList.remove('active', 'completed');
+          }
+        }
+      });
+      
+      const progressText = document.getElementById('progress-text');
+      const titles = {
+        1: 'Create Account',
+        1.5: 'Confirm Email',
+        2: 'Basic Information',
+        3: 'Background',
+        4: 'Relationship Status'
+      };
+      const stepDisplay = currentStep === 1.5 ? '2' : (currentStep > 1.5 ? currentStep + 1 : currentStep);
+      progressText.textContent = `Step ${stepDisplay} of 5: ${titles[currentStep]}`;
+    }
+
+    // Step 1: Account Creation
+    async function handleStep1(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById('step1-name').value;
+      const email = document.getElementById('step1-email').value;
+      const password = document.getElementById('step1-password').value;
+      const btn = document.getElementById('step1-btn');
+      const errorDiv = document.getElementById('step1-error');
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Creating account...';
+        errorDiv.classList.add('hidden');
+
+        // Wait for supabaseAuth to be loaded
+        if (!window.supabaseAuth) {
+          console.error('supabaseAuth not loaded, waiting...');
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          if (!window.supabaseAuth) {
+            throw new Error('System error: Authentication system not loaded. Please refresh the page and try again.');
+          }
+        }
+
+        // Create account
+        const result = await window.supabaseAuth.signUp(email, password, { full_name: name });
+        
+        // Store form data
+        formData.name = name;
+        formData.email = email;
+        formData.password = password;
+
+        // Check if user has an active session (auto-confirm enabled)
+        if (!result.session) {
+          // Email confirmation required - show Step 1.5
+          showEmailConfirmationStep(email);
+          btn.disabled = false;
+          btn.textContent = 'Continue';
+          return;
+        }
+
+        // If auto-confirmed, wait a moment then go to Step 2
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        goToStep(2);
+        
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+      } catch (error) {
+        errorDiv.classList.remove('hidden');
+        errorDiv.querySelector('p').textContent = error.message || 'Failed to create account. Please try again.';
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+      }
+    }
+
+    // Show email confirmation step with provider detection
+    function showEmailConfirmationStep(email) {
+      // Update email display
+      document.getElementById('confirmation-email').textContent = email;
+      
+      // Detect and show email provider link
+      const provider = getEmailProvider(email);
+      if (provider) {
+        document.getElementById('email-provider-link').classList.remove('hidden');
+        document.getElementById('provider-link').href = provider.url;
+        document.getElementById('provider-text').textContent = `Open ${provider.name}`;
+      } else {
+        document.getElementById('email-provider-link').classList.add('hidden');
+      }
+      
+      // Go to confirmation step
+      goToStep(1.5);
+      
+      // Start polling for email confirmation
+      startEmailConfirmationPolling();
+    }
+
+    // Poll for email confirmation
+    let confirmationPollInterval = null;
+    function startEmailConfirmationPolling() {
+      // Clear any existing interval
+      if (confirmationPollInterval) {
+        clearInterval(confirmationPollInterval);
+      }
+      
+      // Check every 3 seconds
+      confirmationPollInterval = setInterval(async () => {
+        const user = await window.supabaseAuth.getCurrentUser();
+        if (user && user.email_confirmed_at) {
+          clearInterval(confirmationPollInterval);
+          // Go directly to next step without toast
+          goToStep(2);
+        }
+      }, 3000);
+    }
+
+    // Resend confirmation email
+    window.resendConfirmationEmail = async function() {
+      const btn = document.getElementById('resend-btn');
+      const originalText = btn.textContent;
+      
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Sending...';
+        
+        // Resend via Supabase
+        const supabase = await window.supabaseAuth.getSupabase();
+        const { error } = await supabase.auth.resend({
+          type: 'signup',
+          email: formData.email
+        });
+        
+        if (error) throw error;
+        
+        // Show success state without toast
+        btn.textContent = 'Email sent ✓';
+        
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }, 3000);
+      } catch (error) {
+        // Show error state
+        btn.textContent = 'Failed to send';
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = originalText;
+        }, 3000);
+      }
+    };
+
+    // Step 2: Basic Info
+    async function handleStep2(event) {
+      event.preventDefault();
+      
+      const gender = document.getElementById('step2-gender').value;
+      const age = parseInt(document.getElementById('step2-age').value);
+      const btn = document.getElementById('step2-btn');
+      const errorDiv = document.getElementById('step2-error');
+      const photoRequiredError = document.getElementById('step2-photo-required-error');
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+        errorDiv.classList.add('hidden');
+        photoRequiredError.classList.add('hidden');
+
+        // Check if profile picture is uploaded (REQUIRED)
+        if (!formData.profile_picture_url) {
+          photoRequiredError.classList.remove('hidden');
+          throw new Error('Profile picture is required. Please upload a photo to continue.');
+        }
+
+        // Ensure user is authenticated before saving
+        const user = await window.supabaseAuth.getCurrentUser();
+        if (!user) {
+          throw new Error('Authentication error. Please try refreshing the page or signing in again.');
+        }
+
+        // Wait for demographicsApi to be loaded
+        if (!window.demographicsApi) {
+          console.error('demographicsApi not loaded yet, waiting...');
+          await new Promise(resolve => setTimeout(resolve, 500));
+          if (!window.demographicsApi) {
+            throw new Error('System error: Demographics API not loaded. Please refresh the page.');
+          }
+        }
+
+        // Save to database with required profile picture
+        await window.demographicsApi.saveDemographics({
+          gender: gender,
+          age: age,
+          profile_picture_url: formData.profile_picture_url
+        });
+
+        formData.gender = gender;
+        formData.age = age;
+
+        // Move to step 3
+        goToStep(3);
+        
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+      } catch (error) {
+        errorDiv.classList.remove('hidden');
+        errorDiv.querySelector('p').textContent = error.message || 'Failed to save information. Please try again.';
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+      }
+    }
+
+    // Step 3: Background
+    async function handleStep3(event) {
+      event.preventDefault();
+      
+      const education = document.getElementById('step3-education').value;
+      const employmentStatus = document.getElementById('step3-employment-status').value;
+      const employmentCategory = document.getElementById('step3-employment-category').value;
+      const religion = document.getElementById('step3-religion').value;
+      const btn = document.getElementById('step3-btn');
+      const errorDiv = document.getElementById('step3-error');
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Saving...';
+        errorDiv.classList.add('hidden');
+
+        // Ensure API is loaded
+        if (!window.demographicsApi) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        // Save to database
+        await window.demographicsApi.saveDemographics({
+          education: education,
+          employment_status: employmentStatus,
+          employment_category: employmentCategory,
+          religious_affiliation: religion
+        });
+
+        formData.education = education;
+        formData.employment_status = employmentStatus;
+        formData.employment_category = employmentCategory;
+        formData.religious_affiliation = religion;
+
+        // Move to step 4
+        goToStep(4);
+        
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+      } catch (error) {
+        errorDiv.classList.remove('hidden');
+        errorDiv.querySelector('p').textContent = error.message || 'Failed to save information. Please try again.';
+        btn.disabled = false;
+        btn.textContent = 'Continue';
+      }
+    }
+
+    // Step 4: Relationship
+    async function handleStep4(event) {
+      event.preventDefault();
+      
+      const status = document.getElementById('step4-status').value;
+      const livingTogether = document.getElementById('step4-living-together').checked;
+      const longDistance = document.getElementById('step4-long-distance').checked;
+      const btn = document.getElementById('step4-btn');
+      const errorDiv = document.getElementById('step4-error');
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Completing setup...';
+        errorDiv.classList.add('hidden');
+
+        // Ensure API is loaded
+        if (!window.demographicsApi) {
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
+
+        // Save to database and mark as complete
+        await window.demographicsApi.saveDemographics({
+          relationship_status: status,
+          living_together: livingTogether,
+          long_distance: longDistance,
+          demographics_complete: true
+        });
+
+        // Redirect to survey
+        window.location.href = '/survey';
+      } catch (error) {
+        errorDiv.classList.remove('hidden');
+        errorDiv.querySelector('p').textContent = error.message || 'Failed to complete setup. Please try again.';
+        btn.disabled = false;
+        btn.textContent = 'Complete Setup';
+      }
+    }
+
+    // Initialize progress on load
+    updateProgress();
+  </script>
+</body>
+</html>
+

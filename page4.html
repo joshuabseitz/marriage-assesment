@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYMBIS Report - Page 4</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase for authentication -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/auth-check.js"></script>
+  <script src="/navigation.js"></script>
+  <script src="/status-manager.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --symbis-red: #E54D42;
+            --symbis-teal: #4FB8B1;
+            --symbis-green: #7BA948;
+            --bg-gray: #F0F2F4;
+            --toni-red: #E88B88;
+            --chris-teal: #4FB8B1;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e5e7eb;
+            color: #333;
+            -webkit-font-smoothing: antialiased;
+        }
+        .report-container {
+            max-width: 950px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        h1, h2, h3, .name-label {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .header-rule {
+            border-bottom: 2px dashed #d1d5db;
+            margin: 1.5rem 0;
+        }
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        .nav-button {
+            transition: all 0.2s ease;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .score-badge {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 56px;
+            line-height: 1;
+        }
+        .wellbeing-section {
+            background: linear-gradient(to bottom, #f9fafb 0%, white 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 2px solid #f3f4f6;
+        }
+        .category-header {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        .person-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        .toni-accent {
+            border-left: 4px solid var(--toni-red);
+        }
+        .chris-accent {
+            border-left: 4px solid var(--chris-teal);
+        }
+        .flag-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 32px;
+            color: white;
+            background-color: #6b7280;
+        }
+        .relationship-banner {
+            background: linear-gradient(135deg, var(--symbis-teal) 0%, var(--symbis-green) 100%);
+            color: white;
+            text-align: center;
+            padding: 32px;
+            border-radius: 16px;
+            margin: 32px 0;
+            box-shadow: 0 8px 24px rgba(79, 184, 177, 0.3);
+        }
+    </style>
+</head>
+<body class="p-0 sm:p-4">
+    <!-- Navigation Bar -->
+    <div id="symbis-navigation"></div>
+
+    <div class="report-container p-8 sm:p-14">
+        <!-- Header with Navigation -->
+        <div class="flex justify-between items-center mb-6">
+            <a href="page3" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">← Previous</a>
+            <span class="text-gray-400 text-sm font-bold">Page 4</span>
+            <a href="page5" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">Next →</a>
+        </div>
+
+        <!-- Wellbeing Header -->
+        <section class="mb-10">
+            <div class="flex items-start gap-6">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-[#7BA948] rounded-xl flex items-center justify-center">
+                        <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C12 2 8 4 8 8C8 10 9 11 10 12C9 13 8 14 8 16C8 20 12 22 12 22C12 22 16 20 16 16C16 14 15 13 14 12C15 11 16 10 16 8C16 4 12 2 12 2Z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-2">WELLBEING</h1>
+                    <p class="text-gray-600 italic text-[15px] leading-relaxed">
+                        Your marriage can only be as healthy as the two of you. Exploring your wellbeing as individuals, as well as the wellbeing of your relationship, is vital to launching enduring love.
+                    </p>
+                </div>
+            </div>
+            <div class="header-rule"></div>
+        </section>
+
+        <!-- Individual Wellbeing Scores -->
+        <div class="text-center mb-10">
+            <h2 class="text-[24px] font-black text-[#333] uppercase tracking-tight mb-8" style="font-family: 'Montserrat', sans-serif;">
+                INDIVIDUAL WELLBEING
+            </h2>
+            
+            <div class="grid grid-cols-2 gap-12 max-w-2xl mx-auto mb-12">
+                <div class="text-center">
+                    <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-28 h-28 rounded-full border-[6px] border-[#E88B88] object-cover mx-auto mb-4 shadow-lg">
+                    <div class="score-badge text-[#E88B88]">88%</div>
+                    <div class="text-gray-500 text-sm font-bold uppercase tracking-wider mt-2">Toni</div>
+                </div>
+                <div class="text-center">
+                    <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-28 h-28 rounded-full border-[6px] border-[#4FB8B1] object-cover mx-auto mb-4 shadow-lg">
+                    <div class="score-badge text-[#4FB8B1]">97%</div>
+                    <div class="text-gray-500 text-sm font-bold uppercase tracking-wider mt-2">Chris</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Self Concept -->
+        <div class="wellbeing-section">
+            <div class="category-header">Self Concept</div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="person-card toni-accent">
+                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide">Toni</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed">
+                        When it comes to your sense of self and your confidence in your abilities, you vacillate. At times you feel strong and sure of yourself but you also have just as many times when you feel unstable. Your self-esteem wavers.
+                    </p>
+                </div>
+                <div class="person-card chris-accent">
+                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide">Chris</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed">
+                        You have a strong sense of yourself. You know who you are and you have confidence in your abilities. In short, you have a healthy self-concept that bolsters emotional health and wellbeing.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Maturity -->
+        <div class="wellbeing-section">
+            <div class="category-header">Maturity</div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="person-card toni-accent">
+                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide">Toni</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed">
+                        By default, your age (over 25) puts you in an optimal zone for lifelong marriage. Ages 24 and younger are correlated with higher divorce rates.
+                    </p>
+                </div>
+                <div class="person-card chris-accent">
+                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide">Chris</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed">
+                        By default, your age (over 25) puts you in an optimal zone for lifelong marriage. Ages 24 and younger are correlated with higher divorce rates.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Independence -->
+        <div class="wellbeing-section">
+            <div class="category-header">Independence</div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="person-card toni-accent">
+                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide">Toni</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed">
+                        You tend to be your own person who is likely to be more objective about your current relationship. As a result, you report having minimal unresolved issues or pain in relation to your parents. This sense of healthy autonomy will aid you in building a strong alliance in your marriage.
+                    </p>
+                </div>
+                <div class="person-card chris-accent">
+                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide">Chris</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed">
+                        You tend to be your own person who is likely to be more objective about your current relationship. As a result, you report having minimal unresolved issues or pain in relation to your parents. This sense of healthy autonomy will aid you in building a strong alliance in your marriage.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Caution Flags -->
+        <div class="wellbeing-section">
+            <div class="category-header">Caution Flags</div>
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="person-card toni-accent">
+                    <div class="flex items-center gap-6">
+                        <div class="flag-badge">3</div>
+                        <div class="flex-1">
+                            <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide">Toni</div>
+                            <ul class="text-[13px] text-gray-600 space-y-1">
+                                <li>• Abuse between parents</li>
+                                <li>• Partner's annoying habit</li>
+                                <li>• Depression</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="person-card chris-accent">
+                    <div class="flex items-center gap-6">
+                        <div class="flag-badge">0</div>
+                        <div class="flex-1">
+                            <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide">Chris</div>
+                            <p class="text-[13px] text-gray-600">None</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Relationship Wellbeing -->
+        <div class="relationship-banner">
+            <div class="score-badge mb-3">91%</div>
+            <div class="text-[22px] font-black uppercase tracking-wide" style="font-family: 'Montserrat', sans-serif;">
+                Relationship Wellbeing
+            </div>
+        </div>
+
+        <!-- Longevity, Stability, Similarity -->
+        <div class="space-y-6 mb-10">
+            <div class="bg-gradient-to-r from-teal-50 to-green-50 p-6 rounded-lg border-l-4 border-[#4FB8B1]">
+                <h3 class="font-black text-[15px] text-gray-800 uppercase mb-2" style="font-family: 'Montserrat', sans-serif;">Longevity</h3>
+                <p class="text-[14px] text-gray-700 leading-relaxed">
+                    The mere fact that you two have dated for less than two years puts you into a moderate caution zone for longevity. Dating for a minimum of two years correlates with the highest rate of marital satisfaction.
+                </p>
+            </div>
+            
+            <div class="bg-gradient-to-r from-teal-50 to-green-50 p-6 rounded-lg border-l-4 border-[#4FB8B1]">
+                <h3 class="font-black text-[15px] text-gray-800 uppercase mb-2" style="font-family: 'Montserrat', sans-serif;">Stability</h3>
+                <p class="text-[14px] text-gray-700 leading-relaxed">
+                    Because you characterize your relationship as being consistent, reliable, and dependable, with little turbulence or conflict, you are more likely to have practiced negotiation and compromise. Your stability bodes well for your marital readiness.
+                </p>
+            </div>
+            
+            <div class="bg-gradient-to-r from-teal-50 to-green-50 p-6 rounded-lg border-l-4 border-[#4FB8B1]">
+                <h3 class="font-black text-[15px] text-gray-800 uppercase mb-2" style="font-family: 'Montserrat', sans-serif;">Similarity</h3>
+                <p class="text-[14px] text-gray-700 leading-relaxed">
+                    You share a great deal of your core values and this heightens your marital readiness.
+                </p>
+            </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-8 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    When it comes to your individual as well as relationship wellbeing, what concerns you the most and why?
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-8 border-t border-gray-100">
+            <div class="flex flex-col sm:flex-row justify-between items-center text-[13px] text-gray-500">
+                <div class="italic mb-4 sm:mb-0">
+                    Refer to Chapter 1 of SYMBIS: "Have You Faced the Myths of Marriage with Honesty?"
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="logo-text text-gray-800 text-3xl">SYMBIS</span>
+                    <span class="text-[var(--symbis-red)] text-2xl font-black mb-1 mx-0.5">♥</span>
+                    <span class="text-gray-400 font-black text-[11px] mt-2 tracking-[0.2em]">ASSESSMENT</span>
+                    <span class="ml-6 text-gray-800 text-3xl font-black">4</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+  <script src="/report-renderer.js"></script>
+  <!-- Report Navigation -->
+  <div id="report-navigation"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof SymbisNav !== 'undefined') {
+        SymbisNav.init('report', 4);
+      }
+    });
+  </script>
+</body>
+</html>

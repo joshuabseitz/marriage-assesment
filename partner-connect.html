@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find Partner - SYMBIS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/lib/responses-api-browser.js"></script>
+  <script src="/lib/partnerships-api-browser.js"></script>
+  <script src="/lib/reports-api-browser.js"></script>
+  <script src="/auth-check.js"></script>
+  <script src="/navigation.js"></script>
+</head>
+<body class="bg-[#fcfaf8]">
+  <div id="app">
+    <!-- Initial loading state -->
+    <div class="min-h-screen flex items-center justify-center">
+      <div class="text-center">
+        <div class="w-12 h-12 border-4 border-slate-900 border-t-transparent rounded-full mx-auto mb-4" style="animation: spin 1s linear infinite;"></div>
+        <p class="text-slate-600">Loading partner connect...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Note: Using global window.supabaseAuth and window.partnershipsApi loaded from separate scripts
+    
+    let currentPartnership = null;
+    let pendingRequests = { sent: [], received: [] };
+
+    /**
+     * Wait for required APIs to load
+     */
+    async function waitForAPIs() {
+      const maxWait = 5000; // 5 seconds
+      const startTime = Date.now();
+      
+      while (!window.supabaseAuth || !window.partnershipsApi || !window.reportsApi) {
+        if (Date.now() - startTime > maxWait) {
+          throw new Error('Required APIs failed to load. Please refresh the page.');
+        }
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    }
+
+    /**
+     * Render error state
+     */
+    function renderError(message) {
+      const app = document.getElementById('app');
+      app.innerHTML = `
+        ${createNavBar()}
+        <div class="min-h-screen flex items-center justify-center p-4">
+          <div class="max-w-md text-center">
+            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h1 class="text-2xl font-bold mb-4 text-slate-900">Unable to Load</h1>
+            <p class="text-slate-600 mb-8">${message}</p>
+            <button onclick="window.location.reload()" 
+                    class="px-8 py-3 rounded-xl bg-slate-900 text-white font-bold hover:bg-slate-800 transition-all">
+              Refresh Page
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    async function init() {
+      try {
+        // Wait for APIs to load
+        await waitForAPIs();
+        
+        // Get current user (auth-check.js handles redirects for unauthenticated users)
+        const user = await window.supabaseAuth.getCurrentUser();
+        if (!user) {
+          // Show a message while redirect happens
+          renderError('Checking authentication...');
+          return;
+        }
+
+        // Load data
+        await loadData();
+        render();
+      } catch (error) {
+        console.error('Initialization error:', error);
+        renderError(error.message || 'An unexpected error occurred.');
+      }
+    }
+
+    async function loadData() {
+      try {
+        currentPartnership = await window.partnershipsApi.getAcceptedPartnership();
+        pendingRequests = await window.partnershipsApi.getPartnershipRequests();
+      } catch (error) {
+        console.error('Error loading partnership data:', error);
+        // Set defaults so the page can still render
+        currentPartnership = null;
+        pendingRequests = { sent: [], received: [] };
+        throw error; // Re-throw to be caught by init()
+      }
+    }
+
+    function render() {
+      const app = document.getElementById('app');
+      
+      app.innerHTML = `
+        ${createNavBar()}
+        
+        <div class="max-w-4xl mx-auto p-4 sm:p-8 pt-24">
+          <!-- Header -->
+          <div class="mb-8">
+            <h1 class="text-3xl font-bold text-slate-900 mb-2">Find Your Partner</h1>
+            <p class="text-slate-600">Connect with your partner to generate your relationship report</p>
+          </div>
+
+          ${currentPartnership ? renderConnectedPartner() : renderSearchAndRequests()}
+        </div>
+      `;
+    }
+
+    function renderConnectedPartner() {
+      return `
+        <!-- Connected Partner Card -->
+        <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 p-6 mb-6">
+          <div class="flex items-start justify-between mb-4">
+            <div>
+              <h2 class="text-xl font-bold text-slate-900 mb-1">Connected Partner</h2>
+              <p class="text-sm text-slate-500">You're connected and ready to generate reports</p>
+            </div>
+            <div class="px-3 py-1 bg-green-100 text-green-700 text-xs font-bold uppercase tracking-wider rounded-full">
+              Connected
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 p-4 bg-green-50 border-2 border-green-200 rounded-xl mb-6">
+            <div class="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center text-white text-2xl font-bold">
+              ${currentPartnership.partner?.full_name?.charAt(0) || '?'}
+            </div>
+            <div class="flex-1">
+              <p class="text-xl font-bold text-green-900">${currentPartnership.partner?.full_name || 'Partner'}</p>
+              <p class="text-sm text-green-700">${currentPartnership.partner?.email}</p>
+              <p class="text-xs text-green-600 mt-1">
+                Connected since ${new Date(currentPartnership.created_at).toLocaleDateString()}
+              </p>
+            </div>
+          </div>
+
+          <div id="partner-status" class="mb-4"></div>
+
+          <div class="flex gap-3">
+            <a 
+              href="/report-generator"
+              class="flex-1 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold text-center hover:bg-slate-800 transition-all">
+              Generate Report
+            </a>
+            <button 
+              onclick="handleDisconnect()"
+              class="px-6 py-3 text-red-600 border-2 border-red-200 rounded-xl font-bold hover:bg-red-50 transition-all">
+              Disconnect
+            </button>
+          </div>
+        </div>
+
+        <div class="text-center">
+          <a href="/survey" class="text-sm text-slate-600 hover:text-slate-900 font-medium">
+            ← Back to Survey
+          </a>
+        </div>
+      `;
+    }
+
+    function renderSearchAndRequests() {
+      return `
+        <!-- Search Partner Section -->
+        <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 p-6 mb-6">
+          <h2 class="text-xl font-bold text-slate-900 mb-4">Search for Your Partner</h2>
+          <p class="text-sm text-slate-600 mb-4">Search by name or email address</p>
+          
+          <div class="relative">
+            <input 
+              type="text"
+              id="search-input"
+              placeholder="Enter name or email..."
+              oninput="handleSearch(event)"
+              class="w-full px-4 py-3 pr-12 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all">
+            <div class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+          </div>
+
+          <div id="search-results" class="mt-4"></div>
+        </div>
+
+        <!-- Pending Requests -->
+        ${pendingRequests.received.length > 0 ? `
+          <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-xl font-bold text-slate-900">Pending Requests</h2>
+              <span class="px-3 py-1 bg-rose-100 text-rose-700 text-xs font-bold rounded-full">
+                ${pendingRequests.received.length}
+              </span>
+            </div>
+            
+            <div class="space-y-3">
+              ${pendingRequests.received.map(req => `
+                <div class="flex items-center gap-3 p-4 border-2 border-slate-200 rounded-xl">
+                  <div class="w-12 h-12 rounded-full bg-slate-900 flex items-center justify-center text-white font-bold">
+                    ${req.partner?.full_name?.charAt(0) || '?'}
+                  </div>
+                  <div class="flex-1">
+                    <p class="font-bold text-slate-900">${req.partner?.full_name || 'User'}</p>
+                    <p class="text-sm text-slate-600">${req.partner?.email}</p>
+                  </div>
+                  <div class="flex gap-2">
+                    <button 
+                      onclick="handleAcceptRequest('${req.id}')"
+                      class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-bold hover:bg-green-700">
+                      Accept
+                    </button>
+                    <button 
+                      onclick="handleDeclineRequest('${req.id}')"
+                      class="px-4 py-2 bg-red-100 text-red-600 rounded-lg text-sm font-bold hover:bg-red-200">
+                      Decline
+                    </button>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Sent Requests -->
+        ${pendingRequests.sent.length > 0 ? `
+          <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 p-6 mb-6">
+            <h2 class="text-xl font-bold text-slate-900 mb-4">Sent Requests</h2>
+            
+            <div class="space-y-3">
+              ${pendingRequests.sent.map(req => `
+                <div class="flex items-center gap-3 p-4 border-2 border-amber-200 bg-amber-50 rounded-xl">
+                  <div class="w-12 h-12 rounded-full bg-amber-500 flex items-center justify-center text-white font-bold">
+                    ${req.partner?.full_name?.charAt(0) || '?'}
+                  </div>
+                  <div class="flex-1">
+                    <p class="font-bold text-amber-900">${req.partner?.full_name || 'User'}</p>
+                    <p class="text-sm text-amber-700">${req.partner?.email}</p>
+                    <p class="text-xs text-amber-600 mt-1">Waiting for response...</p>
+                  </div>
+                  <button 
+                    onclick="handleCancelRequest('${req.id}')"
+                    class="px-4 py-2 bg-red-100 text-red-600 rounded-lg text-sm font-bold hover:bg-red-200 transition-all">
+                    Cancel
+                  </button>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="text-center">
+          <a href="/survey" class="text-sm text-slate-600 hover:text-slate-900 font-medium">
+            ← Back to Survey
+          </a>
+        </div>
+      `;
+    }
+
+    // Search handler - searches both name and email
+    let searchTimeout;
+    window.handleSearch = async function(event) {
+      const query = event.target.value.trim();
+      const resultsDiv = document.getElementById('search-results');
+
+      if (query.length < 2) {
+        resultsDiv.innerHTML = '';
+        return;
+      }
+
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(async () => {
+        resultsDiv.innerHTML = '<p class="text-sm text-slate-500 p-4">Searching...</p>';
+
+        try {
+          // Search both by name and email
+          const [emailResults, nameResults] = await Promise.all([
+            window.partnershipsApi.searchUserByEmail(query),
+            window.partnershipsApi.searchUserByName(query)
+          ]);
+          
+          // Combine and deduplicate results
+          const resultsMap = new Map();
+          [...emailResults, ...nameResults].forEach(user => {
+            resultsMap.set(user.id, user);
+          });
+          const results = Array.from(resultsMap.values());
+          
+          if (results.length === 0) {
+            resultsDiv.innerHTML = '<p class="text-sm text-slate-500 p-4">No users found</p>';
+            return;
+          }
+
+          // Check for existing partnerships to disable already-connected users
+          const existingPartnerships = await window.partnershipsApi.getAllPartnerships();
+          const connectedUserIds = new Set(
+            existingPartnerships.map(p => p.partner.id)
+          );
+
+          resultsDiv.innerHTML = `
+            <div class="space-y-2">
+              ${results.map(user => {
+                const isConnected = connectedUserIds.has(user.id);
+                return `
+                  <div class="flex items-center gap-3 p-3 border-2 ${isConnected ? 'border-green-200 bg-green-50' : 'border-slate-200'} rounded-xl hover:border-slate-300 transition-colors">
+                    <div class="w-10 h-10 rounded-full bg-slate-900 flex items-center justify-center text-white font-bold text-sm">
+                      ${user.full_name?.charAt(0) || '?'}
+                    </div>
+                    <div class="flex-1">
+                      <p class="font-bold text-slate-900 text-sm">${user.full_name || 'User'}</p>
+                      <p class="text-xs text-slate-600">${user.email}</p>
+                      ${isConnected ? '<p class="text-xs text-green-600 mt-1">✓ Already connected or pending</p>' : ''}
+                    </div>
+                    ${!isConnected ? `
+                      <button 
+                        onclick="handleSendRequest('${user.id}')"
+                        class="px-4 py-2 bg-slate-900 text-white rounded-lg text-xs font-bold hover:bg-slate-800">
+                        Send Request
+                      </button>
+                    ` : ''}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          `;
+        } catch (error) {
+          resultsDiv.innerHTML = `<p class="text-sm text-red-600 p-4">Error: ${error.message}</p>`;
+        }
+      }, 500);
+    };
+
+    // Request handlers
+    window.handleSendRequest = async function(partnerId) {
+      try {
+        await window.partnershipsApi.sendPartnerRequest(partnerId);
+        alert('Partnership request sent!');
+        await loadData();
+        render();
+      } catch (error) {
+        alert('Failed to send request: ' + error.message);
+      }
+    };
+
+    window.handleAcceptRequest = async function(partnershipId) {
+      try {
+        await window.partnershipsApi.acceptPartnershipRequest(partnershipId);
+        alert('Partnership accepted! You can now generate your report together.');
+        await loadData();
+        render();
+      } catch (error) {
+        alert('Failed to accept request: ' + error.message);
+      }
+    };
+
+    window.handleDeclineRequest = async function(partnershipId) {
+      if (confirm('Are you sure you want to decline this request?')) {
+        try {
+          await window.partnershipsApi.declinePartnershipRequest(partnershipId);
+          await loadData();
+          render();
+        } catch (error) {
+          alert('Failed to decline request: ' + error.message);
+        }
+      }
+    };
+
+    window.handleCancelRequest = async function(partnershipId) {
+      if (confirm('Are you sure you want to cancel this partnership request?')) {
+        try {
+          await window.partnershipsApi.deletePartnership(partnershipId);
+          await loadData();
+          render();
+        } catch (error) {
+          alert('Failed to cancel request: ' + error.message);
+        }
+      }
+    };
+
+    window.handleDisconnect = async function() {
+      if (confirm('Are you sure you want to disconnect from your partner? This will not delete your survey responses or reports.')) {
+        try {
+          await window.partnershipsApi.deletePartnership(currentPartnership.id);
+          alert('Partnership disconnected.');
+          await loadData();
+          render();
+        } catch (error) {
+          alert('Failed to disconnect: ' + error.message);
+        }
+      }
+    };
+
+    // Check partner's survey status
+    async function checkPartnerStatus() {
+      if (!currentPartnership) return;
+
+      const partnerId = currentPartnership.partner.id;
+      try {
+        const partnerCount = await window.reportsApi.getResponseCountForUser(partnerId);
+        const partnerComplete = partnerCount >= 290;
+        const myComplete = await window.reportsApi.isSurveyComplete();
+
+        const statusDiv = document.getElementById('partner-status');
+        if (statusDiv) {
+          statusDiv.innerHTML = `
+            <div class="grid grid-cols-2 gap-3">
+              <div class="p-3 bg-slate-50 rounded-xl">
+                <p class="text-xs text-slate-500 font-bold uppercase mb-1">Your Survey</p>
+                <p class="text-sm font-bold ${myComplete ? 'text-green-600' : 'text-amber-600'}">
+                  ${myComplete ? '✓ Complete' : '⋯ In Progress'}
+                </p>
+              </div>
+              <div class="p-3 bg-slate-50 rounded-xl">
+                <p class="text-xs text-slate-500 font-bold uppercase mb-1">Partner's Survey</p>
+                <p class="text-sm font-bold ${partnerComplete ? 'text-green-600' : 'text-amber-600'}">
+                  ${partnerComplete ? '✓ Complete' : '⋯ In Progress'}
+                </p>
+              </div>
+            </div>
+            
+            ${!myComplete || !partnerComplete ? `
+              <div class="mt-3 p-3 bg-amber-50 border-2 border-amber-200 rounded-xl">
+                <p class="text-xs text-amber-800">
+                  <span class="font-bold">Both partners must complete the survey</span> before generating the report.
+                </p>
+              </div>
+            ` : ''}
+          `;
+        }
+      } catch (error) {
+        console.error('Error checking partner status:', error);
+      }
+    }
+
+    // Initialize
+    init().then(() => {
+      if (currentPartnership) {
+        checkPartnerStatus();
+      }
+    });
+  </script>
+</body>
+</html>
+

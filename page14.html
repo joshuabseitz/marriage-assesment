@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYMBIS Report - Page 14: Conflict</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase for authentication -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/auth-check.js"></script>
+  <script src="/navigation.js"></script>
+  <script src="/status-manager.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --symbis-red: #E54D42;
+            --symbis-teal: #4FB8B1;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e5e7eb;
+            color: #333;
+        }
+        .report-container {
+            max-width: 950px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .header-rule {
+            border-bottom: 2px dashed #d1d5db;
+            margin: 1.5rem 0;
+        }
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        .nav-button {
+            transition: all 0.2s ease;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="p-0 sm:p-4">
+    <!-- Navigation Bar -->
+    <div id="symbis-navigation"></div>
+
+    <div class="report-container p-8 sm:p-14">
+        <!-- Navigation -->
+        <div class="flex justify-between items-center mb-6">
+            <a href="page13" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">← Previous</a>
+            <span class="text-gray-400 text-sm font-bold">Page 14</span>
+            <a href="page15" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">Next →</a>
+        </div>
+
+        <!-- Header -->
+        <section class="mb-10">
+            <div class="flex items-start gap-6">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-[#4FB8B1] rounded-xl flex items-center justify-center">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 2L16 8L12 14L8 8Z"/>
+                            <circle cx="12" cy="12" r="8"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-2">DYNAMICS: CONFLICT</h1>
+                    <p class="text-gray-600 italic text-[15px] leading-relaxed">
+                        Conflict is inevitable, even for loving couples. It's the price we pay for a deeper level of intimacy. When you learn to fight a good fight, you can use conflict to your advantage.
+                    </p>
+                </div>
+            </div>
+            <div class="header-rule"></div>
+        </section>
+
+        <!-- Conflict Styles -->
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <!-- Cooperating Spouse -->
+            <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-8 border-2 border-red-200">
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md">
+                    <div>
+                        <h3 class="text-[20px] font-black text-[#E54D42] uppercase">Cooperating</h3>
+                        <h4 class="text-[16px] font-black text-[#E54D42] uppercase">Spouse</h4>
+                    </div>
+                </div>
+                <p class="text-[14px] text-gray-700 leading-relaxed mb-6">
+                    When making plans, you can be precise and systematic. You will display discernment and a good sense of timing in selecting the right decision at the appropriate time. At times, you may be rather hesitant in making decisions. This may occur because you have a need to obtain and evaluate information before making a decision. You may not attempt to commit yourself or declare intentions initially, but will when in situations where you can weigh the pros and cons of various ideas or activities. You are usually careful and cautious in most social and family situations. You will probably not go over the speed limits, or disobey written or unwritten rules in the community.
+                </p>
+            </div>
+
+            <!-- Affirming Spouse -->
+            <div class="bg-gradient-to-br from-teal-50 to-blue-50 rounded-xl p-8 border-2 border-teal-200">
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md">
+                    <div>
+                        <h3 class="text-[20px] font-black text-[#4FB8B1] uppercase">Affirming</h3>
+                        <h4 class="text-[16px] font-black text-[#4FB8B1] uppercase">Spouse</h4>
+                    </div>
+                </div>
+                <p class="text-[14px] text-gray-700 leading-relaxed mb-6">
+                    When working on plans for activities, you must feel that you are "in on things." You will generally offer creative ideas or suggest activities. You can be intense when confronted with a tough problem. The intensity may not always fit the problem; that is, sometimes you can get intense over a problem that looks tough. You may mean well in starting numerous activities, but your involvement with so many usually forces some aside. As a result, some things go unfinished. To be more effective, you should be more organized. Don't let things pile up; handle matters and get them out of the way, especially things that your spouse is counting on to be finished. You mean well in starting numerous activities, but your involvement with so many usually forces some aside.
+                </p>
+            </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-12 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    What do you agree or disagree with? Why? Select two or three statements from your paragraph that you agree with most and explain how they may influence conflicts.
+                </p>
+            </div>
+        </div>
+
+        <!-- Personal Conflict Challenges -->
+        <div class="mb-12">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-4" style="font-family: 'Montserrat', sans-serif;">
+                Personal Conflict Challenges
+            </h2>
+            <p class="text-center text-sm text-gray-600 italic mb-8">
+                These can limit your ability to successfully manage conflict
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Toni -->
+                <div class="bg-red-50 rounded-xl p-6 border border-red-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-12 h-12 rounded-full border-2 border-[#E88B88] object-cover">
+                        <span class="font-bold text-lg text-[#E88B88]">Toni</span>
+                    </div>
+                    <ul class="space-y-3 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span>You hesitate to act on a problem unless a solution is clear, or the risk is small.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span>You become evasive if not sure of a position, or the position of others.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span>You become defensive when involving risk--preferring to keep things the same.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span>You yield position to avoid controversy--attempt to avoid an antagonistic environment.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Chris -->
+                <div class="bg-teal-50 rounded-xl p-6 border border-teal-200">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-12 h-12 rounded-full border-2 border-[#4FB8B1] object-cover">
+                        <span class="font-bold text-lg text-[#4FB8B1]">Chris</span>
+                    </div>
+                    <ul class="space-y-3 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span>You are not attentive to detail; as a result, some small details might be ignored or forgotten.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span>You spend money impulsively rather than evaluating affordability.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span>You are a situational listener if not given an opportunity to share ideas.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span>You become so enthusiastic that you are impulsive in activities.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-12 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    What do you resonate with most from each list? Explore why these happen and discuss what you can both do to grow in these areas. Use real life examples.
+                </p>
+            </div>
+        </div>
+
+        <!-- Hot Topics -->
+        <div class="bg-gradient-to-br from-orange-50 to-red-50 rounded-2xl p-8 mb-10 border-2 border-orange-200">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-4" style="font-family: 'Montserrat', sans-serif;">
+                Hot Topics
+            </h2>
+            <p class="text-center text-sm text-gray-600 italic mb-8">
+                Every couple has a list of issues that are prone to conflict. Your hot topics, listed in priority below, are most likely to spark tension for the two of you:
+            </p>
+
+            <div class="flex items-center justify-center gap-12">
+                <div class="bg-white rounded-xl p-6 shadow-md flex-1 max-w-xs">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-12 h-12 rounded-full border-2 border-[#E88B88] object-cover">
+                        <span class="font-bold text-lg text-[#E88B88]">Toni</span>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center gap-2">
+                            <span class="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                            <span>Chores</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-6 h-6 bg-orange-400 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                            <span>Priorities</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-6 h-6 bg-orange-300 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                            <span>Money</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-6 h-6 bg-orange-200 text-gray-700 rounded-full flex items-center justify-center text-xs font-bold">4</span>
+                            <span>Sex</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-6 h-6 bg-orange-100 text-gray-700 rounded-full flex items-center justify-center text-xs font-bold">5</span>
+                            <span>Communication</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-orange-500 rounded-full flex items-center justify-center shadow-lg">
+                        <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15 8L12 14L9 8Z"/>
+                            <path d="M12 10C8 10 4 12 4 15C4 18 8 22 12 22C16 22 20 18 20 15C20 12 16 10 12 10Z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-md flex-1 max-w-xs">
+                    <div class="flex items-center gap-3 mb-4">
+                        <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-12 h-12 rounded-full border-2 border-[#4FB8B1] object-cover">
+                        <span class="font-bold text-lg text-[#4FB8B1]">Chris</span>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-center gap-2">
+                            <span class="w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                            <span>Chores</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-6 h-6 bg-orange-400 text-white rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                            <span>Children</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-6 h-6 bg-orange-300 text-white rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                            <span>Careers</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-6 h-6 bg-orange-200 text-gray-700 rounded-full flex items-center justify-center text-xs font-bold">4</span>
+                            <span>Money</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                            <span class="w-6 h-6 bg-orange-100 text-gray-700 rounded-full flex items-center justify-center text-xs font-bold">5</span>
+                            <span>Sex</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Question -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-8 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    Knowing these topics are likely to spark tension, how can you use this information to curb conflicts? Give a concrete example of how you can better manage each one.
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-8 border-t border-gray-100">
+            <div class="flex flex-col sm:flex-row justify-between items-center text-[13px] text-gray-500">
+                <div class="italic mb-4 sm:mb-0">
+                    Refer to Chapter 6 of SYMBIS: "Do You Know How to Fight a Good Fight?"
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="logo-text text-gray-800 text-3xl">SYMBIS</span>
+                    <span class="text-[var(--symbis-red)] text-2xl font-black mb-1 mx-0.5">♥</span>
+                    <span class="text-gray-400 font-black text-[11px] mt-2 tracking-[0.2em]">ASSESSMENT</span>
+                    <span class="ml-6 text-gray-800 text-3xl font-black">14</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+  <script src="/report-renderer.js"></script>
+  <!-- Report Navigation -->
+  <div id="report-navigation"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof SymbisNav !== 'undefined') {
+        SymbisNav.init('report', 14);
+      }
+    });
+  </script>
+</body>
+</html>
+

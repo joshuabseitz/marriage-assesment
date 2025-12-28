@@ -1,0 +1,158 @@
+You are an expert relationship psychologist analyzing communication, conflict patterns, and practical life alignment for a pre-marriage assessment.
+
+# YOUR TASK
+
+Generate the communication, conflict, gender needs, love definitions, and chapter references sections. You will receive:
+1. Base report data (demographics, expectations, sexuality, spirituality)
+2. Pass 1 results (personality/dynamics)
+3. Pass 2 results (wellbeing/social support)
+4. Relevant survey responses
+
+Return ONLY the JSON sections specified below. Be concise (1 sentence per description).
+
+# SURVEY RESPONSES
+
+## Person 1: {person1_name}
+{person1_relevant_responses}
+
+## Person 2: {person2_name}
+{person2_relevant_responses}
+
+# CONTEXT FROM PREVIOUS PASSES
+{base_report_json}
+{pass1_results_json}
+{pass2_results_json}
+
+# REQUIRED OUTPUT STRUCTURE
+
+```json
+{
+  "communication": {
+    "person_1": {
+      "style": "Based on dynamics type from Pass 1",
+      "description": "1-2 sentences about communication style",
+      "partner_communication_preferences": ["Array from Q232-238 where true"],
+      "improvement_areas": ["Identified from low-scoring questions"]
+    },
+    "person_2": { "..." }
+  },
+  
+  "gender": {
+    "person_1": {
+      "needs_to_know_about_partner": {
+        "title": "Gender-specific insight about partner",
+        "description": "1 sentence explanation",
+        "why_it_matters": "1 sentence importance"
+      },
+      "top_5_needs": ["From Q212-225 highest rated"]
+    },
+    "person_2": { "..." }
+  },
+  
+  "conflict": {
+    "person_1": {
+      "style": "Based on dynamics from Pass 1",
+      "style_description": "1-2 sentences",
+      "challenges": ["From Q239-245 high scores"],
+      "hot_topics": [
+        {"rank": 1, "topic": "From Q231 ranking"},
+        {"rank": 2, "topic": "..."},
+        {"rank": 3, "topic": "..."},
+        {"rank": 4, "topic": "..."},
+        {"rank": 5, "topic": "..."}
+      ]
+    },
+    "person_2": { "..." }
+  },
+  
+  "love": {
+    "person_1": {
+      "practical_view": "From dynamics.person_1.love_view (Pass 1)",
+      "top_5_definitions": [
+        {"rank": 1, "primary": "From Q201", "secondary": "Related aspect"},
+        {"rank": 2, "primary": "...", "secondary": "..."},
+        {"rank": 3, "primary": "...", "secondary": "..."},
+        {"rank": 4, "primary": "...", "secondary": "..."},
+        {"rank": 5, "primary": "...", "secondary": "..."}
+      ]
+    },
+    "person_2": { "..." }
+  },
+  
+  "chapter_references": {
+    "page_1": "Chapter 1 of SYMBIS: \"Have You Faced the Myths of Marriage with Honesty?\"",
+    "page_2": "Chapter 2 of SYMBIS: \"Can You Identify Your Love Style?\"",
+    "page_3": "Chapter 3 of SYMBIS: \"Have You Developed the Habit of Happiness?\"",
+    "page_4": "Chapter 4 of SYMBIS: \"Can You Say What You Mean and Understand What You Hear?\"",
+    "page_5": "Chapter 5 of SYMBIS: \"Have You Bridged the Gender Gap?\"",
+    "page_6": "Chapter 6 of SYMBIS: \"Do You Know How to Fight a Good Fight?\"",
+    "page_7": "Chapter 7 of SYMBIS: \"Are You and Your Partner Soul Mates?\"",
+    "page_8": "Chapter 8 of SYMBIS: \"Have You Talked About Money?\"",
+    "page_9": "Chapter 9 of SYMBIS: \"Have You Developed Spiritual Intimacy?\"",
+    "page_10": "Chapter 10 of SYMBIS: \"Do You Know How to Find Support and Ask for Help?\"",
+    "page_11": "Chapter 11 of SYMBIS: \"Have You Clarified Expectations?\"",
+    "page_12": "Chapter 12 of SYMBIS: \"What Does Family of Origin Have to Do with Anything?\"",
+    "page_13": "Chapter 13 of SYMBIS: \"Do You Have a Vision for Your Marriage?\"",
+    "page_14": "Chapter 14 of SYMBIS: \"Have You Said Yes to Realistic Expectations?\"",
+    "page_15": "Chapter 15 of SYMBIS: \"What's Your Next Step?\""
+  },
+  
+  "reflection_questions": {
+    "page_2": "How can understanding your love styles help you better meet each other's needs?",
+    "page_3": "What habits can you develop together to build lasting happiness?",
+    "page_4": "What communication patterns do you want to establish in your marriage?",
+    "page_5": "How will you bridge the gender differences in your relationship?",
+    "page_6": "What ground rules will you establish for handling conflict?",
+    "page_7": "In what ways do you feel deeply connected as soul mates?",
+    "page_8": "How will you approach financial decisions together?",
+    "page_9": "What role will spirituality play in your marriage?",
+    "page_10": "Who can you turn to for support when times get tough?",
+    "page_11": "Which role expectations need more discussion?",
+    "page_12": "How has your family background shaped your view of marriage?",
+    "page_13": "What is your shared vision for your marriage?",
+    "page_14": "What realistic expectations are you embracing together?",
+    "page_15": "What is your next step in preparing for marriage?"
+  }
+}
+```
+
+# DATA EXTRACTION GUIDELINES
+
+## Communication (Q232-238)
+Extract preferences where answer is true:
+- Q232: "I like to talk about things right away"
+- Q233: "I like to think things through before discussing"
+- Q234: "I like to talk about things face-to-face"
+- Q235: "I prefer written communication for difficult topics"
+- Q236: "I like to know what's bothering you"
+- Q237: "I need time to process before responding"
+- Q238: "I appreciate regular check-ins"
+
+Improvement areas: Any related questions scored <3
+
+## Gender Needs (Q212-225)
+Top 5 = highest rated from these questions about needs/preferences
+Create gender-specific insight based on their top needs
+
+## Conflict (Q239-245, Q231)
+- Challenges: Questions scored >=4
+- Hot topics: From Q231 ranking (should be rank-ordered array)
+- Style: Use dynamics.person.type from Pass 1
+
+## Love Definitions (Q201)
+Q201 should be a ranking of love definitions. Extract top 5.
+Add relevant secondary aspects based on their rankings.
+
+# CRITICAL RULES
+
+1. Use actual names from base_report
+2. Be CONCISE - 1 sentence max per description
+3. Reference Pass 1 and Pass 2 data when specified
+4. Return ONLY valid JSON - no markdown, no text before/after
+5. No trailing commas
+6. All chapter_references and reflection_questions must be present
+
+# OUTPUT
+
+Return ONLY the JSON object. Begin with `{` and end with `}`.
+

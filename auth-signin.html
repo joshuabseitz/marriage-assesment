@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In - SYMBIS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .tab-active {
+      border-bottom-color: #0f172a;
+      color: #0f172a;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+  </style>
+</head>
+<body class="bg-[#fcfaf8]">
+  <div class="min-h-screen flex flex-col items-center justify-center p-4">
+    <div class="w-full max-w-md">
+      <!-- Logo/Brand -->
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-slate-900 tracking-tight mb-2">SYMBIS</h1>
+        <p class="text-sm text-slate-500">Pre-Marriage Assessment</p>
+      </div>
+
+      <!-- Auth Card -->
+      <div class="bg-white rounded-2xl shadow-sm border-2 border-slate-100 overflow-hidden">
+        <!-- Tabs -->
+        <div class="flex border-b-2 border-slate-100">
+          <button 
+            id="signin-tab"
+            class="flex-1 py-4 text-sm font-bold uppercase tracking-wider border-b-2 border-transparent transition-colors tab-active"
+            onclick="switchTab('signin')">
+            Sign In
+          </button>
+          <button 
+            id="signup-tab"
+            class="flex-1 py-4 text-sm font-bold uppercase tracking-wider text-slate-400 border-b-2 border-transparent transition-colors"
+            onclick="switchTab('signup')">
+            Sign Up
+          </button>
+        </div>
+
+        <!-- Sign In Form -->
+        <div id="signin-form" class="p-6 fade-in">
+          <form onsubmit="handleSignIn(event)">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                <input 
+                  type="email" 
+                  id="signin-email"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all"
+                  placeholder="you@example.com">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                <input 
+                  type="password" 
+                  id="signin-password"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all"
+                  placeholder="••••••••">
+              </div>
+            </div>
+
+            <div class="mt-2 text-right">
+              <button 
+                type="button"
+                onclick="handleForgotPassword()"
+                class="text-xs text-slate-600 hover:text-slate-900 font-medium">
+                Forgot password?
+              </button>
+            </div>
+
+            <button 
+              type="submit"
+              id="signin-btn"
+              class="w-full mt-6 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg hover:shadow-rose-100/50">
+              Sign In
+            </button>
+          </form>
+
+          <div id="signin-error" class="hidden mt-4 p-3 bg-red-50 border-2 border-red-200 rounded-xl">
+            <p class="text-sm text-red-600 font-medium"></p>
+          </div>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div id="signup-form" class="p-6 hidden fade-in">
+          <form onsubmit="handleSignUp(event)">
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Full Name</label>
+                <input 
+                  type="text" 
+                  id="signup-name"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all"
+                  placeholder="Your full name">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                <input 
+                  type="email" 
+                  id="signup-email"
+                  required
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all"
+                  placeholder="you@example.com">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                <input 
+                  type="password" 
+                  id="signup-password"
+                  required
+                  minlength="6"
+                  class="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-slate-800 focus:ring-2 focus:ring-slate-100 outline-none transition-all"
+                  placeholder="At least 6 characters">
+                <p class="mt-1 text-xs text-slate-500">Minimum 6 characters</p>
+              </div>
+            </div>
+
+            <button 
+              type="submit"
+              id="signup-btn"
+              class="w-full mt-6 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg hover:shadow-rose-100/50">
+              Create Account
+            </button>
+          </form>
+
+          <div id="signup-error" class="hidden mt-4 p-3 bg-red-50 border-2 border-red-200 rounded-xl">
+            <p class="text-sm text-red-600 font-medium"></p>
+          </div>
+
+          <div id="signup-success" class="hidden mt-4 p-3 bg-green-50 border-2 border-green-200 rounded-xl">
+            <p class="text-sm text-green-600 font-medium"></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <p class="mt-6 text-center text-xs text-slate-400 font-medium uppercase tracking-wider">
+        SYMBIS Journey
+      </p>
+    </div>
+  </div>
+
+  <!-- Load Supabase from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+
+  <script>
+    // Switch between tabs
+    window.switchTab = function(tab) {
+      const signinTab = document.getElementById('signin-tab');
+      const signupTab = document.getElementById('signup-tab');
+      const signinForm = document.getElementById('signin-form');
+      const signupForm = document.getElementById('signup-form');
+
+      if (tab === 'signin') {
+        signinTab.classList.add('tab-active', 'text-slate-900');
+        signinTab.classList.remove('text-slate-400');
+        signupTab.classList.remove('tab-active', 'text-slate-900');
+        signupTab.classList.add('text-slate-400');
+        signinForm.classList.remove('hidden');
+        signupForm.classList.add('hidden');
+      } else {
+        signupTab.classList.add('tab-active', 'text-slate-900');
+        signupTab.classList.remove('text-slate-400');
+        signinTab.classList.remove('tab-active', 'text-slate-900');
+        signinTab.classList.add('text-slate-400');
+        signupForm.classList.remove('hidden');
+        signinForm.classList.add('hidden');
+      }
+    };
+
+    // Handle sign in
+    window.handleSignIn = async function(event) {
+      event.preventDefault();
+      
+      const email = document.getElementById('signin-email').value;
+      const password = document.getElementById('signin-password').value;
+      const btn = document.getElementById('signin-btn');
+      const errorDiv = document.getElementById('signin-error');
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Signing in...';
+        errorDiv.classList.add('hidden');
+
+        // Wait for supabaseAuth to be loaded
+        if (!window.supabaseAuth) {
+          console.error('supabaseAuth not loaded, waiting...');
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          if (!window.supabaseAuth) {
+            throw new Error('System error: Authentication system not loaded. Please refresh the page and try again.');
+          }
+        }
+
+        const { user } = await window.supabaseAuth.signIn(email, password);
+
+        // Get redirect URL from query params
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get('redirect') || '/survey';
+        
+        window.location.href = redirect;
+      } catch (error) {
+        errorDiv.classList.remove('hidden');
+        errorDiv.querySelector('p').textContent = error.message || 'Failed to sign in. Please check your credentials.';
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+      }
+    };
+
+    // Handle sign up
+    window.handleSignUp = async function(event) {
+      event.preventDefault();
+      
+      const name = document.getElementById('signup-name').value;
+      const email = document.getElementById('signup-email').value;
+      const password = document.getElementById('signup-password').value;
+      const btn = document.getElementById('signup-btn');
+      const errorDiv = document.getElementById('signup-error');
+      const successDiv = document.getElementById('signup-success');
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Creating account...';
+        errorDiv.classList.add('hidden');
+        successDiv.classList.add('hidden');
+
+        await window.supabaseAuth.signUp(email, password, { full_name: name });
+
+        successDiv.classList.remove('hidden');
+        successDiv.querySelector('p').textContent = 'Account created! Please check your email to verify your account, then sign in.';
+        
+        // Switch to sign in tab after 2 seconds
+        setTimeout(() => {
+          window.switchTab('signin');
+          document.getElementById('signin-email').value = email;
+        }, 2000);
+
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      } catch (error) {
+        errorDiv.classList.remove('hidden');
+        errorDiv.querySelector('p').textContent = error.message || 'Failed to create account. Please try again.';
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+      }
+    };
+
+    // Handle forgot password
+    window.handleForgotPassword = async function() {
+      const email = document.getElementById('signin-email').value;
+      
+      if (!email) {
+        alert('Please enter your email address first.');
+        return;
+      }
+
+      try {
+        await window.supabaseAuth.resetPassword(email);
+        alert('Password reset email sent! Please check your inbox.');
+      } catch (error) {
+        alert('Failed to send reset email. Please try again.');
+      }
+    };
+
+    // Check if already authenticated and redirect
+    window.supabaseAuth.redirectIfAuthenticated();
+  </script>
+</body>
+</html>
+

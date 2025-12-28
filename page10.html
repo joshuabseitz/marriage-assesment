@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYMBIS Report - Page 10: Dynamics Love</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase for authentication -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/auth-check.js"></script>
+  <script src="/navigation.js"></script>
+  <script src="/status-manager.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --symbis-red: #E54D42;
+            --symbis-teal: #4FB8B1;
+            --toni-red: #E88B88;
+            --chris-teal: #4FB8B1;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e5e7eb;
+            color: #333;
+        }
+        .report-container {
+            max-width: 950px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .header-rule {
+            border-bottom: 2px dashed #d1d5db;
+            margin: 1.5rem 0;
+        }
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        .nav-button {
+            transition: all 0.2s ease;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .love-rank {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+    </style>
+</head>
+<body class="p-0 sm:p-4">
+    <!-- Navigation Bar -->
+    <div id="symbis-navigation"></div>
+
+    <div class="report-container p-8 sm:p-14">
+        <!-- Navigation -->
+        <div class="flex justify-between items-center mb-6">
+            <a href="page9" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">← Previous</a>
+            <span class="text-gray-400 text-sm font-bold">Page 10</span>
+            <a href="page11" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">Next →</a>
+        </div>
+
+        <!-- Header -->
+        <section class="mb-10">
+            <div class="flex items-start gap-6">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-[#4FB8B1] rounded-xl flex items-center justify-center">
+                        <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 21C12 21 4 15 4 9C4 6 6 4 8 4C10 4 11 5 12 7C13 5 14 4 16 4C18 4 20 6 20 9C20 15 12 21 12 21Z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-2">DYNAMICS: LOVE</h1>
+                    <p class="text-gray-600 italic text-[15px] leading-relaxed">
+                        What is love? Perhaps it's no surprise that everyone seems to have their own answer. After all, each of us is hardwired uniquely for giving and receiving love.
+                    </p>
+                </div>
+            </div>
+            <div class="header-rule"></div>
+        </section>
+
+        <!-- How You View Love -->
+        <div class="mb-12">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-8" style="font-family: 'Montserrat', sans-serif;">
+                How You View Love in Practical Terms
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-8 mb-10">
+                <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-8 border-2 border-[#E88B88]">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md">
+                        <div>
+                            <h3 class="text-[22px] font-black text-[#E54D42] uppercase tracking-tight">Cooperating</h3>
+                            <h4 class="text-[22px] font-black text-[#E54D42] uppercase tracking-tight">Spouse</h4>
+                        </div>
+                    </div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed">
+                        Being heart-felt, vulnerable, and giving the benefit of the doubt.
+                    </p>
+                </div>
+
+                <div class="bg-gradient-to-br from-teal-50 to-blue-50 rounded-xl p-8 border-2 border-[#4FB8B1]">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md">
+                        <div>
+                            <h3 class="text-[22px] font-black text-[#4FB8B1] uppercase tracking-tight">Affirming</h3>
+                            <h4 class="text-[22px] font-black text-[#4FB8B1] uppercase tracking-tight">Spouse</h4>
+                        </div>
+                    </div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed">
+                        Being attentive and giving each other affection and acceptance.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Question Box -->
+            <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-10 flex gap-4">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                        What aspects of your definition do you agree with most and how would you elaborate on it? How can you help your partner love you in ways you most desire? Use concrete examples.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How You Define Love -->
+        <div class="mb-12">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-8" style="font-family: 'Montserrat', sans-serif;">
+                How You Define Love
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Toni's Rankings -->
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-12 h-12 rounded-full border-2 border-[#E88B88] object-cover">
+                        <span class="font-bold text-lg text-[#E88B88]">Toni's Top 5</span>
+                    </div>
+                    <div class="love-rank bg-gradient-to-r from-green-100 to-green-50 border-l-4 border-green-600">
+                        <div>
+                            <span class="text-xs font-bold text-green-700 uppercase">First</span>
+                            <div class="text-sm font-bold text-gray-800">Kindness → Trust</div>
+                        </div>
+                    </div>
+                    <div class="love-rank bg-gradient-to-r from-green-100 to-green-50 border-l-4 border-green-500">
+                        <div>
+                            <span class="text-xs font-bold text-green-700 uppercase">Second</span>
+                            <div class="text-sm font-bold text-gray-800">Longing → Honesty</div>
+                        </div>
+                    </div>
+                    <div class="love-rank bg-gradient-to-r from-blue-100 to-blue-50 border-l-4 border-blue-500">
+                        <div>
+                            <span class="text-xs font-bold text-blue-700 uppercase">Third</span>
+                            <div class="text-sm font-bold text-gray-800">Excitement → Friendship</div>
+                        </div>
+                    </div>
+                    <div class="love-rank bg-gradient-to-r from-orange-100 to-orange-50 border-l-4 border-orange-500">
+                        <div>
+                            <span class="text-xs font-bold text-orange-700 uppercase">Fourth</span>
+                            <div class="text-sm font-bold text-gray-800">Commitment → Kindness</div>
+                        </div>
+                    </div>
+                    <div class="love-rank bg-gradient-to-r from-gray-100 to-gray-50 border-l-4 border-gray-500">
+                        <div>
+                            <span class="text-xs font-bold text-gray-700 uppercase">Fifth</span>
+                            <div class="text-sm font-bold text-gray-800">Friendship → Respect</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chris's Rankings -->
+                <div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-12 h-12 rounded-full border-2 border-[#4FB8B1] object-cover">
+                        <span class="font-bold text-lg text-[#4FB8B1]">Chris's Top 5</span>
+                    </div>
+                    <div class="love-rank bg-gradient-to-r from-green-100 to-green-50 border-l-4 border-green-600">
+                        <div>
+                            <span class="text-xs font-bold text-green-700 uppercase">First</span>
+                            <div class="text-sm font-bold text-gray-800">Kindness → Trust</div>
+                        </div>
+                    </div>
+                    <div class="love-rank bg-gradient-to-r from-green-100 to-green-50 border-l-4 border-green-500">
+                        <div>
+                            <span class="text-xs font-bold text-green-700 uppercase">Second</span>
+                            <div class="text-sm font-bold text-gray-800">Longing → Honesty</div>
+                        </div>
+                    </div>
+                    <div class="love-rank bg-gradient-to-r from-blue-100 to-blue-50 border-l-4 border-blue-500">
+                        <div>
+                            <span class="text-xs font-bold text-blue-700 uppercase">Third</span>
+                            <div class="text-sm font-bold text-gray-800">Excitement → Friendship</div>
+                        </div>
+                    </div>
+                    <div class="love-rank bg-gradient-to-r from-orange-100 to-orange-50 border-l-4 border-orange-500">
+                        <div>
+                            <span class="text-xs font-bold text-orange-700 uppercase">Fourth</span>
+                            <div class="text-sm font-bold text-gray-800">Commitment → Kindness</div>
+                        </div>
+                    </div>
+                    <div class="love-rank bg-gradient-to-r from-gray-100 to-gray-50 border-l-4 border-gray-500">
+                        <div>
+                            <span class="text-xs font-bold text-gray-700 uppercase">Fifth</span>
+                            <div class="text-sm font-bold text-gray-800">Friendship → Respect</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Box -->
+            <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mt-10 flex gap-4">
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                        How are your top 3 items similar or different from each other? Elaborate on the qualities you chose. How would each of you complete this sentence: "I feel most loved when you..."
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Let's Talk About Sex -->
+        <div class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 rounded-2xl p-8 mb-10">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-8" style="font-family: 'Montserrat', sans-serif;">
+                Let's Talk About Sex
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Abstaining -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-700 text-sm mb-4">Are you abstaining from sex?</h3>
+                    <div class="flex gap-4">
+                        <div class="flex-1 bg-red-100 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-black text-red-700 mb-1">YES</div>
+                            <div class="text-xs text-red-600 font-semibold">Toni</div>
+                        </div>
+                        <div class="flex-1 bg-blue-100 rounded-lg p-4 text-center">
+                            <div class="text-2xl font-black text-blue-700 mb-1">YES</div>
+                            <div class="text-xs text-blue-600 font-semibold">Chris</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desire Rating -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-700 text-sm mb-4">How do you rate your desire?</h3>
+                    <div class="flex gap-4">
+                        <div class="flex-1 bg-red-100 rounded-lg p-4 text-center">
+                            <div class="text-4xl font-black text-red-700 mb-1">7</div>
+                            <div class="text-xs text-red-600 font-semibold">Toni</div>
+                        </div>
+                        <div class="flex-1 bg-blue-100 rounded-lg p-4 text-center">
+                            <div class="text-4xl font-black text-blue-700 mb-1">10</div>
+                            <div class="text-xs text-blue-600 font-semibold">Chris</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Initiate -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-700 text-sm mb-4">Who do you expect to initiate sex?</h3>
+                    <div class="flex gap-4">
+                        <div class="flex-1 bg-red-100 rounded-lg p-4 text-center">
+                            <div class="text-xl font-black text-red-700 mb-1">YOU</div>
+                            <div class="text-xs text-red-600 font-semibold">Toni</div>
+                        </div>
+                        <div class="flex-1 bg-blue-100 rounded-lg p-4 text-center">
+                            <div class="text-xl font-black text-blue-700 mb-1">BOTH</div>
+                            <div class="text-xs text-blue-600 font-semibold">Chris</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Frequency -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-700 text-sm mb-4">How often do you expect to have sex?</h3>
+                    <div class="flex gap-4">
+                        <div class="flex-1 bg-red-100 rounded-lg p-4 text-center">
+                            <div class="text-xs font-black text-red-700 mb-1">EVERY OTHER DAY</div>
+                            <div class="text-xs text-red-600 font-semibold">Toni</div>
+                        </div>
+                        <div class="flex-1 bg-blue-100 rounded-lg p-4 text-center">
+                            <div class="text-xs font-black text-blue-700 mb-1">EVERY OTHER DAY</div>
+                            <div class="text-xs text-blue-600 font-semibold">Chris</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Question -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-8 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    As you prepare for marriage, what other sexual issues or questions come to mind? What issue related to sexuality causes some anxiety for you?
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-8 border-t border-gray-100">
+            <div class="flex flex-col sm:flex-row justify-between items-center text-[13px] text-gray-500">
+                <div class="italic mb-4 sm:mb-0">
+                    Refer to Chapter 2 of SYMBIS: "Can You Identify Your Love Style?"
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="logo-text text-gray-800 text-3xl">SYMBIS</span>
+                    <span class="text-[var(--symbis-red)] text-2xl font-black mb-1 mx-0.5">♥</span>
+                    <span class="text-gray-400 font-black text-[11px] mt-2 tracking-[0.2em]">ASSESSMENT</span>
+                    <span class="ml-6 text-gray-800 text-3xl font-black">10</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+  <script src="/report-renderer.js"></script>
+  <!-- Report Navigation -->
+  <div id="report-navigation"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof SymbisNav !== 'undefined') {
+        SymbisNav.init('report', 10);
+      }
+    });
+  </script>
+</body>
+</html>
+

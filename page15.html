@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYMBIS Report - Page 15: Spirituality</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase for authentication -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/auth-check.js"></script>
+  <script src="/navigation.js"></script>
+  <script src="/status-manager.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --symbis-red: #E54D42;
+            --symbis-teal: #4FB8B1;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e5e7eb;
+            color: #333;
+        }
+        .report-container {
+            max-width: 950px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .header-rule {
+            border-bottom: 2px dashed #d1d5db;
+            margin: 1.5rem 0;
+        }
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        .nav-button {
+            transition: all 0.2s ease;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="p-0 sm:p-4">
+    <!-- Navigation Bar -->
+    <div id="symbis-navigation"></div>
+
+    <div class="report-container p-8 sm:p-14">
+        <!-- Navigation -->
+        <div class="flex justify-between items-center mb-6">
+            <a href="page14" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">← Previous</a>
+            <span class="text-gray-400 text-sm font-bold">Page 15</span>
+            <div class="w-32"></div>
+        </div>
+
+        <!-- Header -->
+        <section class="mb-10">
+            <div class="flex items-start gap-6">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-[#4FB8B1] rounded-xl flex items-center justify-center">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 2L15 8L12 14L9 8Z"/>
+                            <circle cx="12" cy="12" r="9"/>
+                            <circle cx="12" cy="12" r="3" fill="currentColor"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-2">DYNAMICS: SPIRITUALITY</h1>
+                    <p class="text-gray-600 italic text-[15px] leading-relaxed">
+                        Even happily married couples eventually discover a soulful longing to bond with their lover, not just for comfort or passion–but also for spiritual meaning.
+                    </p>
+                </div>
+            </div>
+            <div class="header-rule"></div>
+        </section>
+
+        <!-- How You Feel Closest to God -->
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <!-- Toni -->
+            <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-8 border-2 border-red-200">
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md">
+                    <h3 class="text-[18px] font-black text-[#E54D42] uppercase">Toni</h3>
+                </div>
+                <p class="text-[14px] text-gray-700 leading-relaxed">
+                    Being compassionate and loving others even if it means significant sacrifice. You are drawn to people in need, and the more needs you meet, the more energized you feel.
+                </p>
+            </div>
+
+            <!-- Chris -->
+            <div class="bg-gradient-to-br from-teal-50 to-blue-50 rounded-xl p-8 border-2 border-teal-200">
+                <div class="flex items-center gap-4 mb-6">
+                    <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md">
+                    <h3 class="text-[18px] font-black text-[#4FB8B1] uppercase">Chris</h3>
+                </div>
+                <p class="text-[14px] text-gray-700 leading-relaxed">
+                    Connecting in a small group and being accountable to them. You may struggle to pray on your own but not in a group. You are energized by socializing and fellowship with other believers.
+                </p>
+            </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-12 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    Explore what each of you do to feel closest to God. Give specific examples of when and what you do. How can you support each other in these practices?
+                </p>
+            </div>
+        </div>
+
+        <!-- Your Spiritual Life Together -->
+        <div class="mb-12">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-4" style="font-family: 'Montserrat', sans-serif;">
+                Your Spiritual Life Together
+            </h2>
+            <p class="text-center text-sm text-gray-600 italic mb-8">
+                What you believe about spiritual practices in marriage:
+            </p>
+
+            <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b-2 border-gray-300">
+                            <th class="text-left py-3 px-4 text-sm font-bold text-gray-700">Practice</th>
+                            <th class="text-center py-3 px-4 text-sm font-bold text-[#E88B88]">Toni</th>
+                            <th class="text-center py-3 px-4 text-sm font-bold text-[#4FB8B1]">Chris</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <tr>
+                            <td class="py-3 px-4 text-sm text-gray-700">Attend church weekly.</td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 text-sm text-gray-700">Go to the same church.</td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 text-sm text-gray-700">Discuss spiritual issues.</td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 text-sm text-gray-700">Receive communion together regularly.</td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold">No</span></td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 text-sm text-gray-700">Agree on theology.</td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 text-sm text-gray-700">Give a financial tithe and/or offering.</td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 text-sm text-gray-700">Pray for each other.</td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 text-sm text-gray-700">Pray together every day.</td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 text-sm text-gray-700">Be involved in serving others together.</td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-amber-100 text-amber-700 rounded-full text-xs font-bold">No</span></td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                        </tr>
+                        <tr>
+                            <td class="py-3 px-4 text-sm text-gray-700">Study the Bible together regularly.</td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                            <td class="py-3 px-4 text-center"><span class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">Yes</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-12 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    Would you consider yourselves in sync spiritually? Why or why not? How would you finish these two sentences right now:<br>
+                    <em>"My spiritual life has been..."</em><br>
+                    <em>"When it comes to our shared spiritual life..."</em>
+                </p>
+            </div>
+        </div>
+
+        <!-- Where Do We Go From Here -->
+        <div class="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl p-8 mb-10 text-center">
+            <div class="flex items-center justify-center gap-6 mb-6">
+                <div class="w-24 h-24 bg-gray-600 rounded-full flex items-center justify-center">
+                    <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 10L17 15L19 22L12 18L5 22L7 15L3 10L9 8L12 2Z"/>
+                        <path d="M12 10L16 14L12 22L8 14Z" fill="white" opacity="0.3"/>
+                    </svg>
+                </div>
+            </div>
+            <h2 class="text-[24px] font-black text-gray-800 uppercase tracking-tight mb-4" style="font-family: 'Montserrat', sans-serif;">
+                Where Do We Go From Here?
+            </h2>
+            <p class="text-gray-700 text-sm leading-relaxed max-w-2xl mx-auto">
+                Congratulations on completing your SYMBIS Assessment! To help you get your marriage off to a great start, we have additional resources you may find helpful on the following page. With every good wish and prayer,<br>
+                <span class="font-semibold italic">--Drs. Les and Leslie Parrott</span>
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-8 border-t border-gray-100">
+            <div class="flex flex-col sm:flex-row justify-between items-center text-[13px] text-gray-500">
+                <div class="italic mb-4 sm:mb-0">
+                    Refer to Chapter 7 of SYMBIS: "Are You and Your Partner Soul Mates?"
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="logo-text text-gray-800 text-3xl">SYMBIS</span>
+                    <span class="text-[var(--symbis-red)] text-2xl font-black mb-1 mx-0.5">♥</span>
+                    <span class="text-gray-400 font-black text-[11px] mt-2 tracking-[0.2em]">ASSESSMENT</span>
+                    <span class="ml-6 text-gray-800 text-3xl font-black">15</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+  <script src="/report-renderer.js"></script>
+  <!-- Report Navigation -->
+  <div id="report-navigation"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof SymbisNav !== 'undefined') {
+        SymbisNav.init('report', 15);
+      }
+    });
+  </script>
+</body>
+</html>
+

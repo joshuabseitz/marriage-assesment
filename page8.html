@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYMBIS Report - Pages 8-9: Dynamics</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Load Supabase for authentication -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/config.js"></script>
+  <script src="/lib/supabase-client-browser.js"></script>
+  <script src="/auth-check.js"></script>
+  <script src="/navigation.js"></script>
+  <script src="/status-manager.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --symbis-red: #E54D42;
+            --symbis-teal: #4FB8B1;
+        }
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background-color: #e5e7eb;
+            color: #333;
+        }
+        .report-container {
+            max-width: 950px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .header-rule {
+            border-bottom: 2px dashed #d1d5db;
+            margin: 1.5rem 0;
+        }
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        .nav-button {
+            transition: all 0.2s ease;
+        }
+        .nav-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body class="p-0 sm:p-4">
+    <!-- Navigation Bar -->
+    <div id="symbis-navigation"></div>
+
+    <div class="report-container p-8 sm:p-14">
+        <!-- Navigation -->
+        <div class="flex justify-between items-center mb-6">
+            <a href="page7" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">← Previous</a>
+            <span class="text-gray-400 text-sm font-bold">Pages 8-9</span>
+            <a href="page10" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">Next →</a>
+        </div>
+
+        <!-- Header -->
+        <section class="mb-10">
+            <div class="flex items-start gap-6">
+                <div class="flex-shrink-0">
+                    <div class="w-20 h-20 bg-[#4FB8B1] rounded-xl flex items-center justify-center">
+                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 2L14 8L12 14L10 8Z"/>
+                            <circle cx="12" cy="12" r="8"/>
+                        </svg>
+                    </div>
+                </div>
+                <div class="flex-1">
+                    <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-2">DYNAMICS</h1>
+                    <p class="text-gray-600 italic text-[15px] leading-relaxed">
+                        There has never been a marriage like the one you two are creating together. The combination of your two personalities can be mapped out to discover how you are hard-wired to give and receive love.
+                    </p>
+                </div>
+            </div>
+            <div class="header-rule"></div>
+        </section>
+
+        <!-- Your Dynamics Summary -->
+        <div class="bg-gradient-to-br from-teal-50 to-blue-50 rounded-2xl p-8 mb-10">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-6" style="font-family: 'Montserrat', sans-serif;">
+                Your Dynamics: Cooperating Spouse + Affirming Spouse
+            </h2>
+            <p class="text-[14px] text-gray-700 leading-relaxed text-center max-w-3xl mx-auto">
+                You two are a fun and relatively easygoing couple. You share an encouraging spirit and social graces. Others are likely drawn to the two of you because you're easy to be with. Chris (Affirming Spouse) may be a bit more talkative than Toni but you're both verbal. This will serve your marriage well. You'll both need to beware of reading signs of disapproval from each other where they don't exist – instead giving each other the benefit of the doubt. This can help you avoid unnecessary tension. Chris (Affirming Spouse) is likely a bit more impulsive while Toni (Cooperating Spouse) may be a bit more persistent. This is a helpful combination that brings fun and productivity to your relationship.
+            </p>
+        </div>
+
+        <!-- Question Box -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-12 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    What do you think and feel about the shared dynamics of your two personalities and how they mix? What can you do, in practical terms, to leverage your Dynamics?
+                </p>
+            </div>
+        </div>
+
+        <!-- Strengths -->
+        <div class="mb-12">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-8" style="font-family: 'Montserrat', sans-serif;">
+                Strengths You Bring to the Relationship
+            </h2>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Toni -->
+                <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-8 border-2 border-red-200">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-16 h-16 rounded-full border-4 border-white object-cover shadow-md">
+                        <span class="font-bold text-lg text-red-700">Toni</span>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span>An excellent "win-win" type of negotiator.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span>Will gather facts before offering an opinion.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span>Socially poised and people-oriented.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span>Enthusiastic about activities and involvement.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-red-500 mt-1">●</span>
+                            <span>Bring a feeling of security and stability.</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Chris -->
+                <div class="bg-gradient-to-br from-teal-50 to-blue-50 rounded-xl p-8 border-2 border-teal-200">
+                    <div class="flex items-center gap-4 mb-6">
+                        <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-16 h-16 rounded-full border-4 border-white object-cover shadow-md">
+                        <span class="font-bold text-lg text-teal-700">Chris</span>
+                    </div>
+                    <ul class="space-y-2 text-sm text-gray-700">
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span>A good team player--positive participation.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span>Never a dull moment.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span>Excite others into getting involved.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span>Creative in playtime with your spouse.</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-teal-500 mt-1">●</span>
+                            <span>Motivate others toward positive goals.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Box -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-12 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    Identify the top 1 or 2 statements you agree with most about yourself. Explain why. Note the top strength you appreciate about your partner.
+                </p>
+            </div>
+        </div>
+
+        <!-- Your Styles -->
+        <div class="bg-gray-50 rounded-2xl p-8 mb-10">
+            <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-8" style="font-family: 'Montserrat', sans-serif;">
+                Your Styles
+            </h2>
+            <p class="text-center text-sm text-gray-500 italic mb-8">Toni top / Chris bottom</p>
+
+            <div class="space-y-6">
+                <!-- Solving Problems -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-700 uppercase text-sm mb-4">Solving Problems</h3>
+                    <div class="relative h-3 bg-gradient-to-r from-blue-200 to-red-200 rounded-full mb-2">
+                        <div class="absolute left-[20%] top-1/2 -translate-y-1/2 w-6 h-6 bg-red-500 rounded-full border-4 border-white shadow-md"></div>
+                        <div class="absolute left-[65%] top-1/2 -translate-y-1/2 w-6 h-6 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-semibold">
+                        <span>REFLECTIVE</span>
+                        <span>AGGRESSIVE</span>
+                    </div>
+                </div>
+
+                <!-- Influencing Each Other -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-700 uppercase text-sm mb-4">Influencing Each Other</h3>
+                    <div class="relative h-3 bg-gradient-to-r from-blue-200 to-red-200 rounded-full mb-2">
+                        <div class="absolute left-[70%] top-1/2 -translate-y-1/2 w-6 h-6 bg-red-500 rounded-full border-4 border-white shadow-md"></div>
+                        <div class="absolute left-[85%] top-1/2 -translate-y-1/2 w-6 h-6 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-semibold">
+                        <span>FACTS</span>
+                        <span>FEELINGS</span>
+                    </div>
+                </div>
+
+                <!-- Reacting to Change -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-700 uppercase text-sm mb-4">Reacting to Change</h3>
+                    <div class="relative h-3 bg-gradient-to-r from-blue-200 to-red-200 rounded-full mb-2">
+                        <div class="absolute left-[35%] top-1/2 -translate-y-1/2 w-6 h-6 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
+                        <div class="absolute left-[60%] top-1/2 -translate-y-1/2 w-6 h-6 bg-red-500 rounded-full border-4 border-white shadow-md"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-semibold">
+                        <span>ACCEPT</span>
+                        <span>RESIST</span>
+                    </div>
+                </div>
+
+                <!-- Making Decisions -->
+                <div class="bg-white rounded-xl p-6 shadow-sm">
+                    <h3 class="font-bold text-gray-700 uppercase text-sm mb-4">Making Decisions</h3>
+                    <div class="relative h-3 bg-gradient-to-r from-blue-200 to-red-200 rounded-full mb-2">
+                        <div class="absolute left-[35%] top-1/2 -translate-y-1/2 w-6 h-6 bg-blue-500 rounded-full border-4 border-white shadow-md"></div>
+                        <div class="absolute left-[70%] top-1/2 -translate-y-1/2 w-6 h-6 bg-red-500 rounded-full border-4 border-white shadow-md"></div>
+                    </div>
+                    <div class="flex justify-between text-xs text-gray-500 font-semibold">
+                        <span>SPONTANEOUS</span>
+                        <span>CAUTIOUS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Final Question -->
+        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-8 flex gap-4">
+            <div class="flex-shrink-0">
+                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex-1">
+                <p class="text-gray-600 italic text-[14px] leading-relaxed">
+                    Consider some real life examples in your relationship where these play out. How can you genuinely appreciate your differences in these four categories?
+                </p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="mt-12 pt-8 border-t border-gray-100">
+            <div class="flex flex-col sm:flex-row justify-between items-center text-[13px] text-gray-500">
+                <div class="italic mb-4 sm:mb-0">
+                    Refer to Appendix of SYMBIS: "Discovering Your Personality Dynamics"
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="logo-text text-gray-800 text-3xl">SYMBIS</span>
+                    <span class="text-[var(--symbis-red)] text-2xl font-black mb-1 mx-0.5">♥</span>
+                    <span class="text-gray-400 font-black text-[11px] mt-2 tracking-[0.2em]">ASSESSMENT</span>
+                    <span class="ml-6 text-gray-800 text-3xl font-black">8-9</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+  <script src="/report-renderer.js"></script>
+  <!-- Report Navigation -->
+  <div id="report-navigation"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof SymbisNav !== 'undefined') {
+        SymbisNav.init('report', 8);
+      }
+    });
+  </script>
+</body>
+</html>
+

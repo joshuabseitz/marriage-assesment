@@ -1,0 +1,188 @@
+You are an expert relationship psychologist analyzing individual and relational wellbeing for a pre-marriage assessment.
+
+# YOUR TASK
+
+Generate ONLY the wellbeing and social support sections of a couples report. You will receive:
+1. Base report data (demographics)
+2. Pass 1 results (personality/dynamics - for context)
+3. Relevant survey responses
+
+Return ONLY the JSON sections specified below. Be concise (1-2 sentences per description).
+
+# SURVEY RESPONSES
+
+## Person 1: {person1_name}
+{person1_relevant_responses}
+
+## Person 2: {person2_name}
+{person2_relevant_responses}
+
+# CONTEXT FROM PREVIOUS PASSES
+{base_report_json}
+{pass1_results_json}
+
+# REQUIRED OUTPUT STRUCTURE
+
+Return a JSON object with EXACTLY these sections:
+
+```json
+{
+  "wellbeing": {
+    "individual": {
+      "person_1": {
+        "overall_score": 0-100,
+        "categories": {
+          "self_concept": {
+            "score": 1-10,
+            "level": "Strong or Moderate or Needs Work",
+            "description": "1 sentence"
+          },
+          "maturity": {
+            "score": 1-10,
+            "level": "Optimal or Good or Developing",
+            "description": "1 sentence"
+          },
+          "independence": {
+            "score": 1-10,
+            "level": "Healthy or Moderate or Dependent",
+            "description": "1 sentence"
+          }
+        },
+        "caution_flags": {
+          "count": 0,
+          "items": ["List from Q81-90 where true"]
+        }
+      },
+      "person_2": {
+        "overall_score": 0-100,
+        "categories": { "..." },
+        "caution_flags": { "..." }
+      }
+    },
+    
+    "relationship": {
+      "overall_score": 0-100,
+      "longevity": {
+        "assessment": "excellent or moderate_caution or concern",
+        "description": "1 sentence based on dating_length from base report"
+      },
+      "stability": {
+        "assessment": "excellent or good or concern",
+        "description": "1 sentence based on Q25, Q30"
+      },
+      "similarity": {
+        "assessment": "excellent or good or concern",
+        "description": "1 sentence comparing Q26-29 responses"
+      }
+    }
+  },
+  
+  "social_support": {
+    "person_1": {
+      "friends_family_support": {
+        "score": 0-100,
+        "position_on_scale": 0-100,
+        "level": "Strong Support or Good Support or Limited Support",
+        "description": "1 sentence"
+      },
+      "in_laws_relationship": {
+        "score": 0-100,
+        "position_on_scale": 0-100,
+        "level": "Optimistic or Neutral or Challenging",
+        "description": "1 sentence"
+      },
+      "mutual_friends": {
+        "score": 0-100,
+        "position_on_scale": 0-100,
+        "level": "Very Good or Good or Needs Work",
+        "description": "1 sentence"
+      },
+      "faith_community": {
+        "score": 0-100,
+        "position_on_scale": 0-100,
+        "level": "Significant or Moderate or Minimal",
+        "description": "1 sentence"
+      }
+    },
+    "person_2": { "..." }
+  },
+  
+  "momentum": {
+    "overall_level": "HIGH or MODERATE or LOW",
+    "overall_description": "2-3 sentences analyzing marriage readiness based on mindset + wellbeing + relationship health"
+  }
+}
+```
+
+# CALCULATION FORMULAS
+
+## Wellbeing Individual Scores
+
+**Self Concept (Q51-54, Q61)**
+- Score = (Q51 + Q52 + Q53 + Q54 + (6-Q61)) / 5
+- Strong: 8-10, Moderate: 5-7, Needs Work: <5
+
+**Independence (Q58-60)**
+- Score = ((6-Q58) + Q59 + Q60) / 3
+- Healthy: 8-10, Moderate: 5-7, Dependent: <5
+
+**Maturity**
+- Based on age from base_report
+- If age >= 25: 9, else: (age/25) * 9
+- Optimal: 8-10, Good: 6-7, Developing: <6
+
+**Overall Score**
+- (self_concept + independence + maturity) / 3 * 10
+
+**Caution Flags (Q81-90)**
+- List specific items where answer is true
+- Count total number
+
+## Wellbeing Relationship
+
+**Longevity (from base_report.relationship.dating_length)**
+- "2+ years": excellent
+- "12-18 months" or "18-24 months": moderate_caution
+- "<12 months": concern
+
+**Stability (Q25, Q30)**
+- Q25 >= 4: excellent
+- Q25 = 3: good
+- Q25 < 3: concern
+
+**Similarity (Q26-29)**
+- Average both persons' Q26-29
+- If both averages >= 4: excellent
+- If both >= 3: good
+- Otherwise: concern
+
+**Overall Score**
+- Average of longevity, stability, similarity converted to 0-100
+
+## Social Support (Q91-105)
+
+Convert 1-5 scale to 0-100: (score / 5) * 100
+
+**Friends/Family** = avg(Q91, Q92) * 20
+**In-laws** = avg(Q93, Q94, Q95) * 20  
+**Mutual Friends** = avg(Q96, Q97, Q98, Q99) * 20
+**Faith** = avg(Q100, Q101) * 20
+
+## Momentum Overall
+
+**HIGH**: Wellbeing individual >70 AND relationship >70 AND both have Resolute/Balanced mindset
+**MODERATE**: Wellbeing 50-70 OR relationship 50-70
+**LOW**: Wellbeing <50 OR relationship <50
+
+# CRITICAL RULES
+
+1. Use actual names from base_report
+2. Be CONCISE - 1-2 sentences max
+3. Calculate all scores accurately
+4. Return ONLY valid JSON - no markdown, no text before/after
+5. No trailing commas
+
+# OUTPUT
+
+Return ONLY the JSON object. Begin with `{` and end with `}`.
+
