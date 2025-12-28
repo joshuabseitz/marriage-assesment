@@ -1,4 +1,6 @@
 {
+  "buildCommand": "echo 'No build needed'",
+  "outputDirectory": ".",
   "rewrites": [
     {
       "source": "/signup",
@@ -31,6 +33,10 @@
     {
       "source": "/test-auth",
       "destination": "/test-auth.html"
+    },
+    {
+      "source": "/(.*)\\.html",
+      "destination": "/$1.html"
     }
   ],
   "headers": [
@@ -52,6 +58,15 @@
       ]
     },
     {
+      "source": "/(.*)\\.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
@@ -68,6 +83,5 @@
         }
       ]
     }
-  ],
-  "trailingSlash": false
+  ]
 }

@@ -3,10 +3,8 @@
   "version": "1.0.0",
   "description": "SYMBIS Pre-Marriage Assessment with AI Report Generation",
   "type": "module",
-  "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon server.js"
+    "build": "echo 'No build needed - static site'"
   },
   "keywords": [
     "symbis",
