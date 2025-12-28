@@ -1,0 +1,6 @@
+*.md
+migrations/
+server.js
+.env
+.git
+node_modules
