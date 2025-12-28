@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "dependencies": {
+    "@google/genai": "^0.3.0",
+    "@supabase/supabase-js": "^2.89.0"
+  }
+}
+
