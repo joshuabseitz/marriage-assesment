@@ -31,10 +31,6 @@
     {
       "source": "/test-auth",
       "destination": "/test-auth.html"
-    },
-    {
-      "source": "/page:number",
-      "destination": "/page:number.html"
     }
   ],
   "headers": [
@@ -71,24 +67,7 @@
           "value": "1; mode=block"
         }
       ]
-    },
-    {
-      "source": "/lib/(.*)\\.js",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=utf-8"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)\\.js",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/javascript; charset=utf-8"
-        }
-      ]
     }
-  ]
+  ],
+  "trailingSlash": false
 }
