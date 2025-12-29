@@ -164,6 +164,12 @@ function renderPage1() {
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  console.log('📷 Photo Debug:', {
+    person1PhotoElement: !!person1Photo,
+    person2PhotoElement: !!person2Photo,
+    person1PhotoUrl: couple?.person_1?.photo_url,
+    person2PhotoUrl: couple?.person_2?.photo_url
+  });
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
   
