@@ -395,10 +395,14 @@ function renderPage2() {
   // Caution flags
   const p1Flags = wellbeing?.individual?.person_1?.caution_flags?.count || 0;
   const p2Flags = wellbeing?.individual?.person_2?.caution_flags?.count || 0;
+  console.log('  - Caution Flags P1:', p1Flags);
+  console.log('  - Caution Flags P2:', p2Flags);
   updateText('[data-field="person1_caution_count"]', p1Flags);
   updateText('[data-field="person2_caution_count"]', p2Flags);
   
   // Dynamics types
+  console.log('  - Trying to render dynamics P1:', dynamics?.person_1?.type);
+  console.log('  - Trying to render dynamics P2:', dynamics?.person_2?.type);
   updateText('[data-field="person1_dynamics_type"]', dynamics?.person_1?.type || 'Cooperating Spouse');
   updateText('[data-field="person2_dynamics_type"]', dynamics?.person_2?.type || 'Affirming Spouse');
 }

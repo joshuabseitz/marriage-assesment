@@ -327,6 +327,11 @@ export default async function handler(req, res) {
             ...pass2Results.momentum,
             ...synthesisResults.momentum
           },
+          dynamics: {
+            ...baseReport.dynamics,
+            ...pass1Results.dynamics,
+            ...synthesisResults.dynamics
+          },
           love: {
             ...baseReport.love,
             ...pass3Results.love,
@@ -346,6 +351,10 @@ export default async function handler(req, res) {
             ...baseReport.momentum,
             ...pass1Results.momentum,
             ...pass2Results.momentum
+          },
+          dynamics: {
+            ...baseReport.dynamics,
+            ...pass1Results.dynamics
           },
           love: {
             ...baseReport.love,
