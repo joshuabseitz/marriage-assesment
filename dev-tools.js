@@ -5,7 +5,10 @@
 (async function() {
   'use strict';
   
+  console.log('🛠️ Dev tools: Script loaded and executing');
+  
   // Wait for supabaseAuth to be available
+  console.log('🛠️ Dev tools: Waiting for supabaseAuth...');
   let attempts = 0;
   while (!window.supabaseAuth && attempts < 50) {
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -13,29 +16,52 @@
   }
   
   if (!window.supabaseAuth) {
-    console.log('Dev tools: Supabase auth not available');
+    console.error('❌ Dev tools: Supabase auth not available after 5 seconds');
     return;
   }
   
+  console.log('✅ Dev tools: supabaseAuth is available');
+  
   // Check if user has developer role
   try {
+    console.log('🛠️ Dev tools: Fetching user profile...');
     const profile = await window.supabaseAuth.getUserProfile();
+    console.log('🛠️ Dev tools: Profile received:', profile);
+    console.log('🛠️ Dev tools: User role:', profile?.role);
+    
     const isDeveloper = profile && (profile.role === 'developer' || profile.role === 'admin');
+    console.log('🛠️ Dev tools: Is developer?', isDeveloper);
     
     if (!isDeveloper) {
-      console.log('Dev tools: User does not have developer role');
+      console.warn('⚠️ Dev tools: User does not have developer role. Role is:', profile?.role);
       return;
     }
   } catch (error) {
-    console.log('Dev tools: Could not check user role', error);
+    console.error('❌ Dev tools: Could not check user role', error);
     return;
   }
+  
+  console.log('✅ Dev tools: User has developer role, initializing dev tools...');
+  
+  // Check for required APIs
+  console.log('🛠️ Dev tools: Checking for required APIs...');
+  console.log('  - supabaseAuth:', !!window.supabaseAuth);
+  console.log('  - responsesApi:', !!window.responsesApi);
+  console.log('  - partnershipsApi:', !!window.partnershipsApi);
+  console.log('  - reportsApi:', !!window.reportsApi);
   
   // Use global APIs (browser version)
   const supabaseAuth = window.supabaseAuth;
   const responsesApi = window.responsesApi;
   const partnershipsApi = window.partnershipsApi;
   const reportsApi = window.reportsApi;
+  
+  if (!responsesApi || !partnershipsApi || !reportsApi) {
+    console.error('❌ Dev tools: Missing required APIs. Cannot initialize dev tools.');
+    return;
+  }
+  
+  console.log('✅ Dev tools: All required APIs available');
   
   // Sample data for current user
   const sampleResponses = {
@@ -168,6 +194,14 @@
   
   // Create the floating button
   function createDevButton() {
+    console.log('🛠️ Dev tools: createDevButton() called');
+    console.log('🛠️ Dev tools: document.body exists?', !!document.body);
+    
+    if (!document.body) {
+      console.error('❌ Dev tools: document.body is null! Cannot create button.');
+      return;
+    }
+    
     const button = document.createElement('button');
     button.id = 'dev-tools-btn';
     button.innerHTML = '🛠️ DEV';
@@ -189,6 +223,8 @@
       font-family: monospace;
     `;
     
+    console.log('🛠️ Dev tools: Button element created:', button);
+    
     button.addEventListener('mouseenter', () => {
       button.style.transform = 'translateY(-2px)';
       button.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
@@ -202,6 +238,8 @@
     button.addEventListener('click', showDevMenu);
     
     document.body.appendChild(button);
+    console.log('✅ Dev tools: Button appended to document.body');
+    console.log('🛠️ Dev tools: Button in DOM?', document.getElementById('dev-tools-btn') !== null);
   }
   
   // Create dev menu
@@ -556,9 +594,17 @@
   }
   
   // Initialize when DOM is ready
+  console.log('🛠️ Dev tools: Initializing button...');
+  console.log('🛠️ Dev tools: Document ready state:', document.readyState);
+  
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', createDevButton);
+    console.log('🛠️ Dev tools: Waiting for DOMContentLoaded...');
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🛠️ Dev tools: DOMContentLoaded fired, creating button...');
+      createDevButton();
+    });
   } else {
+    console.log('🛠️ Dev tools: DOM already ready, creating button immediately...');
     createDevButton();
   }
   
