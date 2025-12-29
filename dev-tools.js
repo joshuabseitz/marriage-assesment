@@ -243,7 +243,7 @@
   }
   
   // Create dev menu
-  function showDevMenu() {
+  async function showDevMenu() {
     // Remove existing menu if present
     const existing = document.getElementById('dev-menu');
     if (existing) {
