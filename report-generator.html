@@ -374,7 +374,7 @@
     function setupExistingReportListeners() {
       document.getElementById('view-report-btn').addEventListener('click', async () => {
         await window.reportsApi.loadReportForRendering(existingReport.id);
-        window.location.href = '/index';
+        window.location.href = '/';
       });
 
       document.getElementById('download-json-btn').addEventListener('click', () => {
@@ -421,7 +421,7 @@
 
         // Load report for rendering and redirect
         await window.reportsApi.loadReportForRendering(report.id);
-        window.location.href = '/index';
+        window.location.href = '/';
 
       } catch (error) {
         console.error('Generation error:', error);
