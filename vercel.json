@@ -1,6 +1,12 @@
 {
   "buildCommand": null,
   "installCommand": "npm install",
+  "functions": {
+    "api/generate-report.js": {
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  },
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/signup", "destination": "/signup.html" },
