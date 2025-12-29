@@ -9,7 +9,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/config.js"></script>
   <script src="/lib/supabase-client-browser.js"></script>
-  <script src="/auth-check.js"></script>
   <script src="/navigation.js"></script>
   <script src="/status-manager.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -156,12 +155,12 @@
             
             <div class="grid grid-cols-2 gap-12 max-w-2xl mx-auto mb-12">
                 <div class="text-center">
-                    <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-28 h-28 rounded-full border-[6px] border-[#E88B88] object-cover mx-auto mb-4 shadow-lg">
+                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1" class="w-28 h-28 rounded-full border-[6px] border-[#E88B88] object-cover mx-auto mb-4 shadow-lg">
                     <div class="score-badge text-[#E88B88]">88%</div>
                     <div class="text-gray-500 text-sm font-bold uppercase tracking-wider mt-2">Toni</div>
                 </div>
                 <div class="text-center">
-                    <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-28 h-28 rounded-full border-[6px] border-[#4FB8B1] object-cover mx-auto mb-4 shadow-lg">
+                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2" class="w-28 h-28 rounded-full border-[6px] border-[#4FB8B1] object-cover mx-auto mb-4 shadow-lg">
                     <div class="score-badge text-[#4FB8B1]">97%</div>
                     <div class="text-gray-500 text-sm font-bold uppercase tracking-wider mt-2">Chris</div>
                 </div>

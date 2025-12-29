@@ -9,7 +9,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/config.js"></script>
   <script src="/lib/supabase-client-browser.js"></script>
-  <script src="/auth-check.js"></script>
   <script src="/navigation.js"></script>
   <script src="/status-manager.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -104,7 +103,7 @@
             <div class="grid md:grid-cols-2 gap-8 mb-10">
                 <div class="bg-gradient-to-br from-red-50 to-pink-50 rounded-xl p-8 border-2 border-[#E88B88]">
                     <div class="flex items-center gap-4 mb-6">
-                        <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md">
+                        <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1" class="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md">
                         <div>
                             <h3 class="text-[22px] font-black text-[#E54D42] uppercase tracking-tight">Cooperating</h3>
                             <h4 class="text-[22px] font-black text-[#E54D42] uppercase tracking-tight">Spouse</h4>
@@ -117,7 +116,7 @@
 
                 <div class="bg-gradient-to-br from-teal-50 to-blue-50 rounded-xl p-8 border-2 border-[#4FB8B1]">
                     <div class="flex items-center gap-4 mb-6">
-                        <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md">
+                        <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2" class="w-20 h-20 rounded-full border-4 border-white object-cover shadow-md">
                         <div>
                             <h3 class="text-[22px] font-black text-[#4FB8B1] uppercase tracking-tight">Affirming</h3>
                             <h4 class="text-[22px] font-black text-[#4FB8B1] uppercase tracking-tight">Spouse</h4>
@@ -156,7 +155,7 @@
                 <!-- Toni's Rankings -->
                 <div>
                     <div class="flex items-center gap-3 mb-6">
-                        <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-12 h-12 rounded-full border-2 border-[#E88B88] object-cover">
+                        <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1" class="w-12 h-12 rounded-full border-2 border-[#E88B88] object-cover">
                         <span class="font-bold text-lg text-[#E88B88]">Toni's Top 5</span>
                     </div>
                     <div class="love-rank bg-gradient-to-r from-green-100 to-green-50 border-l-4 border-green-600">
@@ -194,7 +193,7 @@
                 <!-- Chris's Rankings -->
                 <div>
                     <div class="flex items-center gap-3 mb-6">
-                        <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-12 h-12 rounded-full border-2 border-[#4FB8B1] object-cover">
+                        <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2" class="w-12 h-12 rounded-full border-2 border-[#4FB8B1] object-cover">
                         <span class="font-bold text-lg text-[#4FB8B1]">Chris's Top 5</span>
                     </div>
                     <div class="love-rank bg-gradient-to-r from-green-100 to-green-50 border-l-4 border-green-600">
