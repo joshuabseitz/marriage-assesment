@@ -365,7 +365,14 @@ function renderPage1() {
 function renderPage2() {
   if (!reportData) return;
   
-  const { momentum, couple } = reportData;
+  const { momentum, couple, wellbeing, dynamics } = reportData;
+  
+  console.log('🎨 Rendering Page 2');
+  console.log('  - Momentum:', momentum?.overall_level);
+  console.log('  - Wellbeing P1:', wellbeing?.individual?.person_1?.overall_score);
+  console.log('  - Wellbeing P2:', wellbeing?.individual?.person_2?.overall_score);
+  console.log('  - Dynamics P1:', dynamics?.person_1?.type);
+  console.log('  - Dynamics P2:', dynamics?.person_2?.type);
   
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
@@ -376,8 +383,24 @@ function renderPage2() {
   updateText('[data-field="momentum_description"]', momentum?.overall_description || '');
   
   // Mindset types
-  updateText('[data-field="person1_mindset"]', momentum?.mindset?.person_1?.type || '');
-  updateText('[data-field="person2_mindset"]', momentum?.mindset?.person_2?.type || '');
+  updateText('[data-field="person1_mindset"]', momentum?.mindset?.person_1?.type || 'Balanced Mindset');
+  updateText('[data-field="person2_mindset"]', momentum?.mindset?.person_2?.type || 'Balanced Mindset');
+  
+  // Wellbeing scores (with % symbol)
+  const p1Score = wellbeing?.individual?.person_1?.overall_score;
+  const p2Score = wellbeing?.individual?.person_2?.overall_score;
+  updateText('[data-field="person1_wellbeing"]', p1Score ? `${Math.round(p1Score)}%` : '0%');
+  updateText('[data-field="person2_wellbeing"]', p2Score ? `${Math.round(p2Score)}%` : '0%');
+  
+  // Caution flags
+  const p1Flags = wellbeing?.individual?.person_1?.caution_flags?.count || 0;
+  const p2Flags = wellbeing?.individual?.person_2?.caution_flags?.count || 0;
+  updateText('[data-field="person1_caution_count"]', p1Flags);
+  updateText('[data-field="person2_caution_count"]', p2Flags);
+  
+  // Dynamics types
+  updateText('[data-field="person1_dynamics_type"]', dynamics?.person_1?.type || 'Cooperating Spouse');
+  updateText('[data-field="person2_dynamics_type"]', dynamics?.person_2?.type || 'Affirming Spouse');
 }
 
 // PAGE 3: Mindset Details
@@ -410,9 +433,11 @@ function renderPage4() {
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
   
-  // Overall scores
-  updateText('[data-field="person1_wellbeing"]', wellbeing?.individual?.person_1?.overall_score || '0');
-  updateText('[data-field="person2_wellbeing"]', wellbeing?.individual?.person_2?.overall_score || '0');
+  // Overall scores (with % symbol)
+  const p1Score = wellbeing?.individual?.person_1?.overall_score;
+  const p2Score = wellbeing?.individual?.person_2?.overall_score;
+  updateText('[data-field="person1_wellbeing"]', p1Score ? `${Math.round(p1Score)}%` : '0%');
+  updateText('[data-field="person2_wellbeing"]', p2Score ? `${Math.round(p2Score)}%` : '0%');
   
   // Person 1 categories
   const p1 = wellbeing?.individual?.person_1?.categories || {};
