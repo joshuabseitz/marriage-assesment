@@ -472,6 +472,19 @@ function renderPage2() {
   
   updateStars('[data-field="person1_context_stars"]', starRating);
   updateStars('[data-field="person2_context_stars"]', starRating);
+  
+  // Set momentum bar height dynamically
+  const momentumLevelMap = {
+    'HIGH': '85%',
+    'MODERATE': '55%',
+    'LOW': '25%'
+  };
+  const barFill = document.getElementById('momentum-bar-fill');
+  if (barFill) {
+    const height = momentumLevelMap[momentum?.overall_level] || '55%';
+    barFill.style.height = height;
+    console.log('  - Momentum bar height set to:', height);
+  }
 }
 
 // PAGE 3: Mindset Details

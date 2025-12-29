@@ -158,6 +158,46 @@
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.15);
         }
+        
+        /* Enhanced tooltip styling */
+        .icon-badge {
+            cursor: help;
+            position: relative;
+        }
+        .icon-badge[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 280px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            font-size: 13px;
+            line-height: 1.4;
+            border-radius: 8px;
+            z-index: 1000;
+            margin-bottom: 10px;
+            text-align: left;
+            font-weight: normal;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            font-family: 'Open Sans', sans-serif;
+            text-transform: none;
+            letter-spacing: normal;
+        }
+        .icon-badge[title]:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            margin-bottom: 2px;
+        }
     </style>
 </head>
 <body class="p-0 sm:p-4">
@@ -175,31 +215,22 @@
         <!-- Momentum Section -->
         <section class="mb-12">
             <div class="flex items-start gap-8">
-                <!-- Gauge -->
+                <!-- Momentum Bar Chart -->
                 <div class="flex-shrink-0">
                     <div class="gauge-container relative">
-                        <svg viewBox="0 0 200 200" class="w-full h-full">
-                            <!-- Gauge background arc -->
-                            <defs>
-                                <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" style="stop-color:#E8C547;stop-opacity:1" />
-                                    <stop offset="100%" style="stop-color:#7BA948;stop-opacity:1" />
-                                </linearGradient>
-                            </defs>
-                            <path d="M 30 150 A 70 70 0 0 1 170 150" 
-                                  fill="none" 
-                                  stroke="url(#gaugeGradient)" 
-                                  stroke-width="25" 
-                                  stroke-linecap="round"/>
-                            <!-- Needle -->
-                            <g transform="rotate(-30 100 150)">
-                                <circle cx="100" cy="150" r="12" fill="#E54D42"/>
-                                <path d="M 100 150 L 95 180 L 100 30 L 105 180 Z" fill="#E54D42"/>
-                            </g>
-                        </svg>
-                        <!-- Momentum level label -->
-                        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-600 text-white px-8 py-2 rounded-full">
-                            <span class="font-black text-xl tracking-tight" style="font-family: 'Montserrat', sans-serif;" data-field="momentum_level">HIGH</span>
+                        <div class="flex flex-col items-center gap-4">
+                            <!-- Vertical bar container -->
+                            <div class="w-16 h-64 bg-gray-200 rounded-full relative overflow-hidden shadow-inner">
+                                <!-- Dynamic fill -->
+                                <div id="momentum-bar-fill" 
+                                     class="absolute bottom-0 left-0 right-0 transition-all duration-1000 ease-out rounded-full"
+                                     style="background: linear-gradient(to top, #E8C547, #7BA948); height: 80%;">
+                                </div>
+                            </div>
+                            <!-- Level label -->
+                            <div class="bg-gray-600 text-white px-8 py-2 rounded-full">
+                                <span class="font-black text-xl tracking-tight" style="font-family: 'Montserrat', sans-serif;" data-field="momentum_level">HIGH</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -235,7 +266,8 @@
                 <div class="banner banner-yellow banner-left flex-1" data-field="person1_mindset">
                     Romantic Mindset
                 </div>
-                <div class="icon-badge bg-[#E8C547] flex-shrink-0">
+                <div class="icon-badge bg-[#E8C547] flex-shrink-0" 
+                     title="Mindset: Your core attitudes about marriage and relationships. A balanced mindset helps couples navigate challenges with realistic expectations and mutual understanding.">
                     <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2L15.5 8.5L23 9L17 14.5L19 22L12 18L5 22L7 14.5L1 9L8.5 8.5L12 2Z"/>
                         <circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/>
@@ -255,7 +287,8 @@
                         <div class="text-[12px] font-semibold mt-1"><span data-field="person1_caution_count">3</span> Caution Flag(s)</div>
                     </div>
                 </div>
-                <div class="icon-badge bg-[#7BA948] flex-shrink-0">
+                <div class="icon-badge bg-[#7BA948] flex-shrink-0"
+                     title="Wellbeing: Measures individual psychological health and emotional maturity. Higher wellbeing indicates better readiness for the demands of marriage.">
                     <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2C12 2 8 4 8 8C8 10 9 11 10 12C9 13 8 14 8 16C8 20 12 22 12 22C12 22 16 20 16 16C16 14 15 13 14 12C15 11 16 10 16 8C16 4 12 2 12 2Z"/>
                     </svg>
@@ -280,7 +313,8 @@
                         <span style="color: #E8C547;">★</span>
                     </div>
                 </div>
-                <div class="icon-badge bg-[#5B8FB9] flex-shrink-0">
+                <div class="icon-badge bg-[#5B8FB9] flex-shrink-0"
+                     title="Context: Relationship stability and life circumstances. Factors like dating duration, living situation, and relationship history impact marriage readiness.">
                     <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
                         <rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
                         <path d="M8 6V4C8 3 9 2 10 2H14C15 2 16 3 16 4V6"/>
@@ -304,7 +338,8 @@
                 <div class="banner banner-teal banner-left flex-1" data-field="person1_dynamics_type">
                     Cooperating Spouse
                 </div>
-                <div class="icon-badge bg-[#4FB8B1] flex-shrink-0">
+                <div class="icon-badge bg-[#4FB8B1] flex-shrink-0"
+                     title="Dynamics: How your personality styles interact. Understanding your dynamics helps predict strengths and potential friction points in your partnership.">
                     <svg class="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 4L14 8L16 4L18 8L20 4M12 20L14 16L16 20L18 16L20 20M4 12L8 14L4 16L8 18L4 20M20 12L16 14L20 16L16 18L20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         <circle cx="12" cy="12" r="3" fill="currentColor"/>

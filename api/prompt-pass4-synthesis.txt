@@ -39,7 +39,7 @@ Return ONLY valid JSON. No markdown, no explanatory text. Start with `{` and end
 ```json
 {
   "momentum": {
-    "overall_description": "3-4 comprehensive paragraphs (350-400 words) synthesizing ALL momentum factors"
+    "overall_description": "2-3 concise paragraphs (MAX 200 words) synthesizing ALL momentum factors"
   },
   
   "dynamics": {
@@ -67,50 +67,43 @@ Answer the question: "Are we ready for marriage?" by synthesizing:
 5. Communication compatibility (from Pass 3)
 6. Conflict management readiness (from Pass 3)
 
-### Structure
+### Structure (TOTAL: MAX 200 words across all paragraphs)
 
-**Paragraph 1: State the Momentum Level and What It Means** (80-100 words)
+**CRITICAL: Be concise and punchy. Remove filler words. Every sentence must add value.**
+
+**Paragraph 1: State the Momentum Level** (60-70 words)
 
 Opening sentence templates based on level:
 
 **HIGH Momentum**:
-"Congratulations! Your relationship has strong momentum for a growing and thriving marriage. The combination of your mindsets, your psychological health as individuals, your relationship maturity, and your compatibility as communicators provides you with promising vitality for lifelong love."
+"Congratulations! Your relationship has strong momentum for a thriving marriage. The combination of your mindsets, psychological health, and communication compatibility provides promising vitality for lifelong love."
 
 **MODERATE Momentum**:
-"Your relationship shows moderate momentum—a solid foundation with some areas requiring intentional attention. While you have strengths in [specific areas from data], there are growth opportunities in [specific areas from data] that will benefit from focused work."
+"Your relationship shows moderate momentum—a solid foundation with areas requiring intentional attention. You have strengths in [specific areas], but growth opportunities in [specific areas] need focused work."
 
 **LOW Momentum**:
-"Your assessment reveals several areas needing significant attention before marriage. This doesn't mean you can't build a strong marriage, but it does mean you'll need to invest in pre-marital counseling and address [specific concerns] before committing to lifelong partnership."
+"Your assessment reveals areas needing significant attention before marriage. This means investing in pre-marital counseling to address [specific concerns] before committing to lifelong partnership."
 
-**Paragraph 2: Synthesize Mindset + Personality + Communication** (90-110 words)
+**Paragraph 2: Synthesize Key Patterns** (70-80 words)
 
-Connect insights across passes:
-- How does {person1_name}'s {mindset_type} interact with their {dynamics_type} personality?
-- How does {person2_name}'s {mindset_type} interact with their {dynamics_type} personality?
-- What happens when these two approaches collide in communication?
-- Reference specific combinations:
-  - "The pairing of a Romantic Mindset with an Affirming Spouse personality in {person1_name} creates someone who is both idealistic about love AND highly expressive—which will energize your relationship but may also lead to disappointment when reality doesn't match the vision."
+Connect insights concisely:
+- How their mindset types interact with personality dynamics
+- What happens when these approaches meet in communication
+- Reference 1-2 specific combinations briefly
+- Example: "{person1_name}'s {mindset_type} with {dynamics_type} personality creates [brief insight]. This pairs with {person2_name}'s {mindset_type} to [brief outcome]."
 
-**Paragraph 3: Analyze Individual Wellbeing + Relationship Health** (90-110 words)
+**Paragraph 3: Forward-Looking Guidance** (50-60 words)
 
-Synthesize numerical data into narrative:
-- "{person1_name}'s wellbeing score of {score} combined with {resilience_level} resilience suggests [specific readiness indicators]."
-- "{person2_name}'s wellbeing score of {score} with {caution_flag_count} caution flags indicates [specific considerations]."
-- "Your relationship health score of {score}, based on {dating_length}, {stability}, and {similarity}, shows [specific strengths or concerns]."
-- "Your social support networks (averaging {average_support_score}) will [help/challenge] you in building your marriage."
-
-**Paragraph 4: Forward-Looking Guidance** (90-110 words)
-
-Provide specific, actionable direction:
+Provide specific direction:
 
 **For HIGH Momentum**:
-"Beware, however, this does not exempt you from bumps in the road—that's part of married life. The good news? Your strong momentum puts you in a prime place for maximizing what you'll learn during your SYMBIS Assessment. Use your momentum to get all you can out of this experience. Pay special attention to [specific chapter from report] where your [specific weakness or difference] may cause friction."
+"Your strong momentum positions you well for this assessment. Focus on [1-2 specific areas] where differences may cause friction."
 
 **For MODERATE Momentum**:
-"To move from moderate to strong momentum, focus intentionally on these areas: [bullet 1-3 specific actionable items with chapter references]. With targeted effort, you can strengthen these areas before or during your first year of marriage. Consider working with a counselor or mentor couple on [specific concern]."
+"To strengthen momentum, focus on: [2-3 brief actionable items]. Consider working with a counselor on [specific concern]."
 
 **For LOW Momentum**:
-"Before proceeding to marriage, we strongly recommend: [3 specific recommendations]. This isn't about whether you love each other—love is evident. It's about ensuring you have the relational skills, individual health, and external support to sustain a lifelong marriage. Marriage magnifies existing issues; it doesn't resolve them."
+"Before marriage, we recommend: [2-3 brief recommendations]. Marriage magnifies existing issues; address them now."
 
 ---
 
