@@ -269,6 +269,32 @@ function updateImage(selector, src, fallback = '/images/default-avatar.png') {
 }
 
 /**
+ * Render star rating (1-5 scale)
+ */
+function updateStars(selector, rating) {
+  const el = document.querySelector(selector);
+  if (!el) {
+    if (debugMode) {
+      console.warn(`⚠️ Stars element not found: ${selector}`);
+    }
+    return;
+  }
+  
+  const numRating = parseInt(rating) || 0;
+  const stars = [];
+  
+  for (let i = 1; i <= 5; i++) {
+    if (i <= numRating) {
+      stars.push('<span style="color: #E8C547;">★</span>');
+    } else {
+      stars.push('<span class="opacity-30">★</span>');
+    }
+  }
+  
+  el.innerHTML = stars.join('');
+}
+
+/**
  * Update score/position visualizations
  */
 function updateScore(selector, score, maxScore = 100) {
@@ -401,16 +427,36 @@ function renderPage2() {
   // Caution flags
   const p1Flags = wellbeing?.individual?.person_1?.caution_flags?.count || 0;
   const p2Flags = wellbeing?.individual?.person_2?.caution_flags?.count || 0;
-  console.log('  - Caution Flags P1:', p1Flags);
-  console.log('  - Caution Flags P2:', p2Flags);
+  console.log('  - Caution Flags P1:', p1Flags, '(from:', wellbeing?.individual?.person_1?.caution_flags, ')');
+  console.log('  - Caution Flags P2:', p2Flags, '(from:', wellbeing?.individual?.person_2?.caution_flags, ')');
+  
+  const p1Element = document.querySelector('[data-field="person1_caution_count"]');
+  const p2Element = document.querySelector('[data-field="person2_caution_count"]');
+  console.log('  - P1 Caution Element found:', !!p1Element, 'Current text:', p1Element?.textContent);
+  console.log('  - P2 Caution Element found:', !!p2Element, 'Current text:', p2Element?.textContent);
+  
   updateText('[data-field="person1_caution_count"]', p1Flags);
   updateText('[data-field="person2_caution_count"]', p2Flags);
+  
+  console.log('  - After update P1:', p1Element?.textContent);
+  console.log('  - After update P2:', p2Element?.textContent);
   
   // Dynamics types
   console.log('  - Trying to render dynamics P1:', dynamics?.person_1?.type);
   console.log('  - Trying to render dynamics P2:', dynamics?.person_2?.type);
   updateText('[data-field="person1_dynamics_type"]', dynamics?.person_1?.type || 'Cooperating Spouse');
   updateText('[data-field="person2_dynamics_type"]', dynamics?.person_2?.type || 'Affirming Spouse');
+  
+  // Context stars (relationship stability from survey Q11)
+  // Note: This comes from the survey responses, not AI-generated
+  const { relationship } = reportData;
+  console.log('  - Relationship data:', relationship);
+  
+  // Both people rate the same relationship, so we might use the same score
+  // or different scores if they answered separately
+  // For now, using a default of 4 stars as fallback
+  updateStars('[data-field="person1_context_stars"]', 4);
+  updateStars('[data-field="person2_context_stars"]', 4);
 }
 
 // PAGE 3: Mindset Details
