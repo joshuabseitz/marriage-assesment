@@ -9,7 +9,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/config.js"></script>
   <script src="/lib/supabase-client-browser.js"></script>
-  <script src="/auth-check.js"></script>
   <script src="/navigation.js"></script>
   <script src="/status-manager.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -198,9 +197,9 @@
                                 <path d="M 100 150 L 95 180 L 100 30 L 105 180 Z" fill="#E54D42"/>
                             </g>
                         </svg>
-                        <!-- HIGH label -->
+                        <!-- Momentum level label -->
                         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-600 text-white px-8 py-2 rounded-full">
-                            <span class="font-black text-xl tracking-tight" style="font-family: 'Montserrat', sans-serif;">HIGH</span>
+                            <span class="font-black text-xl tracking-tight" style="font-family: 'Montserrat', sans-serif;" data-field="momentum_level">HIGH</span>
                         </div>
                     </div>
                 </div>
@@ -208,7 +207,7 @@
                 <!-- Text Content -->
                 <div class="flex-1">
                     <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-3">OVERVIEW: MARRIAGE MOMENTUM</h1>
-                    <p class="text-gray-600 italic text-[15px] leading-relaxed">
+                    <p class="text-gray-600 italic text-[15px] leading-relaxed" data-field="momentum_description">
                         Congratulations! Your relationship has strong momentum for a growing and thriving marriage. The combination of your mindsets, your psychological health as individuals, and your compatibility as a couple, provides you with promising vitality for lifelong love. Beware, however, this does not exempt you from bumps in the road – that's part of married life. The good news? Your strong momentum puts you in a prime place for maximizing what you'll learn during your SYMBIS Assessment. Use your momentum to get all you can out of this experience.
                     </p>
                 </div>
@@ -219,12 +218,12 @@
         <!-- Profiles -->
         <div class="flex items-center justify-center gap-32 mb-8">
             <div class="flex items-center gap-4">
-                <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-24 h-24 rounded-full border-[6px] border-[#F0F2F4] object-cover">
-                <span class="name-label text-[32px] font-black text-[#222] tracking-tighter">TONI</span>
+                <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1" class="w-24 h-24 rounded-full border-[6px] border-[#F0F2F4] object-cover">
+                <span class="name-label text-[32px] font-black text-[#222] tracking-tighter" data-person="person1">TONI</span>
             </div>
             <div class="flex items-center gap-4">
-                <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-24 h-24 rounded-full border-[6px] border-[#F0F2F4] object-cover">
-                <span class="name-label text-[32px] font-black text-[#222] tracking-tighter">CHRIS</span>
+                <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2" class="w-24 h-24 rounded-full border-[6px] border-[#F0F2F4] object-cover">
+                <span class="name-label text-[32px] font-black text-[#222] tracking-tighter" data-person="person2">CHRIS</span>
             </div>
         </div>
 
@@ -233,7 +232,7 @@
             
             <!-- Mindset -->
             <div class="flex items-center gap-0">
-                <div class="banner banner-yellow banner-left flex-1">
+                <div class="banner banner-yellow banner-left flex-1" data-field="person1_mindset">
                     Romantic Mindset
                 </div>
                 <div class="icon-badge bg-[#E8C547] flex-shrink-0">
@@ -243,7 +242,7 @@
                     </svg>
                     <span class="text-[11px] leading-tight">MINDSET</span>
                 </div>
-                <div class="banner banner-yellow banner-right flex-1">
+                <div class="banner banner-yellow banner-right flex-1" data-field="person2_mindset">
                     Resolute Mindset
                 </div>
             </div>
@@ -252,8 +251,8 @@
             <div class="flex items-center gap-0">
                 <div class="banner banner-green banner-left flex-1 text-[18px]">
                     <div class="flex flex-col items-center">
-                        <div class="text-4xl font-black">88%</div>
-                        <div class="text-[12px] font-semibold mt-1">3 Caution Flag(s)</div>
+                        <div class="text-4xl font-black" data-field="person1_wellbeing">88%</div>
+                        <div class="text-[12px] font-semibold mt-1"><span data-field="person1_caution_count">3</span> Caution Flag(s)</div>
                     </div>
                 </div>
                 <div class="icon-badge bg-[#7BA948] flex-shrink-0">
@@ -264,8 +263,8 @@
                 </div>
                 <div class="banner banner-green banner-right flex-1 text-[18px]">
                     <div class="flex flex-col items-center">
-                        <div class="text-4xl font-black">97%</div>
-                        <div class="text-[12px] font-semibold mt-1">0 Caution Flag(s)</div>
+                        <div class="text-4xl font-black" data-field="person2_wellbeing">97%</div>
+                        <div class="text-[12px] font-semibold mt-1"><span data-field="person2_caution_count">0</span> Caution Flag(s)</div>
                     </div>
                 </div>
             </div>
@@ -302,7 +301,7 @@
 
             <!-- Dynamics -->
             <div class="flex items-center gap-0">
-                <div class="banner banner-teal banner-left flex-1">
+                <div class="banner banner-teal banner-left flex-1" data-field="person1_dynamics_type">
                     Cooperating Spouse
                 </div>
                 <div class="icon-badge bg-[#4FB8B1] flex-shrink-0">
@@ -312,7 +311,7 @@
                     </svg>
                     <span class="text-[11px] leading-tight">DYNAMICS</span>
                 </div>
-                <div class="banner banner-teal banner-right flex-1">
+                <div class="banner banner-teal banner-right flex-1" data-field="person2_dynamics_type">
                     Affirming Spouse
                 </div>
             </div>
