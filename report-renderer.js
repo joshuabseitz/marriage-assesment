@@ -448,15 +448,27 @@ function renderPage2() {
   updateText('[data-field="person2_dynamics_type"]', dynamics?.person_2?.type || 'Affirming Spouse');
   
   // Context stars (relationship stability from survey Q11)
-  // Note: This comes from the survey responses, not AI-generated
   const { relationship } = reportData;
   console.log('  - Relationship data:', relationship);
   
-  // Both people rate the same relationship, so we might use the same score
-  // or different scores if they answered separately
-  // For now, using a default of 4 stars as fallback
-  updateStars('[data-field="person1_context_stars"]', 4);
-  updateStars('[data-field="person2_context_stars"]', 4);
+  // Convert stability label to star rating
+  const stabilityToStars = (stability) => {
+    if (!stability) return 3;
+    const stabilityMap = {
+      'Very Stable': 5,
+      'Moderately Stable': 3,
+      'Somewhat Rocky': 2,
+      'Rocky': 1
+    };
+    return stabilityMap[stability] || 3;
+  };
+  
+  const starRating = stabilityToStars(relationship?.stability);
+  console.log('  - Stability label:', relationship?.stability);
+  console.log('  - Star rating:', starRating);
+  
+  updateStars('[data-field="person1_context_stars"]', starRating);
+  updateStars('[data-field="person2_context_stars"]', starRating);
 }
 
 // PAGE 3: Mindset Details
