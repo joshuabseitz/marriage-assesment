@@ -9,7 +9,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="/config.js"></script>
   <script src="/lib/supabase-client-browser.js"></script>
-  <script src="/auth-check.js"></script>
   <script src="/navigation.js"></script>
   <script src="/status-manager.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -151,7 +150,7 @@
                     <div>RESOLUTE</div>
                     <div class="mindset-sublabel">MINDSET</div>
                 </div>
-                <div class="name-in-card">Chris</div>
+                <div class="name-in-card" data-person="person2">Chris</div>
             </div>
 
             <!-- Rational -->
@@ -180,7 +179,7 @@
                     <div>ROMANTIC</div>
                     <div class="mindset-sublabel">MINDSET</div>
                 </div>
-                <div class="name-in-card">Toni</div>
+                <div class="name-in-card" data-person="person1">Toni</div>
             </div>
 
             <!-- Restless -->
@@ -215,30 +214,30 @@
 
         <!-- Detailed Profiles -->
         <div class="grid grid-cols-2 gap-8 mb-10">
-            <!-- Toni - Romantic -->
+            <!-- Person 1 Mindset -->
             <div>
                 <div class="flex items-center gap-4 mb-4">
-                    <img src="https://i.pravatar.cc/150?u=toni3" alt="Toni" class="w-16 h-16 rounded-full border-4 border-[#F0F2F4] object-cover">
+                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1" class="w-16 h-16 rounded-full border-4 border-[#F0F2F4] object-cover">
                     <div>
-                        <h2 class="text-[22px] font-black text-[#333] tracking-tight uppercase leading-none">ROMANTIC</h2>
+                        <h2 class="text-[22px] font-black text-[#333] tracking-tight uppercase leading-none" data-field="person1_mindset_type">ROMANTIC</h2>
                         <h3 class="text-[22px] font-black text-[#333] tracking-tight uppercase leading-none">MINDSET</h3>
                     </div>
                 </div>
-                <p class="text-[14px] text-gray-700 leading-relaxed">
+                <p class="text-[14px] text-gray-700 leading-relaxed" data-field="person1_mindset_desc">
                     You approach marriage with more idealism than most. In some respects, you're living out your own romantic script with the "soul mate" of your dreams. In fact, you are nearly twice as likely as the average person to say, "There's only one perfect person for me." Love conquers all for you. You believe in a soul-to-soul connection that doesn't require much effort and you expect it to not only last forever but to bring you both unending bliss.
                 </p>
             </div>
 
-            <!-- Chris - Resolute -->
+            <!-- Person 2 Mindset -->
             <div>
                 <div class="flex items-center gap-4 mb-4">
-                    <img src="https://i.pravatar.cc/150?u=chris3" alt="Chris" class="w-16 h-16 rounded-full border-4 border-[#F0F2F4] object-cover">
+                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2" class="w-16 h-16 rounded-full border-4 border-[#F0F2F4] object-cover">
                     <div>
-                        <h2 class="text-[22px] font-black text-[#333] tracking-tight uppercase leading-none">RESOLUTE</h2>
+                        <h2 class="text-[22px] font-black text-[#333] tracking-tight uppercase leading-none" data-field="person2_mindset_type">RESOLUTE</h2>
                         <h3 class="text-[22px] font-black text-[#333] tracking-tight uppercase leading-none">MINDSET</h3>
                     </div>
                 </div>
-                <p class="text-[14px] text-gray-700 leading-relaxed">
+                <p class="text-[14px] text-gray-700 leading-relaxed" data-field="person2_mindset_desc">
                     You are a true believer when it comes to matrimony. In fact, you have the highest marriage motivation of any other category. You are more than twice as likely as your peers to say: "Divorce is not an option." You are marrying for life. You resonate with words like devotion, dedication, and commitment. More than others, you are likely to want to have children at some point, too. In fact, only 2% of Resolutes say they never want children.
                 </p>
             </div>
@@ -254,7 +253,7 @@
             <h2 class="text-center text-[24px] font-black text-[#333] uppercase tracking-tight mb-6" style="font-family: 'Montserrat', sans-serif;">
                 HOW YOUR MINDSETS MESH
             </h2>
-            <div class="space-y-4 text-[14px] text-gray-700 leading-relaxed">
+            <div class="space-y-4 text-[14px] text-gray-700 leading-relaxed" data-field="mindsets_mesh">
                 <p>
                     You don't share the same mindset, but you both share a passion for a loving marriage. The two of you bring together a combination of dedication and idealism. This can work well as long as both of you are sensitive to your different attitudes and are willing to work as a team. A Romantic mindset is often tempted to ignore real-life work because it doesn't fit their "love story." Yet the Resolute perspective can learn from the Romantic how to lean a bit more into the softer side of love. The key is honest discussions about your values and your commitment to each other – even when times get tough. That's not always as easy with a Romantic mindset, but it's crucial.
                 </p>
