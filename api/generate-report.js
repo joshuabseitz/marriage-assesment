@@ -291,7 +291,6 @@ export default async function handler(req, res) {
       stack: error.stack,
       __dirname: __dirname
     });
-  }
   } catch (fatalError) {
     // Outer catch for any errors in setup or error handling itself
     console.error('💀 FATAL ERROR - Failed before main logic:', fatalError);
