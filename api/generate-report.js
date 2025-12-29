@@ -3,10 +3,16 @@
  * This is a serverless endpoint that replaces /api/generate-report
  */
 
-import { GoogleGenAI } from '@google/genai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@supabase/supabase-js';
 import { readFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// Get the directory of the current module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const PROJECT_ROOT = join(__dirname, '..');
 
 // Helper: Extract JSON from AI response text
 function extractJSON(responseText) {
@@ -29,26 +35,12 @@ async function callGeminiAPI(genAI, prompt, passName, maxRetries = 2) {
     try {
       console.log(`🤖 Calling Gemini (${passName}, attempt ${attempt}/${maxRetries})...`);
       
-      const result = await genAI.models.generateContent({
-        model: modelName,
-        contents: prompt,
-        config: {
-          temperature: 0.7,
-          topP: 0.95,
-          topK: 40,
-          maxOutputTokens: 8192,
-        }
-      });
+      const model = genAI.getGenerativeModel({ model: modelName });
+      const result = await model.generateContent(prompt);
       
       // Extract response text
-      let responseText;
-      if (result.text) {
-        responseText = result.text;
-      } else if (result.candidates?.[0]?.content?.parts?.[0]?.text) {
-        responseText = result.candidates[0].content.parts[0].text;
-      } else {
-        throw new Error('No text in API response');
-      }
+      const response = await result.response;
+      const responseText = response.text();
       
       // Extract and parse JSON
       const jsonData = extractJSON(responseText);
@@ -72,7 +64,7 @@ async function callGeminiAPI(genAI, prompt, passName, maxRetries = 2) {
 
 // Helper: Load data extractor
 function loadDataExtractor() {
-  const extractorPath = join(process.cwd(), 'report-data-extractor.js');
+  const extractorPath = join(PROJECT_ROOT, 'report-data-extractor.js');
   const extractorCode = readFileSync(extractorPath, 'utf-8');
   
   const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', `
@@ -108,7 +100,7 @@ export default async function handler(req, res) {
     if (!GEMINI_API_KEY) {
       return res.status(500).json({ error: 'Gemini API not configured' });
     }
-    const genAI = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
     // Initialize Supabase Admin
     const SUPABASE_URL = process.env.SUPABASE_URL || 'https://tobxdhqcdttgawqewpwl.supabase.co';
@@ -151,7 +143,7 @@ export default async function handler(req, res) {
 
     // AI Pass 1 - Personality
     console.log('🎭 AI Pass 1 - Personality Analysis...');
-    const pass1Template = readFileSync(join(process.cwd(), 'prompt-pass1-personality.txt'), 'utf-8');
+    const pass1Template = readFileSync(join(PROJECT_ROOT, 'prompt-pass1-personality.txt'), 'utf-8');
     const pass1Prompt = pass1Template
       .replace('{person1_name}', baseReport.couple.person_1.name)
       .replace('{person2_name}', baseReport.couple.person_2.name)
@@ -164,7 +156,7 @@ export default async function handler(req, res) {
 
     // AI Pass 2 - Wellbeing
     console.log('💚 AI Pass 2 - Wellbeing & Social...');
-    const pass2Template = readFileSync(join(process.cwd(), 'prompt-pass2-wellbeing.txt'), 'utf-8');
+    const pass2Template = readFileSync(join(PROJECT_ROOT, 'prompt-pass2-wellbeing.txt'), 'utf-8');
     const pass2Prompt = pass2Template
       .replace('{person1_name}', baseReport.couple.person_1.name)
       .replace('{person2_name}', baseReport.couple.person_2.name)
@@ -185,7 +177,7 @@ export default async function handler(req, res) {
 
     // AI Pass 3 - Communication
     console.log('💬 AI Pass 3 - Communication & Conflict...');
-    const pass3Template = readFileSync(join(process.cwd(), 'prompt-pass3-communication.txt'), 'utf-8');
+    const pass3Template = readFileSync(join(PROJECT_ROOT, 'prompt-pass3-communication.txt'), 'utf-8');
     const pass3Prompt = pass3Template
       .replace('{person1_name}', baseReport.couple.person_1.name)
       .replace('{person2_name}', baseReport.couple.person_2.name)
