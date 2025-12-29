@@ -1,7 +1,14 @@
 {
-  "version": 2,
-  "public": true,
-  "github": {
-    "silent": true
-  }
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/signup", "destination": "/signup.html" },
+    { "source": "/auth-signin", "destination": "/auth-signin.html" },
+    { "source": "/auth", "destination": "/auth.html" },
+    { "source": "/survey", "destination": "/survey.html" },
+    { "source": "/profile", "destination": "/profile.html" },
+    { "source": "/partner-connect", "destination": "/partner-connect.html" },
+    { "source": "/report-generator", "destination": "/report-generator.html" },
+    { "source": "/test-auth", "destination": "/test-auth.html" },
+    { "source": "/page:number", "destination": "/page:number.html" }
+  ]
 }
