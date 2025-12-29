@@ -64,18 +64,35 @@ async function callGeminiAPI(genAI, prompt, passName, maxRetries = 2) {
 
 // Helper: Load data extractor
 function loadDataExtractor() {
-  const extractorPath = join(PROJECT_ROOT, 'report-data-extractor.js');
-  const extractorCode = readFileSync(extractorPath, 'utf-8');
-  
-  const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', `
-    ${extractorCode}
-    return extractBaseReport(person1Responses, person2Responses, user1Profile, user2Profile);
-  `);
-  
-  return extractBaseReport;
+  try {
+    const extractorPath = join(PROJECT_ROOT, 'report-data-extractor.js');
+    console.log('Loading data extractor from:', extractorPath);
+    const extractorCode = readFileSync(extractorPath, 'utf-8');
+    console.log('Data extractor loaded successfully');
+    
+    const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', `
+      ${extractorCode}
+      return extractBaseReport(person1Responses, person2Responses, user1Profile, user2Profile);
+    `);
+    
+    return extractBaseReport;
+  } catch (error) {
+    console.error('Error loading data extractor:', error);
+    throw new Error(`Failed to load data extractor: ${error.message}`);
+  }
 }
 
 export default async function handler(req, res) {
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  
+  // Handle OPTIONS request
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
   // Only allow POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -83,6 +100,8 @@ export default async function handler(req, res) {
 
   try {
     console.log('📊 MULTI-PASS REPORT GENERATION STARTED');
+    console.log('PROJECT_ROOT:', PROJECT_ROOT);
+    console.log('__dirname:', __dirname);
     
     const { person1_responses, person2_responses, user1_id, user2_id } = req.body;
 
@@ -143,7 +162,9 @@ export default async function handler(req, res) {
 
     // AI Pass 1 - Personality
     console.log('🎭 AI Pass 1 - Personality Analysis...');
-    const pass1Template = readFileSync(join(PROJECT_ROOT, 'prompt-pass1-personality.txt'), 'utf-8');
+    const pass1TemplatePath = join(PROJECT_ROOT, 'prompt-pass1-personality.txt');
+    console.log('Loading prompt template from:', pass1TemplatePath);
+    const pass1Template = readFileSync(pass1TemplatePath, 'utf-8');
     const pass1Prompt = pass1Template
       .replace('{person1_name}', baseReport.couple.person_1.name)
       .replace('{person2_name}', baseReport.couple.person_2.name)
