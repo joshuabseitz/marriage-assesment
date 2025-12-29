@@ -239,6 +239,14 @@ export default async function handler(req, res) {
     const extractBaseReport = loadDataExtractor();
     const baseReport = extractBaseReport(person1_responses, person2_responses, user1Profile, user2Profile);
     console.log('✅ Base data extracted');
+    console.log('  - Person 1 caution flags:', baseReport.caution_flags?.person_1?.length || 0);
+    console.log('  - Person 2 caution flags:', baseReport.caution_flags?.person_2?.length || 0);
+    if (baseReport.caution_flags?.person_1?.length > 0) {
+      console.log('  - P1 flags:', baseReport.caution_flags.person_1.map(f => f.description));
+    }
+    if (baseReport.caution_flags?.person_2?.length > 0) {
+      console.log('  - P2 flags:', baseReport.caution_flags.person_2.map(f => f.description));
+    }
     
     // Prepare prompt data
     const promptData = {

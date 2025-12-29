@@ -30,7 +30,11 @@ function extractBaseReport(person1Responses, person2Responses, user1Profile = nu
       sexuality: extractSexuality(person1Responses, person2Responses)
     },
     spirituality: extractSpirituality(person1Responses, person2Responses),
-    expectations: extractExpectations(person1Responses, person2Responses)
+    expectations: extractExpectations(person1Responses, person2Responses),
+    caution_flags: {
+      person_1: extractCautionFlags(person1Responses),
+      person_2: extractCautionFlags(person2Responses)
+    }
   };
 }
 

@@ -450,28 +450,15 @@ function renderPage2() {
   updateText('[data-field="person1_dynamics_type"]', dynamics?.person_1?.type || 'Cooperating Spouse');
   updateText('[data-field="person2_dynamics_type"]', dynamics?.person_2?.type || 'Affirming Spouse');
   
-  // Context stars (relationship stability from survey Q11)
-  const { relationship } = reportData;
-  console.log('  - Relationship data:', relationship);
+  // Context stars (external life load - AI-calculated per person)
+  const p1Context = wellbeing?.individual?.person_1?.context?.star_rating || 3;
+  const p2Context = wellbeing?.individual?.person_2?.context?.star_rating || 3;
   
-  // Convert stability label to star rating
-  const stabilityToStars = (stability) => {
-    if (!stability) return 3;
-    const stabilityMap = {
-      'Very Stable': 5,
-      'Moderately Stable': 3,
-      'Somewhat Rocky': 2,
-      'Rocky': 1
-    };
-    return stabilityMap[stability] || 3;
-  };
+  console.log('  - Context P1:', p1Context, 'stars, stressors:', wellbeing?.individual?.person_1?.context?.stressors);
+  console.log('  - Context P2:', p2Context, 'stars, stressors:', wellbeing?.individual?.person_2?.context?.stressors);
   
-  const starRating = stabilityToStars(relationship?.stability);
-  console.log('  - Stability label:', relationship?.stability);
-  console.log('  - Star rating:', starRating);
-  
-  updateStars('[data-field="person1_context_stars"]', starRating);
-  updateStars('[data-field="person2_context_stars"]', starRating);
+  updateStars('[data-field="person1_context_stars"]', p1Context);
+  updateStars('[data-field="person2_context_stars"]', p2Context);
   
   // Set momentum bar height dynamically
   const momentumLevelMap = {
