@@ -5,7 +5,7 @@
 
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { createClient } from '@supabase/supabase-js';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync, readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -82,24 +82,65 @@ function loadDataExtractor() {
 }
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  
-  // Handle OPTIONS request
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-  
-  // Only allow POST
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+  // Wrap everything in comprehensive error handling
   try {
+    // Set CORS headers
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    
+    // Handle OPTIONS request
+    if (req.method === 'OPTIONS') {
+      return res.status(200).end();
+    }
+    
+    // Only allow POST
+    if (req.method !== 'POST') {
+      return res.status(405).json({ error: 'Method not allowed' });
+    }
+
     console.log('📊 MULTI-PASS REPORT GENERATION STARTED');
-    console.log('__dirname:', __dirname);
+    console.log('Environment Check:');
+    console.log('  - __dirname:', __dirname);
+    console.log('  - __filename:', __filename);
+    console.log('  - process.cwd():', process.cwd());
+    console.log('  - Node version:', process.version);
+    console.log('  - GEMINI_API_KEY exists:', !!process.env.GEMINI_API_KEY);
+    console.log('  - SUPABASE_SERVICE_KEY exists:', !!process.env.SUPABASE_SERVICE_KEY);
+    
+    // Check if required files exist
+    console.log('\nFile System Check:');
+    const requiredFiles = [
+      'report-data-extractor.js',
+      'prompt-pass1-personality.txt',
+      'prompt-pass2-wellbeing.txt',
+      'prompt-pass3-communication.txt'
+    ];
+    
+    try {
+      const dirContents = readdirSync(__dirname);
+      console.log('  - Directory contents:', dirContents);
+    } catch (err) {
+      console.error('  - Failed to read directory:', err.message);
+    }
+    
+    for (const file of requiredFiles) {
+      const filePath = join(__dirname, file);
+      const exists = existsSync(filePath);
+      console.log(`  - ${file}: ${exists ? '✅ EXISTS' : '❌ MISSING'} (${filePath})`);
+      
+      if (!exists) {
+        return res.status(500).json({
+          error: 'Missing required file',
+          file: file,
+          searchPath: filePath,
+          __dirname: __dirname,
+          dirContents: readdirSync(__dirname)
+        });
+      }
+    }
+    
+    console.log('✅ All required files found\n');
     
     const { person1_responses, person2_responses, user1_id, user2_id } = req.body;
 
@@ -225,25 +266,50 @@ export default async function handler(req, res) {
 
   } catch (error) {
     console.error('❌ GENERATION ERROR:', error);
+    console.error('Error stack:', error.stack);
+    console.error('Error type:', error.constructor.name);
     
     if (error.message.includes('429') || error.message.includes('quota')) {
       return res.status(429).json({ 
         error: 'API quota exceeded',
-        details: 'Rate limit hit. Wait a few minutes and try again.'
+        details: 'Rate limit hit. Wait a few minutes and try again.',
+        message: error.message
       });
     }
     
     if (error instanceof SyntaxError) {
       return res.status(500).json({ 
         error: 'Invalid JSON in AI response',
-        details: error.message
+        details: error.message,
+        stack: error.stack
       });
     }
 
     return res.status(500).json({ 
       error: error.message || 'Failed to generate report',
-      type: error.constructor.name
+      type: error.constructor.name,
+      stack: error.stack,
+      __dirname: __dirname
     });
+  }
+  } catch (fatalError) {
+    // Outer catch for any errors in setup or error handling itself
+    console.error('💀 FATAL ERROR - Failed before main logic:', fatalError);
+    console.error('Fatal error stack:', fatalError.stack);
+    
+    try {
+      return res.status(500).json({
+        error: 'Fatal server error',
+        message: fatalError.message,
+        type: fatalError.constructor.name,
+        stack: fatalError.stack,
+        cwd: process.cwd(),
+        nodeVersion: process.version
+      });
+    } catch (jsonError) {
+      // If even JSON response fails, send plain text
+      return res.status(500).send(`FATAL ERROR: ${fatalError.message}\n\nStack: ${fatalError.stack}`);
+    }
   }
 }
 
