@@ -361,6 +361,237 @@ function scaleToPercentage(score) {
 }
 
 // ============================================================================
+// ENHANCED HELPER FUNCTIONS (for AI prompts)
+// ============================================================================
+
+/**
+ * Calculate compatibility score between two people on specific question range
+ * Returns a score from 0-100 indicating how aligned their responses are
+ */
+function calculateCompatibilityScore(person1Responses, person2Responses, questionIds) {
+  let totalDifference = 0;
+  let validQuestions = 0;
+  
+  questionIds.forEach(id => {
+    const p1 = parseFloat(person1Responses[id]);
+    const p2 = parseFloat(person2Responses[id]);
+    
+    if (!isNaN(p1) && !isNaN(p2)) {
+      // Calculate normalized difference (0-1 scale)
+      const maxPossible = 5; // Most questions use 1-5 scale
+      const difference = Math.abs(p1 - p2) / maxPossible;
+      totalDifference += difference;
+      validQuestions++;
+    }
+  });
+  
+  if (validQuestions === 0) return 50; // Neutral score if no data
+  
+  // Convert to 0-100 where 100 = perfect alignment
+  const avgDifference = totalDifference / validQuestions;
+  const compatibilityScore = (1 - avgDifference) * 100;
+  
+  return Math.round(compatibilityScore);
+}
+
+/**
+ * Extract top N values from a set of questions
+ * Returns array of {questionId, value, score} sorted by score
+ */
+function extractTopValues(responses, questionIds, topN = 5) {
+  const values = [];
+  
+  questionIds.forEach(id => {
+    const score = parseFloat(responses[id]);
+    if (!isNaN(score)) {
+      values.push({
+        questionId: id,
+        score: score,
+        value: responses[id]
+      });
+    }
+  });
+  
+  // Sort by score descending
+  values.sort((a, b) => b.score - a.score);
+  
+  // Return top N
+  return values.slice(0, topN);
+}
+
+/**
+ * Identify agreement gaps between two people on specific questions
+ * Returns array of questions where they significantly disagree
+ */
+function identifyAgreementGaps(person1Responses, person2Responses, questionIds, threshold = 2) {
+  const gaps = [];
+  
+  questionIds.forEach(id => {
+    const p1 = parseFloat(person1Responses[id]);
+    const p2 = parseFloat(person2Responses[id]);
+    
+    if (!isNaN(p1) && !isNaN(p2)) {
+      const difference = Math.abs(p1 - p2);
+      
+      if (difference >= threshold) {
+        gaps.push({
+          questionId: id,
+          person1Value: p1,
+          person2Value: p2,
+          difference: difference,
+          person1Response: person1Responses[id],
+          person2Response: person2Responses[id]
+        });
+      }
+    }
+  });
+  
+  // Sort by difference descending (biggest gaps first)
+  gaps.sort((a, b) => b.difference - a.difference);
+  
+  return gaps;
+}
+
+/**
+ * Calculate personality dimension score from DISC-style questions
+ * Used for dynamics analysis
+ */
+function calculateDimensionScore(responses, questionIds) {
+  const scores = questionIds
+    .map(id => parseInt(responses[id]))
+    .filter(val => !isNaN(val) && val >= 1 && val <= 5);
+  
+  if (scores.length === 0) return 50; // Neutral if no data
+  
+  const avgScore = scores.reduce((sum, val) => sum + val, 0) / scores.length;
+  
+  // Convert 1-5 scale to 0-100 position
+  // 1 = 0, 3 = 50, 5 = 100
+  const position = ((avgScore - 1) / 4) * 100;
+  
+  return Math.round(position);
+}
+
+/**
+ * Determine personality type from dynamics scores
+ * Returns: 'Cooperating Spouse' | 'Affirming Spouse' | 'Directing Spouse' | 'Analyzing Spouse'
+ */
+function determinePersonalityType(responses) {
+  // Simplified type determination based on key questions
+  // Q53-55: High = Cooperating (patient, diplomatic, steady)
+  // Q73-82: Low = Cooperating (not aggressive)
+  // Q83-92: High = Affirming (feelings over facts)
+  // Q103-112: High = Analyzing (cautious, methodical)
+  
+  const steadiness = calculateAverage(responses, [53, 54, 55]); // Cooperating indicators
+  const aggressiveness = calculateAverage(responses, [73, 74, 75, 76, 77]); // Directing indicators
+  const expressiveness = calculateAverage(responses, [83, 84, 85, 86, 87]); // Affirming indicators
+  const cautiousness = calculateAverage(responses, [103, 104, 105, 106, 107]); // Analyzing indicators
+  
+  // Find dominant trait
+  const scores = {
+    'Cooperating Spouse': steadiness,
+    'Affirming Spouse': expressiveness,
+    'Directing Spouse': aggressiveness,
+    'Analyzing Spouse': cautiousness
+  };
+  
+  let maxType = 'Cooperating Spouse';
+  let maxScore = steadiness;
+  
+  Object.entries(scores).forEach(([type, score]) => {
+    if (score > maxScore) {
+      maxScore = score;
+      maxType = type;
+    }
+  });
+  
+  return maxType;
+}
+
+/**
+ * Extract caution flags with context
+ * Returns array of flag objects with details
+ */
+function extractCautionFlags(responses) {
+  const flagQuestions = {
+    67: "Witnessed parental conflict/abuse",
+    68: "Managing depression",
+    69: "Concern about partner's habit",
+    70: "Addiction concerns",
+    71: "Undisclosed financial concerns",
+    72: "Anger management challenges"
+  };
+  
+  const flags = [];
+  
+  Object.entries(flagQuestions).forEach(([qId, description]) => {
+    const response = responses[parseInt(qId)];
+    if (response === true || response === "true" || response === "True") {
+      flags.push({
+        questionId: parseInt(qId),
+        description: description,
+        severity: "caution" // Could be enhanced with severity levels
+      });
+    }
+  });
+  
+  return flags;
+}
+
+/**
+ * Calculate relationship timeline score
+ * Returns assessment of dating length appropriateness
+ */
+function assessRelationshipTimeline(datingLength, age1, age2) {
+  const avgAge = (age1 + age2) / 2;
+  
+  let score = 50; // Default neutral
+  let assessment = "moderate";
+  
+  if (datingLength === "2+ years") {
+    score = 90;
+    assessment = "excellent";
+  } else if (datingLength === "18-24 months") {
+    score = 70;
+    assessment = "good";
+  } else if (datingLength === "12-18 months") {
+    score = 60;
+    assessment = "moderate_caution";
+  } else if (datingLength === "6-12 months") {
+    score = 40;
+    assessment = "concern";
+  } else {
+    score = 25;
+    assessment = "significant_concern";
+  }
+  
+  // Adjust for age - younger couples need more time
+  if (avgAge < 23 && score > 50) {
+    score -= 10;
+  }
+  
+  return {
+    score: score,
+    assessment: assessment,
+    recommendation: score >= 70 ? "Ready" : "Consider extending dating period"
+  };
+}
+
+/**
+ * Generate compatibility summary across multiple dimensions
+ */
+function generateCompatibilitySummary(person1Responses, person2Responses) {
+  return {
+    mindset: calculateCompatibilityScore(person1Responses, person2Responses, [17, 18, 19, 20, 21, 22, 23, 24, 25, 26]),
+    values: calculateCompatibilityScore(person1Responses, person2Responses, [12, 13, 14, 15]),
+    communication: calculateCompatibilityScore(person1Responses, person2Responses, [281, 282, 283, 284, 285]),
+    conflict: calculateCompatibilityScore(person1Responses, person2Responses, [311, 312, 313, 314, 315]),
+    spirituality: calculateCompatibilityScore(person1Responses, person2Responses, [341, 342, 343, 344, 345])
+  };
+}
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -370,7 +601,15 @@ if (typeof module !== 'undefined' && module.exports) {
     extractBaseReport,
     getResponsesForQuestions,
     calculateAverage,
-    scaleToPercentage
+    scaleToPercentage,
+    calculateCompatibilityScore,
+    extractTopValues,
+    identifyAgreementGaps,
+    calculateDimensionScore,
+    determinePersonalityType,
+    extractCautionFlags,
+    assessRelationshipTimeline,
+    generateCompatibilitySummary
   };
 }
 
@@ -380,7 +619,15 @@ if (typeof window !== 'undefined') {
     extractBaseReport,
     getResponsesForQuestions,
     calculateAverage,
-    scaleToPercentage
+    scaleToPercentage,
+    calculateCompatibilityScore,
+    extractTopValues,
+    identifyAgreementGaps,
+    calculateDimensionScore,
+    determinePersonalityType,
+    extractCautionFlags,
+    assessRelationshipTimeline,
+    generateCompatibilitySummary
   };
 }
 

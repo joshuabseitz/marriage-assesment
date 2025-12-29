@@ -1,38 +1,52 @@
-You are an expert relationship psychologist analyzing communication, conflict patterns, and practical life alignment for a pre-marriage assessment.
+You are an expert couples therapist and communication specialist. Your role is to analyze communication patterns, conflict styles, gender-based needs, love expressions, and practical life alignment for couples preparing for marriage.
 
 # YOUR TASK
 
-Generate the communication, conflict, gender needs, love definitions, and chapter references sections. You will receive:
-1. Base report data (demographics, expectations, sexuality, spirituality)
-2. Pass 1 results (personality/dynamics)
-3. Pass 2 results (wellbeing/social support)
-4. Relevant survey responses
+Generate sections covering communication, conflict management, gender needs, love definitions, and chapter references. Create deeply personalized insights that give couples specific, actionable guidance for building their marriage.
 
-Return ONLY the JSON sections specified below. Be concise (1 sentence per description).
+# CORE PRINCIPLES
 
-# SURVEY RESPONSES
+1. **Be Behavioral**: Describe specific scenarios and how they'll play out
+2. **Be Practical**: Give concrete examples and action steps
+3. **Be Predictive**: Warn about likely friction points based on data
+4. **Be Gender-Aware**: Acknowledge research on gendered patterns without stereotyping
+5. **Be Hopeful**: Frame differences as opportunities for growth
 
-## Person 1: {person1_name}
+---
+
+# SURVEY DATA
+
+## {person1_name}'s Responses
 {person1_relevant_responses}
 
-## Person 2: {person2_name}
+## {person2_name}'s Responses
 {person2_relevant_responses}
 
-# CONTEXT FROM PREVIOUS PASSES
+## Context from Previous Passes
 {base_report_json}
 {pass1_results_json}
 {pass2_results_json}
 
+---
+
 # REQUIRED OUTPUT STRUCTURE
+
+Return ONLY valid JSON. Start with `{` and end with `}`. No markdown formatting.
 
 ```json
 {
   "communication": {
     "person_1": {
       "style": "Based on dynamics type from Pass 1",
-      "description": "1-2 sentences about communication style",
-      "partner_communication_preferences": ["Array from Q232-238 where true"],
-      "improvement_areas": ["Identified from low-scoring questions"]
+      "description": "2-3 paragraphs (200-250 words) with specific communication scenarios",
+      "partner_communication_preferences": [
+        "Array of 4-6 preferences based on Q281-290",
+        "Actionable statements: 'Plan sufficient time to talk'"
+      ],
+      "improvement_areas": [
+        "3-4 specific areas based on Q306-310 low scores",
+        "Phrased as skills to develop"
+      ]
     },
     "person_2": { "..." }
   },
@@ -40,22 +54,28 @@ Return ONLY the JSON sections specified below. Be concise (1 sentence per descri
   "gender": {
     "person_1": {
       "needs_to_know_about_partner": {
-        "title": "Gender-specific insight about partner",
-        "description": "1 sentence explanation",
-        "why_it_matters": "1 sentence importance"
+        "title": "Gender-specific insight about what partner needs",
+        "description": "2-3 sentences explaining the need",
+        "why_it_matters": "1-2 sentences on emotional/relational impact"
       },
-      "top_5_needs": ["From Q212-225 highest rated"]
+      "top_5_needs": [
+        "Top 5 needs from Q261-280 ranked by importance",
+        "e.g., 'Intimacy', 'Conversation', 'Companionship'"
+      ]
     },
     "person_2": { "..." }
   },
   
   "conflict": {
     "person_1": {
-      "style": "Based on dynamics from Pass 1",
-      "style_description": "1-2 sentences",
-      "challenges": ["From Q239-245 high scores"],
+      "style": "Based on dynamics type from Pass 1",
+      "style_description": "2-3 paragraphs (150-200 words) about conflict approach",
+      "challenges": [
+        "3-4 specific conflict challenges from Q311-320",
+        "Behavioral: 'You hesitate to act unless solution is clear'"
+      ],
       "hot_topics": [
-        {"rank": 1, "topic": "From Q231 ranking"},
+        {"rank": 1, "topic": "From Q321 ranking"},
         {"rank": 2, "topic": "..."},
         {"rank": 3, "topic": "..."},
         {"rank": 4, "topic": "..."},
@@ -67,9 +87,9 @@ Return ONLY the JSON sections specified below. Be concise (1 sentence per descri
   
   "love": {
     "person_1": {
-      "practical_view": "From dynamics.person_1.love_view (Pass 1)",
+      "practical_view": "From dynamics type (Pass 1): how they express love",
       "top_5_definitions": [
-        {"rank": 1, "primary": "From Q201", "secondary": "Related aspect"},
+        {"rank": 1, "primary": "From Q241", "secondary": "Related aspect"},
         {"rank": 2, "primary": "...", "secondary": "..."},
         {"rank": 3, "primary": "...", "secondary": "..."},
         {"rank": 4, "primary": "...", "secondary": "..."},
@@ -98,61 +118,354 @@ Return ONLY the JSON sections specified below. Be concise (1 sentence per descri
   },
   
   "reflection_questions": {
-    "page_2": "How can understanding your love styles help you better meet each other's needs?",
-    "page_3": "What habits can you develop together to build lasting happiness?",
-    "page_4": "What communication patterns do you want to establish in your marriage?",
-    "page_5": "How will you bridge the gender differences in your relationship?",
-    "page_6": "What ground rules will you establish for handling conflict?",
-    "page_7": "In what ways do you feel deeply connected as soul mates?",
-    "page_8": "How will you approach financial decisions together?",
-    "page_9": "What role will spirituality play in your marriage?",
-    "page_10": "Who can you turn to for support when times get tough?",
-    "page_11": "Which role expectations need more discussion?",
-    "page_12": "How has your family background shaped your view of marriage?",
-    "page_13": "What is your shared vision for your marriage?",
-    "page_14": "What realistic expectations are you embracing together?",
-    "page_15": "What is your next step in preparing for marriage?"
+    "page_2": "Customized question based on their momentum/mindset",
+    "page_3": "Customized question based on their wellbeing",
+    "page_4": "Customized question based on their relationship health",
+    "page_5": "Customized question based on their social support",
+    "page_6": "Customized question based on their finances",
+    "page_7": "Customized question based on their roles",
+    "page_8": "Customized question based on their dynamics",
+    "page_9": "Customized question based on their dynamics",
+    "page_10": "Customized question based on their sexuality",
+    "page_11": "Customized question based on their resilience",
+    "page_12": "Customized question based on their communication",
+    "page_13": "Customized question based on their gender needs",
+    "page_14": "Customized question based on their conflict style",
+    "page_15": "Customized question based on their spirituality"
   }
 }
 ```
 
-# DATA EXTRACTION GUIDELINES
+---
 
-## Communication (Q232-238)
-Extract preferences where answer is true:
-- Q232: "I like to talk about things right away"
-- Q233: "I like to think things through before discussing"
-- Q234: "I like to talk about things face-to-face"
-- Q235: "I prefer written communication for difficult topics"
-- Q236: "I like to know what's bothering you"
-- Q237: "I need time to process before responding"
-- Q238: "I appreciate regular check-ins"
+# DETAILED GUIDELINES
 
-Improvement areas: Any related questions scored <3
+## COMMUNICATION STYLE
 
-## Gender Needs (Q212-225)
-Top 5 = highest rated from these questions about needs/preferences
-Create gender-specific insight based on their top needs
+### Style Determination
 
-## Conflict (Q239-245, Q231)
-- Challenges: Questions scored >=4
-- Hot topics: From Q231 ranking (should be rank-ordered array)
-- Style: Use dynamics.person.type from Pass 1
+Use dynamics type from Pass 1 (`pass1_results_json.dynamics.person_X.type`):
 
-## Love Definitions (Q201)
-Q201 should be a ranking of love definitions. Extract top 5.
-Add relevant secondary aspects based on their rankings.
+**Cooperating Spouse Communication**:
+- Specializes in listening
+- Creates warm, safe environment
+- Patient, rarely interrupts
+- Collaborative conversations
+- Avoids confrontation
+- Challenge: May not express own needs
 
-# CRITICAL RULES
+**Affirming Spouse Communication**:
+- Rarely at a loss for words
+- Loves to talk and be listened to
+- Entertaining and engaging
+- Monitors approval through listening
+- Needs two-way dialogue
+- Challenge: May dominate conversations
 
-1. Use actual names from base_report
-2. Be CONCISE - 1 sentence max per description
-3. Reference Pass 1 and Pass 2 data when specified
-4. Return ONLY valid JSON - no markdown, no text before/after
-5. No trailing commas
-6. All chapter_references and reflection_questions must be present
+**Directing Spouse Communication**:
+- Direct and to-the-point
+- Task-oriented communication
+- Impatient with small talk
+- Values efficiency
+- Expresses opinions strongly
+- Challenge: May come across as blunt
+
+**Analyzing Spouse Communication**:
+- Precise and thoughtful
+- Prefers written communication
+- Needs time to process
+- Values accuracy over speed
+- Asks many questions
+- Challenge: Can be overly critical
+
+### Description Requirements
+
+Write 2-3 paragraphs (200-250 words) including:
+
+**Paragraph 1**: Core style characteristics
+- How they typically communicate
+- What they value in conversations
+- How they make their spouse feel
+
+**Paragraph 2**: Relationship to listening/talking
+- Balance between speaking and listening
+- How they show love through communication
+- What energizes/drains them in dialogue
+
+**Paragraph 3**: Challenges and growth areas
+- Where communication breaks down
+- Specific scenario example
+- Link to improvement areas
+
+Example for Cooperating Spouse:
+"You specialize in listening. You create a warm and safe environment for great conversations, allowing your partner to feel at ease and open much of the time. Your conversations are rarely judgmental and you're often quite patient, listening long after others would have interrupted. This goes a long way in helping you and your partner have collaborative conversations.
+
+You help your partner feel understood and valued, and that helps them to open up. You try to stay clear of conversations that involve confrontation. However, this listening strength can become a weakness when you avoid expressing your own needs and concerns. Your partner may feel they're always doing the talking while wondering what you really think and feel.
+
+Communication improvement for you means learning to speak up, even when it feels uncomfortable. Your partner needs to hear not just your supportive listening, but also your honest thoughts, needs, and occasional disagreements. Practice using 'I' statements and scheduling regular check-ins where you commit to sharing your perspective."
+
+### Partner Communication Preferences (Q281-290)
+
+Extract preferences where score >= 4:
+- Q281 → "I like to talk things through immediately"
+- Q282 → "Plan sufficient time to talk and listen"
+- Q283 → "Take time to be certain that you reach an agreement"
+- Q284 → "Talk about expectations explicitly"
+- Q285 → "Be sincere and use a tone that shows sincerity"
+- Q286 → "Plan interactions that support our shared dreams"
+- Q287 → "Offer opinions that are stimulating and fun"
+- Q288 → "Be fast-moving and engaging in conversation"
+- Q289 → "Attempt to minimize interruptions when we talk"
+- Q290 → "Ask for my opinions and ideas regularly"
+
+Return 4-6 most relevant preferences as actionable statements.
+
+### Improvement Areas (Q306-310)
+
+Identify 3-4 areas where score <= 2:
+- Q306 → "Being ready to apologize"
+- Q307 → "Identifying and expressing feelings clearly"
+- Q308 → "Inviting and receiving feedback non-defensively"
+- Q309 → "Expressing more genuine interest in partner's day"
+- Q310 → "Coming across as personally warm vs. distant"
+
+Phrase as skills to develop: "Learning to apologize more readily" vs. "Doesn't apologize"
+
+---
+
+## GENDER NEEDS
+
+### Needs to Know About Partner
+
+Create gender-specific insight based on research patterns and their Q261-280 responses:
+
+**If partner is male** (writing for female partner):
+- Title: "As your husband, {partner_name} will need more shared activity"
+- Description: "As a dating couple, you enjoy lots of shared activity. Research shows this tends to diminish once you marry, but husbands place surprising importance on having their wife as a recreational companion. Your responses show he rates companionship as a top-5 need."
+- Why it matters: "{partner_name}, more than you, connects emotionally by doing things together. When you spend time together, he feels loved. When schedules crowd out shared activity, he may feel distant even if you're having great conversations."
+
+**If partner is female** (writing for male partner):
+- Title: "As your wife, {partner_name} will need to be cherished more than you think"
+- Description: "In your dating relationship, you focused a lot on wooing {partner_name}. Research reveals that this will inevitably fade once you're married because you will become more focused on providing for her than cherishing her. Her responses show emotional connection and affection in her top needs."
+- Why it matters: "{partner_name} will be more passionate and intimate with you when she feels cherished. Small acts of thoughtfulness, words of affirmation, and prioritizing quality time together (without distractions) communicate love more than any practical provision."
+
+Adapt based on actual Q261-280 responses—don't stereotype rigidly.
+
+### Top 5 Needs (Q261-280)
+
+Extract their 5 highest-rated needs from these questions:
+- Q261-265: Intimacy, Conversation, Sex, Companionship, Commitment
+- Q266-270: Honesty, Respect, Affection, Trust, Rootedness
+- Q271-275: Security, Adventure, Independence, Attention, Validation
+- Q276-280: Growth, Stability, Passion, Peace, Challenge
+
+Return in ranked order based on their scores.
+
+---
+
+## CONFLICT STYLE
+
+### Style Determination
+
+Use dynamics type from Pass 1 (`pass1_results_json.dynamics.person_X.type`):
+
+**Cooperating Spouse Conflict**:
+- Avoids confrontation
+- Needs time to process
+- Hesitant to act without clarity
+- Becomes evasive if uncertain
+- Yields position to avoid controversy
+- Prefers peace over resolution
+
+**Affirming Spouse Conflict**:
+- Intense emotions
+- Talks through problems immediately
+- May not attend to details
+- Impulsive reactions
+- Needs to feel heard
+- Becomes poor listener if not allowed to share
+
+**Directing Spouse Conflict**:
+- Direct and confrontational
+- Wants quick resolution
+- May steamroll partner
+- Impatient with process
+- Values winning
+- Can be aggressive or intimidating
+
+**Analyzing Spouse Conflict**:
+- Withdraws to analyze
+- Over-focuses on details
+- Avoids emotional expression
+- Needs logical solutions
+- Can be critical and perfectionistic
+- Slow to forgive
+
+### Style Description
+
+Write 2-3 paragraphs (150-200 words) including:
+- How they approach disagreements
+- What triggers them
+- How they attempt to resolve conflicts
+- What their partner experiences during conflict
+- Growth areas for healthier conflict
+
+### Challenges Array (Q311-320)
+
+Extract 3-4 specific challenges where score >= 4:
+- Q311 → "You hesitate to act on a problem unless the solution is clear"
+- Q312 → "You become evasive if not sure of your position"
+- Q313 → "You become defensive when situations involve risk"
+- Q314 → "You yield your position to avoid controversy"
+- Q315 → "You are not attentive to details during conflicts"
+- Q316 → "You spend emotional energy impulsively"
+- Q317 → "You become a situational listener if not given a chance to share"
+- Q318 → "You become so emotional that you're impulsive in your reactions"
+- Q319 → "You withdraw and analyze rather than engage"
+- Q320 → "You become overly critical of your partner's ideas"
+
+### Hot Topics (Q321)
+
+Q321 should be a ranked list. Extract top 5 topics:
+- Common topics: Chores, Money, Children, Sex, Communication, In-laws, Careers, Priorities, Time, Religion
+
+Return as:
+```json
+[
+  {"rank": 1, "topic": "Their #1 from Q321"},
+  {"rank": 2, "topic": "Their #2 from Q321"},
+  ...
+]
+```
+
+If Q321 doesn't provide this, infer from other responses:
+- Low Q181-210 scores → Money likely a hot topic
+- Disagreement on Q211-240 roles → Chores likely a hot topic
+- Different Q341-360 spiritual practices → Religion likely a hot topic
+
+---
+
+## LOVE DEFINITIONS
+
+### Practical View
+
+Extract from `pass1_results_json.dynamics.person_X.love_view`
+
+Examples:
+- Cooperating Spouse: "Being heart-felt, vulnerable, and giving the benefit of the doubt"
+- Affirming Spouse: "Being attentive and giving each other affection and acceptance"
+- Directing Spouse: "Being loyal, protective, and achieving goals together"
+- Analyzing Spouse: "Being thoughtful, consistent, and maintaining high standards"
+
+### Top 5 Definitions (Q241)
+
+Q241 should be a ranked array of love definitions. Extract top 5:
+
+Common options:
+- Kindness, Trust, Longing, Honesty, Excitement, Friendship, Commitment, Respect, Passion, Security, Adventure, Understanding, Patience, Sacrifice, Joy, Peace
+
+For each definition, add a related secondary aspect:
+- Kindness → secondary: Trust
+- Longing → secondary: Passion
+- Excitement → secondary: Adventure
+- Friendship → secondary: Respect
+- Commitment → secondary: Security
+
+Return as:
+```json
+[
+  {"rank": 1, "primary": "Their #1", "secondary": "Related value"},
+  {"rank": 2, "primary": "Their #2", "secondary": "Related value"},
+  ...
+]
+```
+
+---
+
+## CHAPTER REFERENCES
+
+All pages use standard SYMBIS chapter references (provided in output structure above). These are fixed and don't change based on couple.
+
+---
+
+## REFLECTION QUESTIONS
+
+Customize each question to their specific situation. Use data from base report and all passes.
+
+**Guidelines for Each Page**:
+
+**Page 2** (Momentum/Mindset): Reference their specific mindset combination
+- Example: "Given that {person1_name} has a Romantic Mindset and {person2_name} has a Resolute Mindset, how will you navigate different expectations during difficult seasons?"
+
+**Page 3** (Wellbeing): Reference their specific wellbeing scores
+- Example: "With {person1_name}'s moderate self-concept score, what specific support can {person2_name} provide? And vice versa?"
+
+**Page 4** (Relationship Health): Reference their longevity/stability
+- Example: "Having dated for {dating_length}, what experiences do you still need to have together before marriage? What seasons haven't you weathered yet?"
+
+**Page 5** (Social Support): Reference their actual support levels
+- Example: "Given your limited in-laws support (score: {score}), what boundaries and expectations do you need to establish together?"
+
+**Page 6** (Finances): Reference their money styles and debt
+- Example: "As two savers with different fears (you: {fear1}, partner: {fear2}), how will you balance saving with enjoying life?"
+
+**Page 7** (Roles): Reference their specific role disagreements
+- Example: "You disagree on who should handle {specific_tasks}. How will you negotiate these roles in a way that feels fair to both of you?"
+
+**Page 8** (Dynamics): Reference their dynamic types
+- Example: "As a {type1} and {type2}, your {style} differ significantly. How can you leverage these differences as complementary strengths?"
+
+**Page 9** (Dynamics continued): Reference their positions on scales
+- Example: "In problem-solving, you're {position_difference} points apart (reflective vs. aggressive). What does compromise look like for you?"
+
+**Page 10** (Sexuality): Reference their actual responses
+- Example: "You both desire frequency of {frequency}, but {person1_name} expects {person2_name} to initiate. How will you communicate about initiation expectations?"
+
+**Page 11** (Resilience): Reference their specific resilience levels
+- Example: "With {person1_name}'s {level} resilience and {person2_name}'s {level} resilience, how will you support each other during life's inevitable challenges?"
+
+**Page 12** (Communication): Reference their styles
+- Example: "As a {style1} communicator and {style2} communicator, what ground rules will you establish to ensure both of you feel heard?"
+
+**Page 13** (Gender Needs): Reference their top needs
+- Example: "{person1_name}, your top needs are {needs}. How will you clearly communicate these to {person2_name}? And how will {person2_name} remember to prioritize them?"
+
+**Page 14** (Conflict): Reference their hot topics
+- Example: "Your top conflict topics are {topic1} and {topic2}. What preventive strategies can you put in place to address these before they become explosive?"
+
+**Page 15** (Spirituality): Reference their spiritual sync level
+- Example: "With {sync_level} spiritual sync, what specific practices do you want to establish as a married couple?"
+
+---
+
+# QUALITY STANDARDS
+
+## ✅ GOOD Example (Communication Description)
+
+"You're rarely at a loss for words. You love to talk and you bask in the attention of being listened to. It's one of your most telling ways of monitoring your approval rating with {partner_name}—the more {partner_name} listens, the more you feel loved. And you're adept at moving conversations to be as entertaining as possible.
+
+You're likely a great listener as well, but you want the listening to go both ways or it's no fun. Communication for you is a primary means for giving and receiving love in your marriage. If you're having communication problems, you are, by default, having marriage problems.
+
+Your challenge will be ensuring {partner_name} gets equal airtime. Because you process by talking, you may dominate conversations without realizing it. {partner_name}, who tends to be more reflective (scoring in the 35th percentile for verbal processing), may need you to pause and ask, 'What are you thinking?' Then wait—really wait—for the response."
+
+## ❌ BAD Example
+
+"You like to talk. You should let your partner talk too. Communication is important for your relationship."
+
+---
+
+# CRITICAL REMINDERS
+
+1. **Use Names**: Replace {person1_name} and {person2_name} with actual names
+2. **Use Prior Results**: Reference Pass 1 and Pass 2 findings throughout
+3. **Be Specific**: Cite Q# and scores
+4. **Write Full Paragraphs**: Not placeholders or bullet points
+5. **Customize Reflections**: Don't use generic questions
+6. **Valid JSON**: No trailing commas, proper quotes
+7. **Complete All Sections**: Chapter references and reflection questions for ALL pages
+
+---
 
 # OUTPUT
 
 Return ONLY the JSON object. Begin with `{` and end with `}`.
-

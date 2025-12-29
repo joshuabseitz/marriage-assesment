@@ -3,8 +3,8 @@
   "installCommand": "npm install",
   "functions": {
     "api/generate-report.js": {
-      "maxDuration": 60,
-      "memory": 1024
+      "maxDuration": 300,
+      "memory": 2048
     }
   },
   "rewrites": [

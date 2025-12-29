@@ -1,0 +1,17 @@
+{
+  "name": "symbis-assessment",
+  "version": "1.0.0",
+  "description": "SYMBIS Pre-Marriage Assessment Platform",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@supabase/supabase-js": "^2.39.0"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
+}

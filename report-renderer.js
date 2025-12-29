@@ -1,10 +1,18 @@
-// SYMBIS Report Dynamic Renderer
+// SYMBIS Report Dynamic Renderer - Enhanced Edition
 // Loads generated report data and injects it into page templates
+// Now with rich text support, fallbacks, and debug mode
 
 let reportData = null;
+let debugMode = false; // Set to true to see which fields are AI-generated
 
 // Initialize renderer on page load
 document.addEventListener('DOMContentLoaded', () => {
+  // Check for debug mode in URL
+  debugMode = new URLSearchParams(window.location.search).has('debug');
+  if (debugMode) {
+    console.log('🐛 Debug mode enabled');
+  }
+  
   loadReportData();
 });
 
@@ -20,10 +28,16 @@ function loadReportData() {
   
   try {
     reportData = JSON.parse(savedReport);
-    console.log('Report data loaded successfully');
+    console.log('✅ Report data loaded successfully');
+    console.log('📊 Report sections:', Object.keys(reportData));
+    
+    if (debugMode) {
+      console.log('📝 Full report data:', reportData);
+    }
+    
     renderCurrentPage();
   } catch (error) {
-    console.error('Error parsing report data:', error);
+    console.error('❌ Error parsing report data:', error);
     showNoDataMessage();
   }
 }
@@ -46,7 +60,7 @@ function renderCurrentPage() {
   const path = window.location.pathname;
   const page = path.substring(path.lastIndexOf('/') + 1);
   
-  console.log('Rendering page:', page);
+  console.log(`🎨 Rendering page: ${page || 'index'}`);
   
   switch (page) {
     case 'index':
@@ -111,23 +125,168 @@ function renderCurrentPage() {
       renderPage15();
       break;
   }
+  
+  console.log('✨ Page rendering complete');
 }
 
-// Helper function to safely get nested properties
+// ============================================================================
+// ENHANCED HELPER FUNCTIONS
+// ============================================================================
+
+/**
+ * Safely get nested properties with comprehensive fallback
+ */
 function getNestedProperty(obj, path, defaultValue = '') {
-  return path.split('.').reduce((acc, part) => acc && acc[part], obj) || defaultValue;
+  try {
+    const result = path.split('.').reduce((acc, part) => acc && acc[part], obj);
+    return result !== null && result !== undefined ? result : defaultValue;
+  } catch (error) {
+    if (debugMode) {
+      console.warn(`⚠️ Failed to get property: ${path}`, error);
+    }
+    return defaultValue;
+  }
 }
 
-// Helper function to update text content
-function updateText(selector, value) {
+/**
+ * Update text content with fallback and debug info
+ */
+function updateText(selector, value, fallback = '[Data not available]') {
   const el = document.querySelector(selector);
-  if (el) el.textContent = value;
+  if (!el) {
+    if (debugMode) {
+      console.warn(`⚠️ Element not found: ${selector}`);
+    }
+    return;
+  }
+  
+  const displayValue = value || fallback;
+  el.textContent = displayValue;
+  
+  if (debugMode && displayValue === fallback) {
+    el.style.backgroundColor = '#FFF3CD'; // Light yellow highlight
+    el.title = 'Using fallback value';
+  }
 }
 
-// Helper function to update multiple elements
-function updateAll(selector, value) {
+/**
+ * Update HTML content with rich text support (preserves paragraphs, lists)
+ */
+function updateHTML(selector, value, fallback = '<p class="text-gray-500 italic">[Content not available]</p>') {
+  const el = document.querySelector(selector);
+  if (!el) {
+    if (debugMode) {
+      console.warn(`⚠️ Element not found: ${selector}`);
+    }
+    return;
+  }
+  
+  if (!value) {
+    el.innerHTML = fallback;
+    if (debugMode) {
+      el.style.backgroundColor = '#FFF3CD';
+      el.title = 'Using fallback content';
+    }
+    return;
+  }
+  
+  // Convert plain text with line breaks to proper HTML paragraphs
+  let htmlContent = value;
+  if (typeof value === 'string' && !value.includes('<')) {
+    // Split on double line breaks for paragraphs
+    const paragraphs = value.split('\n\n').filter(p => p.trim());
+    htmlContent = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+  }
+  
+  el.innerHTML = htmlContent;
+  
+  if (debugMode) {
+    el.style.border = '1px dashed #28a745'; // Green border for AI content
+    el.title = 'AI-generated content';
+  }
+}
+
+/**
+ * Update multiple elements with same value
+ */
+function updateAll(selector, value, fallback = '') {
   const elements = document.querySelectorAll(selector);
-  elements.forEach(el => el.textContent = value);
+  if (elements.length === 0 && debugMode) {
+    console.warn(`⚠️ No elements found: ${selector}`);
+  }
+  
+  const displayValue = value || fallback;
+  elements.forEach(el => {
+    el.textContent = displayValue;
+    if (debugMode && displayValue === fallback) {
+      el.style.backgroundColor = '#FFF3CD';
+    }
+  });
+}
+
+/**
+ * Update array/list content with fallback
+ */
+function updateList(selector, items, fallback = ['No items available']) {
+  const el = document.querySelector(selector);
+  if (!el) {
+    if (debugMode) {
+      console.warn(`⚠️ List element not found: ${selector}`);
+    }
+    return;
+  }
+  
+  const displayItems = (items && items.length > 0) ? items : fallback;
+  
+  el.innerHTML = displayItems
+    .map(item => `<li>${item}</li>`)
+    .join('');
+  
+  if (debugMode && items === fallback) {
+    el.style.backgroundColor = '#FFF3CD';
+  }
+}
+
+/**
+ * Safely update image source
+ */
+function updateImage(selector, src, fallback = '/images/default-avatar.png') {
+  const el = document.querySelector(selector);
+  if (!el) {
+    if (debugMode) {
+      console.warn(`⚠️ Image element not found: ${selector}`);
+    }
+    return;
+  }
+  
+  el.src = src || fallback;
+  el.onerror = function() {
+    this.src = fallback;
+    if (debugMode) {
+      console.warn(`⚠️ Image failed to load: ${src}`);
+    }
+  };
+}
+
+/**
+ * Update score/position visualizations
+ */
+function updateScore(selector, score, maxScore = 100) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+  
+  const percentage = (score / maxScore) * 100;
+  el.textContent = Math.round(score);
+  
+  // Update progress bars if they exist
+  const progressBar = el.querySelector('.progress-fill');
+  if (progressBar) {
+    progressBar.style.width = `${percentage}%`;
+  }
+  
+  if (debugMode) {
+    el.title = `Score: ${score}/${maxScore} (${percentage.toFixed(1)}%)`;
+  }
 }
 
 // PAGE 1: Demographics, Family, Relationship
