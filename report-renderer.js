@@ -378,6 +378,12 @@ function renderPage2() {
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
   
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
+  
   // Momentum Level
   updateText('[data-field="momentum_level"]', momentum?.overall_level || 'MODERATE');
   updateText('[data-field="momentum_description"]', momentum?.overall_description || '');
@@ -417,6 +423,12 @@ function renderPage3() {
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
   
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
+  
   // Mindset details
   updateText('[data-field="person1_mindset_type"]', momentum?.mindset?.person_1?.type || '');
   updateText('[data-field="person1_mindset_desc"]', momentum?.mindset?.person_1?.description || '');
@@ -436,6 +448,12 @@ function renderPage4() {
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
+  
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
   
   // Overall scores (with % symbol)
   const p1Score = wellbeing?.individual?.person_1?.overall_score;
@@ -483,6 +501,12 @@ function renderPage5() {
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
+  
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
   
   // Person 1 support scores
   const p1 = social_support?.person_1 || {};
@@ -603,6 +627,12 @@ function renderDynamics() {
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
   
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
+  
   // Overall dynamics
   updateText('[data-field="dynamics_type"]', dynamics?.overall_type || '');
   updateText('[data-field="dynamics_description"]', dynamics?.overall_description || '');
@@ -628,6 +658,12 @@ function renderPage10() {
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
+  
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
   
   // Top 5 love definitions
   const p1Defs = love?.person_1?.top_5_definitions || [];
@@ -661,6 +697,12 @@ function renderPage11() {
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
   
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
+  
   // Resilience
   updateText('[data-field="person1_resilience"]', attitude?.person_1?.resilience_score || '0');
   updateText('[data-field="person1_resilience_level"]', attitude?.person_1?.resilience_level || '');
@@ -689,6 +731,12 @@ function renderPage12() {
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
   
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
+  
   // Communication styles
   updateText('[data-field="person1_comm_style"]', communication?.person_1?.style || '');
   updateText('[data-field="person1_comm_desc"]', communication?.person_1?.description || '');
@@ -715,6 +763,12 @@ function renderPage13() {
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
   
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
+  
   // Needs to know about partner
   updateText('[data-field="person1_needs_title"]', gender?.person_1?.needs_to_know_about_partner?.title || '');
   updateText('[data-field="person1_needs_desc"]', gender?.person_1?.needs_to_know_about_partner?.description || '');
@@ -738,6 +792,12 @@ function renderPage14() {
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
+  
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
   
   // Conflict styles
   updateText('[data-field="person1_conflict_style"]', conflict?.person_1?.style || '');
@@ -767,6 +827,12 @@ function renderPage15() {
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
+  
+  // Photos
+  const person1Photo = document.querySelector('[data-field="person1_photo"]');
+  const person2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
+  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
   
   // How they feel closest to God
   updateText('[data-field="person1_closest_to_god"]', spirituality?.person_1?.feels_closest_to_god_through || '');
