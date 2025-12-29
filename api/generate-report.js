@@ -265,49 +265,39 @@ export default async function handler(req, res) {
     return res.status(200).json(finalReport);
 
   } catch (error) {
-    console.error('❌ GENERATION ERROR:', error);
+    console.error('❌ ERROR:', error);
     console.error('Error stack:', error.stack);
     console.error('Error type:', error.constructor.name);
     
-    if (error.message.includes('429') || error.message.includes('quota')) {
-      return res.status(429).json({ 
-        error: 'API quota exceeded',
-        details: 'Rate limit hit. Wait a few minutes and try again.',
-        message: error.message
-      });
-    }
-    
-    if (error instanceof SyntaxError) {
-      return res.status(500).json({ 
-        error: 'Invalid JSON in AI response',
-        details: error.message,
-        stack: error.stack
-      });
-    }
-
-    return res.status(500).json({ 
-      error: error.message || 'Failed to generate report',
-      type: error.constructor.name,
-      stack: error.stack,
-      __dirname: __dirname
-    });
-  } catch (fatalError) {
-    // Outer catch for any errors in setup or error handling itself
-    console.error('💀 FATAL ERROR - Failed before main logic:', fatalError);
-    console.error('Fatal error stack:', fatalError.stack);
-    
+    // Try to send a detailed error response
     try {
-      return res.status(500).json({
-        error: 'Fatal server error',
-        message: fatalError.message,
-        type: fatalError.constructor.name,
-        stack: fatalError.stack,
-        cwd: process.cwd(),
-        nodeVersion: process.version
+      if (error.message && (error.message.includes('429') || error.message.includes('quota'))) {
+        return res.status(429).json({ 
+          error: 'API quota exceeded',
+          details: 'Rate limit hit. Wait a few minutes and try again.',
+          message: error.message
+        });
+      }
+      
+      if (error instanceof SyntaxError) {
+        return res.status(500).json({ 
+          error: 'Invalid JSON in AI response',
+          details: error.message,
+          stack: error.stack
+        });
+      }
+
+      return res.status(500).json({ 
+        error: error.message || 'Failed to generate report',
+        type: error.constructor.name,
+        stack: error.stack,
+        __dirname: __dirname,
+        cwd: process.cwd()
       });
-    } catch (jsonError) {
-      // If even JSON response fails, send plain text
-      return res.status(500).send(`FATAL ERROR: ${fatalError.message}\n\nStack: ${fatalError.stack}`);
+    } catch (responseError) {
+      // If even sending error response fails, log and send plain text
+      console.error('Failed to send JSON error response:', responseError);
+      return res.status(500).send(`ERROR: ${error.message}\n\nStack: ${error.stack}`);
     }
   }
 }
