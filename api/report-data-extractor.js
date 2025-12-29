@@ -34,6 +34,18 @@ function extractBaseReport(person1Responses, person2Responses, user1Profile = nu
     caution_flags: {
       person_1: extractCautionFlags(person1Responses),
       person_2: extractCautionFlags(person2Responses)
+    },
+    // DETERMINISTIC TYPE CALCULATIONS
+    // These are calculated by formulas, not AI generation
+    calculated_types: {
+      person_1: {
+        mindset: calculateMindsetType(person1Responses),
+        dynamics: calculateDynamicsType(person1Responses)
+      },
+      person_2: {
+        mindset: calculateMindsetType(person2Responses),
+        dynamics: calculateDynamicsType(person2Responses)
+      }
     }
   };
 }
@@ -596,6 +608,89 @@ function generateCompatibilitySummary(person1Responses, person2Responses) {
 }
 
 // ============================================================================
+// TYPE CALCULATION FUNCTIONS (DETERMINISTIC)
+// ============================================================================
+
+/**
+ * Calculate Mindset Type (Resolute vs Romantic)
+ * Based on Q17-36 responses
+ * 
+ * RESOLUTE: High commitment ideology, views marriage as covenant
+ * ROMANTIC: Idealistic expectations, soul mate beliefs
+ */
+function calculateMindsetType(responses) {
+  // Romantic indicators: Q17-21, 29-30, 34 (higher = more romantic)
+  // Questions about soul mates, magic, effortless love
+  const romanticQuestions = [17, 18, 19, 20, 21, 29, 30, 34];
+  
+  // Resolute indicators: Q22-28, 31-33, 35-36 (higher = more resolute)
+  // Questions about commitment, work, perseverance
+  const resoluteQuestions = [22, 23, 24, 25, 26, 27, 28, 31, 32, 33, 35, 36];
+  
+  // Calculate average scores
+  const romanticScore = calculateAverage(responses, romanticQuestions);
+  const resoluteScore = calculateAverage(responses, resoluteQuestions);
+  
+  // Some questions are reverse-scored (low score = resolute)
+  // Q17, 20, 23: "Ending marriage is healthy option" - disagree (1-2) = resolute
+  const reverseQuestions = [17, 20, 23];
+  let adjustedResoluteScore = resoluteScore;
+  
+  reverseQuestions.forEach(q => {
+    const value = responses[q];
+    if (value !== null && value !== undefined && typeof value === 'number') {
+      // Reverse score: 1->5, 2->4, 3->3, 4->2, 5->1
+      const reversedValue = 6 - value;
+      adjustedResoluteScore += reversedValue / reverseQuestions.length;
+    }
+  });
+  
+  return adjustedResoluteScore > romanticScore ? "Resolute Mindset" : "Romantic Mindset";
+}
+
+/**
+ * Calculate Dynamics Type (Cooperating, Affirming, Directing, Analyzing)
+ * Based on Q73-150 responses
+ * 
+ * Types determined by which dimension scores highest
+ */
+function calculateDynamicsType(responses) {
+  // Cooperation indicators: Q73-82, Q113-121 (collaborative, flexible questions)
+  const cooperationQuestions = [73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 113, 114, 115, 116, 117, 118, 119, 120, 121];
+  
+  // Affirmation indicators: Q83-92, Q122-131 (supportive, encouraging questions)
+  const affirmationQuestions = [83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131];
+  
+  // Direction indicators: Q93-102, Q132-141 (leadership, decisive questions)
+  const directionQuestions = [93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141];
+  
+  // Analysis indicators: Q103-112, Q142-150 (thoughtful, processing questions)
+  const analysisQuestions = [103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 142, 143, 144, 145, 146, 147, 148, 149, 150];
+  
+  const scores = {
+    cooperation: calculateAverage(responses, cooperationQuestions),
+    affirmation: calculateAverage(responses, affirmationQuestions),
+    direction: calculateAverage(responses, directionQuestions),
+    analysis: calculateAverage(responses, analysisQuestions)
+  };
+  
+  // Find highest scoring dimension
+  const maxDimension = Object.entries(scores).reduce((max, [key, value]) => 
+    value > max.value ? { key, value } : max, 
+    { key: 'cooperation', value: scores.cooperation }
+  );
+  
+  const typeMap = {
+    cooperation: "Cooperating Spouse",
+    affirmation: "Affirming Spouse",
+    direction: "Directing Spouse",
+    analysis: "Analyzing Spouse"
+  };
+  
+  return typeMap[maxDimension.key];
+}
+
+// ============================================================================
 // EXPORTS
 // ============================================================================
 
@@ -613,7 +708,9 @@ if (typeof module !== 'undefined' && module.exports) {
     determinePersonalityType,
     extractCautionFlags,
     assessRelationshipTimeline,
-    generateCompatibilitySummary
+    generateCompatibilitySummary,
+    calculateMindsetType,
+    calculateDynamicsType
   };
 }
 
@@ -631,7 +728,9 @@ if (typeof window !== 'undefined') {
     determinePersonalityType,
     extractCautionFlags,
     assessRelationshipTimeline,
-    generateCompatibilitySummary
+    generateCompatibilitySummary,
+    calculateMindsetType,
+    calculateDynamicsType
   };
 }
 

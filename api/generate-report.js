@@ -252,10 +252,19 @@ export default async function handler(req, res) {
     const promptData = {
       person1_name: baseReport.couple.person_1.name,
       person2_name: baseReport.couple.person_2.name,
+      // Calculated types (deterministic, not AI-generated)
+      person1_mindset_type: baseReport.calculated_types.person_1.mindset,
+      person2_mindset_type: baseReport.calculated_types.person_2.mindset,
+      person1_dynamics_type: baseReport.calculated_types.person_1.dynamics,
+      person2_dynamics_type: baseReport.calculated_types.person_2.dynamics,
       person1_relevant_responses: person1_responses,
       person2_relevant_responses: person2_responses,
       base_report_json: baseReport
     };
+    
+    console.log('📊 Calculated Types:');
+    console.log('  - Person 1:', baseReport.calculated_types.person_1.mindset, '+', baseReport.calculated_types.person_1.dynamics);
+    console.log('  - Person 2:', baseReport.calculated_types.person_2.mindset, '+', baseReport.calculated_types.person_2.dynamics);
     
     // ========================================================================
     // PARALLEL AI PROCESSING (Passes 1-3)

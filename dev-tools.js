@@ -85,14 +85,15 @@
     10: false, // Not expecting
     11: 5, // Very stable relationship
     
-    // Placeholder for removed questions (Q12-30)
+    // Placeholder for removed questions (Q12-16)
     12: null, 13: null, 14: null, 15: null, 16: null,
-    17: null, 18: null, 19: null, 20: null,
-    21: null, 22: null, 23: null, 24: null, 25: null,
-    26: null, 27: null, 28: null, 29: null, 30: null,
+    // RESOLUTE MINDSET: Q17-21 LOW (disagree with romantic), Q22-36 HIGH (agree with resolute)
+    17: 1, 18: 1, 19: 1, 20: 1, 21: 1, // LOW romantic indicators
+    22: 5, 23: 5, 24: 5, 25: 5, 26: 5, // HIGH resolute indicators
+    27: 5, 28: 5, 29: 1, 30: 1, // Q27-28 resolute, Q29-30 romantic (low)
     
     // Mindset (Q31-50) - RESOLUTE: High commitment, sacrifice, perseverance
-    31: 5, 32: 5, 33: 5, 34: 5, 35: 5, // Strong dedication
+    31: 5, 32: 5, 33: 5, 34: 1, 35: 5, // Q34 is romantic (low), rest resolute
     36: 5, 37: 5, 38: 5, 39: 1, 40: 5, // Disagree with easy exits
     41: 5, 42: 5, 43: 5, 44: 2, 45: 5, // Low parental dependence
     46: 5, 47: 5, 48: 5, 49: 5, 50: 5, // High resilience
@@ -103,13 +104,13 @@
     58: 1, 59: 5, 60: 5, // Low stress
     61: 5, 62: 5, 63: 5, 64: 5, // Good regulation
     65: 5, 66: 5, 67: false, 68: false, 69: false, // NO CAUTION FLAGS
-    70: false, 71: false, 72: false, 73: 5, 74: 5, // Continued high scores
+    70: false, 71: false, 72: false, 73: 5, 74: 5, // Q73-82 HIGH for Cooperating
     75: 5, 76: 5, 77: 5, 78: 5, 79: 5, 80: 5,
-    81: true, 82: true, 83: true, 84: false, 85: false,
-    86: false, 87: false, 88: false, 89: false, 90: false,
+    81: 5, 82: 5, 83: 3, 84: 3, 85: 3, // Q81-82 Cooperating, Q83+ not
+    86: 3, 87: 3, 88: 3, 89: 3, 90: 3,
     
     // Social Support (Q91-105) - Strong network
-    91: 5, 92: 5, 93: 5, 94: "Less than $10,000", 95: 5, // Low debt Q94!
+    91: 3, 92: 3, 93: 3, 94: "Less than $10,000", 95: 5, // Low debt Q94!
     96: 5, 97: 5, 98: 4, 99: false, // No financial fears
     100: false, 101: false, 102: false, 103: 1, 104: 1, 105: 5,
     
@@ -117,11 +118,11 @@
     106: "Saver",
     107: "I live by a budget religiously",
     108: "Less than $10,000", // Low debt
-    109: 5, 110: 5, 111: 5, 112: 5, // Comfortable with debt level
-    113: false, 114: false, 115: false, 116: false, // No financial fears
-    117: 5, 118: 5, 119: 5, 120: 5, 121: 1, // Low anxiety
-    122: 1, 123: 5, 124: 5, 125: 5, 126: 5,
-    127: 5, 128: 1, 129: 1, 130: 1,
+    109: 3, 110: 3, 111: 3, 112: 3,
+    113: 5, 114: 5, 115: 5, 116: 5, // Q113-121 HIGH for Cooperating
+    117: 5, 118: 5, 119: 5, 120: 5, 121: 5, 
+    122: 3, 123: 3, 124: 3, 125: 3, 126: 3,
+    127: 3, 128: 3, 129: 3, 130: 3,
     
     // Role Expectations (Q131-150) - Flexible, collaborative
     131: "Both", 132: "Both", 133: "Both", 134: "Both", 135: "Both",
@@ -187,15 +188,15 @@
     
     B: {
       name: "Growth-Oriented",
-      description: "Balanced mindset, Affirming spouse, 72% wellbeing, 2 flags, 3⭐ context",
+      description: "Romantic mindset, Affirming spouse, 72% wellbeing, 2 flags, 3⭐ context",
       responses: {
         1: "Hispanic", 2: "Married", 3: "Raised by both parents", 4: 2, 5: "Second born", 6: "2025-03-01",
         7: "12-18 months", 8: 0, 9: 0, 10: false, 11: 4,
-        12: null, 13: null, 14: null, 15: null, 16: null, 17: null, 18: null, 19: null, 20: null,
-        21: null, 22: null, 23: null, 24: null, 25: null, 26: null, 27: null, 28: null, 29: null, 30: null,
-        // BALANCED MINDSET: Mix of idealism and realism
-        31: 3, 32: 3, 33: 4, 34: 4, 35: 3,
-        36: 4, 37: 3, 38: 4, 39: 3, 40: 4,
+        12: null, 13: null, 14: null, 15: null, 16: null, 17: 5, 18: 5, 19: 5, 20: 5, // High romantic Q17-20
+        21: 5, 22: 2, 23: 2, 24: 2, 25: 2, 26: 2, 27: 2, 28: 2, 29: 5, 30: 5, // Q21 romantic, Q22-28 low resolute, Q29-30 romantic
+        // ROMANTIC MINDSET: High idealism, soul mate beliefs (Q17-21, 29-30 high, Q22-28 low)
+        31: 2, 32: 2, 33: 2, 34: 5, 35: 2, // Q34 romantic
+        36: 2, 37: 3, 38: 4, 39: 3, 40: 4,
         41: 3, 42: 4, 43: 3, 44: 3, 45: 4,
         46: 4, 47: 3, 48: 4, 49: 3, 50: 4,
         // MODERATE WELLBEING (72%): Some emotional regulation challenges
@@ -203,15 +204,15 @@
         58: 3, 59: 3, 60: 3, 61: 3, 62: 3, 63: 3, 64: 3,
         65: 3, 66: 3, 67: false, 68: true, 69: true, // 2 CAUTION FLAGS: depression, partner's habit
         70: false, 71: false, 72: false, 73: 3, 74: 3,
-        75: 3, 76: 3, 77: 4, 78: 4, 79: 3, 80: 3,
-        81: true, 82: false, 83: true, 84: false, 85: false, 86: false, 87: false, 88: false, 89: false, 90: false,
+        75: 3, 76: 3, 77: 3, 78: 3, 79: 3, 80: 3,
+        81: 3, 82: 3, 83: 5, 84: 5, 85: 5, 86: 5, 87: 5, 88: 5, 89: 5, 90: 5, // Q83-92 HIGH for Affirming
+        91: 5, 92: 5, 93: 3, 94: "$10,000-$50,000", 95: 3, // Q91-92 HIGH for Affirming (then Q94 context)
         // MODERATE CONTEXT (3 stars): Some debt, shorter relationship
-        91: 4, 92: 4, 93: 4, 94: "$10,000-$50,000", 95: 3, // Moderate debt
         96: 3, 97: 4, 98: 3, 99: false, 100: false, 101: true, 102: false, 103: 3, 104: 3, 105: 4,
         106: "Balanced", 107: "I try to budget but struggle", 108: "$10,000-$50,000",
         109: 3, 110: 3, 111: 3, 112: 3, 113: false, 114: true, 115: false, 116: false,
-        117: 3, 118: 3, 119: 3, 120: 3, 121: 3, 122: 3, 123: 3, 124: 3, 125: 3, 126: 3,
-        127: 3, 128: 3, 129: 3, 130: 3,
+        117: 3, 118: 3, 119: 3, 120: 3, 121: 3, 122: 5, 123: 5, 124: 5, 125: 5, 126: 5, // Q122-131 HIGH for Affirming
+        127: 5, 128: 5, 129: 5, 130: 5, 131: 5,
         131: "Both", 132: "Both", 133: "You", 134: "Both", 135: "Me", 136: "Both", 137: "Both", 138: "You", 139: "Both", 140: "Both",
         141: "Both", 142: "Me", 143: "Both", 144: "You", 145: "Both", 146: "Both", 147: "Both", 148: "Me", 149: "Both", 150: "You",
         // AFFIRMING SPOUSE: Supportive, encouraging, emotionally responsive
@@ -246,10 +247,12 @@
       responses: {
         1: "Asian", 2: "Divorced", 3: "Raised by mother", 4: 1, 5: "Only child", 6: "2025-02-01",
         7: "6-12 months", 8: 1, 9: 2, 10: false, 11: 3, // Previous marriage, children, newer relationship
-        12: null, 13: null, 14: null, 15: null, 16: null, 17: null, 18: null, 19: null, 20: null,
-        21: null, 22: null, 23: null, 24: null, 25: null, 26: null, 27: null, 28: null, 29: null, 30: null,
-        // ROMANTIC MINDSET: High idealism, soul mate beliefs
-        31: 5, 32: 5, 33: 1, 34: 5, 35: 5,
+        12: null, 13: null, 14: null, 15: null, 16: null, 
+        // ROMANTIC MINDSET: Q17-21, 29-30, 34 HIGH for romantic
+        17: 5, 18: 5, 19: 5, 20: 5, 21: 5, // HIGH romantic indicators
+        22: 1, 23: 1, 24: 1, 25: 1, 26: 1, // LOW resolute indicators
+        27: 1, 28: 1, 29: 5, 30: 5, // Q27-28 resolute (low), Q29-30 romantic (high)
+        31: 1, 32: 1, 33: 1, 34: 5, 35: 1, // Q34 romantic (high), rest resolute (low)
         36: 1, 37: 5, 38: 1, 39: 5, 40: 5,
         41: 1, 42: 5, 43: 1, 44: 5, 45: 2, // High parental dependence
         46: 2, 47: 3, 48: 3, 49: 3, 50: 3,
@@ -262,13 +265,13 @@
         81: false, 82: true, 83: false, 84: true, 85: true, 86: false, 87: false, 88: false, 89: false, 90: false,
         // HIGH CONTEXT STRESS (2 stars): High debt, children, long-distance
         91: 3, 92: 3, 93: 2, 94: "More than $50,000", 95: 2, // High debt
-        96: 2, 97: 3, 98: 2, 99: true, 100: true, 101: true, 102: true, 103: 4, 104: 4, 105: 3, // Financial fears
+        96: 2, 97: 3, 98: 2, 99: true, 100: true, 101: true, 102: true, 103: 5, 104: 5, 105: 3, // Q103-112 HIGH for Analyzing
         106: "Spender", 107: "I don't really budget", 108: "More than $50,000",
-        109: 2, 110: 2, 111: 2, 112: 2, 113: true, 114: true, 115: true, 116: true,
-        117: 4, 118: 4, 119: 2, 120: 2, 121: 4, 122: 4, 123: 2, 124: 2, 125: 2, 126: 4,
-        127: 2, 128: 4, 129: 4, 130: 4,
+        109: 5, 110: 5, 111: 5, 112: 5, 113: 2, 114: 2, 115: 2, 116: 2, // Q109-112 HIGH, rest low
+        117: 2, 118: 2, 119: 2, 120: 2, 121: 2, 122: 2, 123: 2, 124: 2, 125: 2, 126: 2,
+        127: 2, 128: 2, 129: 2, 130: 2,
         131: "Me", 132: "Me", 133: "Me", 134: "You", 135: "You", 136: "Me", 137: "Me", 138: "You", 139: "Me", 140: "You",
-        141: "Me", 142: "You", 143: "Me", 144: "You", 145: "Me", 146: "You", 147: "Me", 148: "You", 149: "Me", 150: "You",
+        141: "Me", 142: 5, 143: 5, 144: 5, 145: 5, 146: 5, 147: 5, 148: 5, 149: 5, 150: 5, // Q142-150 HIGH for Analyzing
         // ANALYZING SPOUSE: Thoughtful, processes deeply, problem-solving focused
         151: 2, 152: 2, 153: 5, 154: 5, 155: 2, 156: 2, 157: 2, 158: 5, 159: 5, 160: 5, // Deep thinking
         161: 2, 162: 2, 163: 5, 164: 5, 165: 5, 166: 2, 167: 5, 168: 5, 169: 5, 170: 2, // Analytical
@@ -301,10 +304,12 @@
       responses: {
         1: "African American", 2: "Married", 3: "Raised by both parents", 4: 3, 5: "First born", 6: "2024-12-31",
         7: "2-3 years", 8: 0, 9: 0, 10: false, 11: 5,
-        12: null, 13: null, 14: null, 15: null, 16: null, 17: null, 18: null, 19: null, 20: null,
-        21: null, 22: null, 23: null, 24: null, 25: null, 26: null, 27: null, 28: null, 29: null, 30: null,
-        // RESOLUTE MINDSET: High commitment, perseverance
-        31: 5, 32: 5, 33: 5, 34: 5, 35: 5,
+        12: null, 13: null, 14: null, 15: null, 16: null, 
+        // RESOLUTE MINDSET: Q17-21 LOW (disagree with romantic), Q22-36 HIGH (agree with resolute)
+        17: 1, 18: 1, 19: 1, 20: 1, 21: 1, // LOW romantic indicators
+        22: 5, 23: 5, 24: 5, 25: 5, 26: 5, // HIGH resolute indicators
+        27: 5, 28: 5, 29: 1, 30: 1, // Q27-28 resolute, Q29-30 romantic (low)
+        31: 5, 32: 5, 33: 5, 34: 1, 35: 5, // Q34 romantic (low), rest resolute
         36: 5, 37: 5, 38: 5, 39: 1, 40: 5,
         41: 5, 42: 5, 43: 5, 44: 2, 45: 5,
         46: 5, 47: 5, 48: 5, 49: 5, 50: 5,
@@ -314,16 +319,16 @@
         65: 4, 66: 4, 67: false, 68: false, 69: false, // 1 CAUTION FLAG: undisclosed debt
         70: false, 71: true, 72: false, 73: 4, 74: 4,
         75: 4, 76: 4, 77: 4, 78: 4, 79: 4, 80: 4,
-        81: true, 82: true, 83: false, 84: false, 85: false, 86: false, 87: false, 88: false, 89: false, 90: false,
+        81: 3, 82: 3, 83: 3, 84: 3, 85: 3, 86: 3, 87: 3, 88: 3, 89: 3, 90: 3,
         // MODERATE-LOW CONTEXT (4 stars): Some financial stress, imminent wedding
-        91: 4, 92: 4, 93: 4, 94: "$10,000-$50,000", 95: 4,
-        96: 4, 97: 4, 98: 4, 99: false, 100: true, 101: false, 102: false, 103: 3, 104: 3, 105: 4,
+        91: 3, 92: 3, 93: 5, 94: "$10,000-$50,000", 95: 4, // Q93-102 HIGH for Directing
+        96: 4, 97: 4, 98: 4, 99: false, 100: 5, 101: 5, 102: 5, 103: 3, 104: 3, 105: 4,
         106: "Balanced", 107: "I budget when needed", 108: "$10,000-$50,000",
-        109: 4, 110: 4, 111: 4, 112: 4, 113: false, 114: true, 115: false, 116: false,
-        117: 3, 118: 3, 119: 4, 120: 4, 121: 3, 122: 3, 123: 4, 124: 4, 125: 4, 126: 3,
-        127: 4, 128: 2, 129: 2, 130: 2,
-        131: "Me", 132: "Me", 133: "Both", 134: "Me", 135: "Me", 136: "Both", 137: "Me", 138: "Me", 139: "Me", 140: "Me",
-        141: "Me", 142: "Both", 143: "Me", 144: "Me", 145: "Both", 146: "Me", 147: "Me", 148: "Both", 149: "Me", 150: "Both",
+        109: 3, 110: 3, 111: 3, 112: 3, 113: 3, 114: 3, 115: 3, 116: 3,
+        117: 3, 118: 3, 119: 3, 120: 3, 121: 3, 122: 3, 123: 3, 124: 3, 125: 3, 126: 3,
+        127: 3, 128: 3, 129: 3, 130: 3,
+        131: "Me", 132: 5, 133: 5, 134: 5, 135: 5, 136: 5, 137: 5, 138: 5, 139: 5, 140: 5, // Q132-141 HIGH for Directing
+        141: 5, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3, 148: 3, 149: 3, 150: 3,
         // DIRECTING SPOUSE: Decisive, takes charge, goal-oriented
         151: 2, 152: 2, 153: 2, 154: 5, 155: 5, 156: 2, 157: 2, 158: 2, 159: 2, 160: 2, // Takes initiative
         161: 5, 162: 2, 163: 5, 164: 2, 165: 2, 166: 5, 167: 5, 168: 2, 169: 2, 170: 5, // Provides direction

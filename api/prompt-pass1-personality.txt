@@ -29,13 +29,18 @@ Commitment ideology—how couples conceptualize marriage, permanence, and persev
 - "Marriage requires ongoing sacrifice even when feelings change"
 - "Conflict is a sign something is fundamentally wrong"
 
-### Mindset Types Explained
+### Mindset Types - PRE-CALCULATED
+
+**CRITICAL**: The mindset types have been DETERMINED by scoring formulas based on Q17-36 responses. DO NOT change or reassign them.
+
+**Person 1 Mindset**: {person1_mindset_type}  
+**Person 2 Mindset**: {person2_mindset_type}
+
+Your task is to generate ONLY the descriptive text explaining what this type means for THEM specifically, based on their actual survey responses.
 
 **Resolute Mindset**: High commitment ideology. Views marriage as covenant, embraces sacrifice, sees conflict as normal, repairs over exits. Based on marital dedication research.
 
 **Romantic Mindset**: Idealistic expectations. Values emotional fulfillment highly, may struggle when feelings change, expects natural compatibility. Needs recalibration toward realistic commitment.
-
-**Balanced Mindset**: Integrates realism with dedication. Understands both work and joy, prepared for seasons, commitment informed by maturity.
 
 ## Dynamics Types
 
@@ -62,7 +67,14 @@ Interaction patterns—how two people actually function together.
 - NOT gendered expectations
 - Based on role-based relational modeling
 
-### Dynamics Types Explained
+### Dynamics Types - PRE-CALCULATED
+
+**CRITICAL**: The dynamics types have been DETERMINED by scoring formulas based on Q73-150 responses. DO NOT change or reassign them.
+
+**Person 1 Dynamics**: {person1_dynamics_type}  
+**Person 2 Dynamics**: {person2_dynamics_type}
+
+Your task is to generate ONLY the descriptive text explaining what this type means for THEM specifically, based on their actual survey responses.
 
 **Cooperating Spouse**: Collaborative, negotiates, seeks consensus, flexible in role-taking. High on partnership orientation.
 
@@ -110,24 +122,24 @@ Return ONLY valid JSON (no markdown, no text before/after). Start with `{` and e
   "momentum": {
     "mindset": {
       "person_1": {
-        "type": "Romantic Mindset | Resolute Mindset | Balanced Mindset",
-        "description": "2-3 paragraphs (250-300 words) with specific behavioral examples"
+        "type": "{person1_mindset_type}",  // DO NOT CHANGE - use provided value exactly
+        "description": "2-3 paragraphs (250-300 words) with specific behavioral examples from their responses"
       },
       "person_2": {
-        "type": "...",
-        "description": "..."
+        "type": "{person2_mindset_type}",  // DO NOT CHANGE - use provided value exactly
+        "description": "2-3 paragraphs (250-300 words) with specific behavioral examples from their responses"
       }
     },
-    "how_mindsets_mesh": "2-3 paragraphs (200-250 words) analyzing compatibility, potential conflicts, and recommendations"
+    "how_mindsets_mesh": "2-3 paragraphs (200-250 words) analyzing how THESE TWO SPECIFIC mindsets interact"
   },
   
   "dynamics": {
-    "overall_type": "Combined description (e.g., 'Cooperating Spouse + Affirming Spouse')",
+    "overall_type": "Combined description using PROVIDED types (e.g., '{person1_dynamics_type} + {person2_dynamics_type}')",
     "overall_description": "2-3 paragraphs (250-300 words) about how their personalities complement or clash",
     
     "person_1": {
-      "type": "Cooperating Spouse | Affirming Spouse | Directing Spouse | Analyzing Spouse",
-      "full_description": "2 paragraphs (150-200 words) with specific behavioral tendencies",
+      "type": "{person1_dynamics_type}",  // DO NOT CHANGE - use provided value exactly
+      "full_description": "2 paragraphs (150-200 words) with specific behavioral tendencies from their responses",
       "love_view": "One sentence describing how they view love based on their type",
       "strengths": [
         "5 specific strength statements",
@@ -137,10 +149,10 @@ Return ONLY valid JSON (no markdown, no text before/after). Start with `{` and e
     },
     
     "person_2": {
-      "type": "...",
-      "full_description": "...",
-      "love_view": "...",
-      "strengths": ["..."]
+      "type": "{person2_dynamics_type}",  // DO NOT CHANGE - use provided value exactly
+      "full_description": "2 paragraphs (150-200 words) with specific behavioral tendencies from their responses",
+      "love_view": "One sentence describing how they view love based on their type",
+      "strengths": ["5 specific strength statements"]
     },
     
     "styles": {
