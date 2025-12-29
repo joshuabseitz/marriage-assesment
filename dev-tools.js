@@ -68,7 +68,7 @@
   const profiles = {
     A: {
       name: "Highly Compatible",
-      description: "Resolute mindset, Cooperating spouse, 85% wellbeing, 0 flags, 5⭐ context",
+      description: "Confident mindset, Cooperating spouse, 85% wellbeing, 0 flags, 5⭐ context",
       responses: {
     // Demographics & Family (Q1-6) - Same across profiles
     1: "Caucasian",
@@ -87,16 +87,16 @@
     
     // Placeholder for removed questions (Q12-16)
     12: null, 13: null, 14: null, 15: null, 16: null,
-    // RESOLUTE MINDSET: Q17-21 LOW (disagree with romantic), Q22-36 HIGH (agree with resolute)
-    17: 1, 18: 1, 19: 1, 20: 1, 21: 1, // LOW romantic indicators
-    22: 5, 23: 5, 24: 5, 25: 5, 26: 5, // HIGH resolute indicators
-    27: 5, 28: 5, 29: 1, 30: 1, // Q27-28 resolute, Q29-30 romantic (low)
+    // CONFIDENT MINDSET: Q17-21 LOW (not idealistic), Q22-24 HIGH (realistic, conflict-comfortable)
+    17: 1, 18: 1, 19: 1, 20: 1, 21: 2, // LOW idealistic indicators
+    22: 5, 23: 5, 24: 5, 25: 3, 26: 2, // HIGH confident indicators, LOW cautious
+    27: 2, 28: 2, 29: 1, 30: 1, // Q26-28 LOW (not cautious), Q29-30 LOW (not idealistic)
     
-    // Mindset (Q31-50) - RESOLUTE: High commitment, sacrifice, perseverance
-    31: 5, 32: 5, 33: 5, 34: 1, 35: 5, // Q34 is romantic (low), rest resolute
-    36: 5, 37: 5, 38: 5, 39: 1, 40: 5, // Disagree with easy exits
-    41: 5, 42: 5, 43: 5, 44: 2, 45: 5, // Low parental dependence
-    46: 5, 47: 5, 48: 5, 49: 5, 50: 5, // High resilience
+    // Mindset (Q31-50) - CONFIDENT: Trusts judgment, high resilience, comfortable with vulnerability
+    31: 5, 32: 5, 33: 5, 34: 2, 35: 5, // Q34 romantic (low), Q35 vulnerability (high)
+    36: 5, 37: 4, 38: 4, 39: 4, 40: 4, // Moderate expression (not reserved)
+    41: 5, 42: 5, 43: 5, 44: 2, 45: 5, // High optimism, low parental dependence, no past pain
+    46: 5, 47: 5, 48: 5, 49: 5, 50: 5, // HIGH trust in judgment + resilience
     
     // Wellbeing (Q51-90) - HIGH (85%): Low stress, emotionally stable
     51: 5, 52: 5, 53: 5, 54: 5, // Strong self-concept
@@ -188,17 +188,17 @@
     
     B: {
       name: "Growth-Oriented",
-      description: "Romantic mindset, Affirming spouse, 72% wellbeing, 2 flags, 3⭐ context",
+      description: "Idealistic mindset, Affirming spouse, 72% wellbeing, 2 flags, 3⭐ context",
       responses: {
         1: "Hispanic", 2: "Married", 3: "Raised by both parents", 4: 2, 5: "Second born", 6: "2025-03-01",
         7: "12-18 months", 8: 0, 9: 0, 10: false, 11: 4,
-        12: null, 13: null, 14: null, 15: null, 16: null, 17: 5, 18: 5, 19: 5, 20: 5, // High romantic Q17-20
-        21: 5, 22: 2, 23: 2, 24: 2, 25: 2, 26: 2, 27: 2, 28: 2, 29: 5, 30: 5, // Q21 romantic, Q22-28 low resolute, Q29-30 romantic
-        // ROMANTIC MINDSET: High idealism, soul mate beliefs (Q17-21, 29-30 high, Q22-28 low)
-        31: 2, 32: 2, 33: 2, 34: 5, 35: 2, // Q34 romantic
-        36: 2, 37: 3, 38: 4, 39: 3, 40: 4,
-        41: 3, 42: 4, 43: 3, 44: 3, 45: 4,
-        46: 4, 47: 3, 48: 4, 49: 3, 50: 4,
+        12: null, 13: null, 14: null, 15: null, 16: null, 17: 5, 18: 5, 19: 5, 20: 5, // High idealistic Q17-20
+        21: 3, 22: 2, 23: 2, 24: 2, 25: 3, 26: 2, 27: 2, 28: 2, 29: 5, 30: 5, // Q17-21, 29-30 HIGH idealistic, Q22-24 LOW
+        // IDEALISTIC MINDSET: Believes love should be easy, magical, effortless (Q17-21, 29-30 high, Q22-24 low)
+        31: 2, 32: 2, 33: 2, 34: 3, 35: 3, // Q34 romantic (moderate)
+        36: 3, 37: 4, 38: 4, 39: 4, 40: 4, // Moderate expression
+        41: 5, 42: 5, 43: 5, 44: 3, 45: 4, // HIGH optimism (Q41-43)
+        46: 4, 47: 3, 48: 4, 49: 3, 50: 4, // Moderate resilience
         // MODERATE WELLBEING (72%): Some emotional regulation challenges
         51: 4, 52: 4, 53: 3, 54: 4, 55: 3, 56: 4, 57: 3,
         58: 3, 59: 3, 60: 3, 61: 3, 62: 3, 63: 3, 64: 3,
@@ -248,14 +248,14 @@
         1: "Asian", 2: "Divorced", 3: "Raised by mother", 4: 1, 5: "Only child", 6: "2025-02-01",
         7: "6-12 months", 8: 1, 9: 2, 10: false, 11: 3, // Previous marriage, children, newer relationship
         12: null, 13: null, 14: null, 15: null, 16: null, 
-        // ROMANTIC MINDSET: Q17-21, 29-30, 34 HIGH for romantic
-        17: 5, 18: 5, 19: 5, 20: 5, 21: 5, // HIGH romantic indicators
-        22: 1, 23: 1, 24: 1, 25: 1, 26: 1, // LOW resolute indicators
-        27: 1, 28: 1, 29: 5, 30: 5, // Q27-28 resolute (low), Q29-30 romantic (high)
-        31: 1, 32: 1, 33: 1, 34: 5, 35: 1, // Q34 romantic (high), rest resolute (low)
-        36: 1, 37: 5, 38: 1, 39: 5, 40: 5,
-        41: 1, 42: 5, 43: 1, 44: 5, 45: 2, // High parental dependence
-        46: 2, 47: 3, 48: 3, 49: 3, 50: 3,
+        // ROMANTIC MINDSET: Q21, 34 HIGH (passion/intensity), Q37-40 HIGH (emotional expression)
+        17: 3, 18: 3, 19: 3, 20: 3, 21: 5, // Q21 HIGH (passion), Q17-20 moderate (not idealistic)
+        22: 3, 23: 3, 24: 3, 25: 2, 26: 2, // Moderate on work/conflict
+        27: 2, 28: 2, 29: 3, 30: 3, // Q29-30 moderate (not idealistic)
+        31: 3, 32: 3, 33: 3, 34: 5, 35: 3, // Q34 HIGH romantic (passion essential)
+        36: 3, 37: 5, 38: 5, 39: 5, 40: 5, // Q37-40 HIGH emotional expression
+        41: 3, 42: 3, 43: 3, 44: 4, 45: 3, // Moderate optimism, some parental dependence
+        46: 3, 47: 3, 48: 3, 49: 3, 50: 3, // Moderate resilience
         // LOWER WELLBEING (65%): Higher stress, unresolved past wounds
         51: 3, 52: 3, 53: 2, 54: 3, 55: 2, 56: 3, 57: 2,
         58: 4, 59: 2, 60: 2, 61: 2, 62: 2, 63: 2, 64: 2,
@@ -300,22 +300,22 @@
     
     D: {
       name: "Decisive Leader",
-      description: "Resolute mindset, Directing spouse, 78% wellbeing, 1 flag, 4⭐ context",
+      description: "Reserved mindset, Directing spouse, 78% wellbeing, 1 flag, 4⭐ context",
       responses: {
         1: "African American", 2: "Married", 3: "Raised by both parents", 4: 3, 5: "First born", 6: "2024-12-31",
         7: "2-3 years", 8: 0, 9: 0, 10: false, 11: 5,
         12: null, 13: null, 14: null, 15: null, 16: null, 
-        // RESOLUTE MINDSET: Q17-21 LOW (disagree with romantic), Q22-36 HIGH (agree with resolute)
-        17: 1, 18: 1, 19: 1, 20: 1, 21: 1, // LOW romantic indicators
-        22: 5, 23: 5, 24: 5, 25: 5, 26: 5, // HIGH resolute indicators
-        27: 5, 28: 5, 29: 1, 30: 1, // Q27-28 resolute, Q29-30 romantic (low)
-        31: 5, 32: 5, 33: 5, 34: 1, 35: 5, // Q34 romantic (low), rest resolute
-        36: 5, 37: 5, 38: 5, 39: 1, 40: 5,
-        41: 5, 42: 5, 43: 5, 44: 2, 45: 5,
-        46: 5, 47: 5, 48: 5, 49: 5, 50: 5,
-        // GOOD WELLBEING (78%): High autonomy, good emotional health
+        // RESERVED MINDSET: Q37-40 LOW (low emotional expression), Q25 HIGH (handles privately)
+        17: 2, 18: 2, 19: 2, 20: 2, 21: 2, // Moderate idealistic
+        22: 4, 23: 4, 24: 4, 25: 5, 26: 3, // Q25 HIGH (private emotions), moderate cautious
+        27: 3, 28: 3, 29: 2, 30: 2, // Moderate
+        31: 4, 32: 4, 33: 4, 34: 2, 35: 4, // Q34 romantic (low)
+        36: 4, 37: 1, 38: 1, 39: 2, 40: 2, // Q37-40 LOW emotional expression
+        41: 4, 42: 4, 43: 4, 44: 2, 45: 5, // Moderate optimism, low parental dependence
+        46: 5, 47: 5, 48: 5, 49: 5, 50: 5, // High resilience
+        // GOOD WELLBEING (78%): High autonomy, good emotional health, values self-control
         51: 5, 52: 5, 53: 4, 54: 5, 55: 4, 56: 5, 57: 4,
-        58: 2, 59: 4, 60: 4, 61: 4, 62: 4, 63: 4, 64: 4,
+        58: 2, 59: 5, 60: 5, 61: 5, 62: 5, 63: 5, 64: 5, // Q59-62 HIGH (handles stress internally, self-control)
         65: 4, 66: 4, 67: false, 68: false, 69: false, // 1 CAUTION FLAG: undisclosed debt
         70: false, 71: true, 72: false, 73: 4, 74: 4,
         75: 4, 76: 4, 77: 4, 78: 4, 79: 4, 80: 4,
