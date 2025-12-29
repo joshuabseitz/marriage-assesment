@@ -29,24 +29,24 @@ Commitment ideology—how couples conceptualize marriage, permanence, and persev
 - "Marriage requires ongoing sacrifice even when feelings change"
 - "Conflict is a sign something is fundamentally wrong"
 
-### Mindset Types - PRE-CALCULATED
+### Mindset Types - PRE-CALCULATED (SYMBIS Official Framework)
 
-**CRITICAL**: The mindset types have been DETERMINED by multi-dimensional scoring formulas. DO NOT change or reassign them.
+**CRITICAL**: The mindset types have been DETERMINED by multi-dimensional scoring formulas based on the official SYMBIS framework. DO NOT change or reassign them.
 
 **Person 1 Mindset**: {person1_mindset_type}  
 **Person 2 Mindset**: {person2_mindset_type}
 
 Your task is to generate ONLY the descriptive text explaining what this type means for THEM specifically, based on their actual survey responses.
 
-**Idealistic Mindset**: "Love should be easy and fulfilling." High hopes for romance and intimacy. Assumes love will naturally resolve difficulties. Strength: optimism and warmth. Risk: disappointment when reality doesn't match expectations.
+**Resolute Mindset**: Believes in marriage for life with steadfast commitment. Views divorce as unacceptable regardless of circumstances. Approaches marriage with covenant thinking and unwavering dedication. Strength: deep loyalty and perseverance through difficulty. Risk: may struggle to acknowledge when a relationship is truly unhealthy.
 
-**Cautious Mindset**: "I need to protect myself." Emotionally careful, slow to trust fully. Often shaped by past hurts or observed relationship failures. Strength: realism and boundaries. Risk: emotional distance or reluctance to fully commit.
+**Rational Mindset**: Sees marriage as hard work requiring ongoing effort and realistic expectations. Views it as a logical partnership built on practical foundations rather than feelings alone. Strength: prepared for challenges, doesn't expect perfection. Risk: may undervalue emotional connection and romance.
 
-**Confident Mindset**: "We can handle whatever comes." Believes in teamwork and shared problem-solving. Comfortable with conflict as normal part of growth. Strength: resilience and adaptability. Risk: may underestimate emotional nuance.
+**Romantic Mindset**: Believes in soulmates, magic, and intense passion. Expects love to always feel exciting and growing. Sees their partner as "the one" with special destiny. Strength: brings passion, devotion, and emotional depth. Risk: disappointment when passion naturally ebbs or reality doesn't match fantasy.
 
-**Reserved Mindset**: "Strong emotions should be managed quietly." Values self-control and emotional independence. Less expressive but deeply loyal. Strength: steadiness and reliability. Risk: partner may feel emotionally shut out.
+**Restless Mindset**: Cautious and still exploring options, unsure about full commitment. Often seeking external reasons or validation to stay. May be influenced by past relationship wounds or fear. Strength: careful discernment and self-awareness. Risk: difficulty committing fully, always one foot out the door.
 
-**Romantic Mindset**: "Love should feel passionate and special." Highly values emotional intensity and connection. Drawn to grand gestures and deep feelings. Strength: passion and devotion. Risk: dissatisfaction if passion ebbs naturally.
+**Reluctant Mindset**: Not naturally inclined toward marriage, may be resistant to the idea and traditional marital roles. Often here due to partner or external pressure rather than internal desire. Strength: honest about hesitations, values independence. Risk: resentment and lack of genuine investment in the relationship.
 
 ## Dynamics Types
 

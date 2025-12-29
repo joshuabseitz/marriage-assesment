@@ -612,98 +612,102 @@ function generateCompatibilitySummary(person1Responses, person2Responses) {
 // ============================================================================
 
 /**
- * Calculate Mindset Type (5 types: Idealistic, Cautious, Confident, Reserved, Romantic)
+ * Calculate SYMBIS Mindset Type (5 types: Resolute, Rational, Romantic, Restless, Reluctant)
  * Based on patterns across Q17-50 responses
  * 
- * Dimensions analyzed:
- * - Expectations of marriage (ease vs work)
- * - Conflict beliefs (avoidance vs engagement)
- * - Trust & vulnerability patterns
- * - Emotional expression style
- * - Resilience & realism
+ * SYMBIS Official Mindsets:
+ * - Resolute: Marriage for life, steadfast commitment, divorce unacceptable
+ * - Rational: Marriage as hard work, logical partnership, realistic expectations
+ * - Romantic: Soulmates, magic, intense passion, expects excitement
+ * - Restless: Cautious, exploring options, unsure about commitment
+ * - Reluctant: Not inclined to marry, resistant to traditional roles
  */
 function calculateMindsetType(responses) {
-  // Initialize scores for each mindset
+  // Initialize scores for each SYMBIS mindset
   const scores = {
-    idealistic: 0,
-    cautious: 0,
-    confident: 0,
-    reserved: 0,
-    romantic: 0
+    resolute: 0,
+    rational: 0,
+    romantic: 0,
+    restless: 0,
+    reluctant: 0
   };
   
-  // DIMENSION 1: Expectations of Marriage (easy vs work)
-  // Idealistic: believes love should be easy, magical, effortless
-  const idealisticQuestions = [17, 18, 19, 29, 30]; // "perfect person", "meant to be", "love conquers all"
-  scores.idealistic += calculateAverage(responses, idealisticQuestions) * 2; // Weight: 2x
+  // RESOLUTE: Marriage for life, divorce unacceptable, steadfast commitment
+  // Low on divorce acceptance (Q17, 20, 23 - reverse scored)
+  // High on commitment, sacrifice, perseverance (Q22, 24, 27, 28, 31-33, 35-36)
+  const resoluteCommitmentQuestions = [22, 24, 27, 28, 31, 32, 33, 35, 36];
+  scores.resolute += calculateAverage(responses, resoluteCommitmentQuestions) * 2;
   
-  // Romantic: values passion, intensity, emotional depth
-  const romanticQuestions = [21, 34]; // "passion essential", "grand gestures"
-  scores.romantic += calculateAverage(responses, romanticQuestions) * 2; // Weight: 2x
+  // Reverse score divorce acceptance questions (low = resolute)
+  const divorceAcceptanceQuestions = [17, 20, 23];
+  scores.resolute += (5 - calculateAverage(responses, divorceAcceptanceQuestions)) * 2;
   
-  // Confident: realistic about work required, comfortable with difficulty
-  const realisticQuestions = [22, 23, 24]; // "work required", "conflict normal"
-  scores.confident += calculateAverage(responses, realisticQuestions) * 1.5; // Weight: 1.5x
+  // RATIONAL: Marriage as hard work, logical partnership, realistic expectations
+  // High on "work required" (Q22-24)
+  // Low on idealism/magic (Q17-21, 29-30 - reverse)
+  // Moderate-high on practical approach
+  const rationalWorkQuestions = [22, 23, 24];
+  scores.rational += calculateAverage(responses, rationalWorkQuestions) * 2;
   
-  // DIMENSION 2: Conflict Beliefs
-  // Confident: sees conflict as healthy, engages with tough topics
-  const conflictEngagementQuestions = [22, 23, 24];
-  scores.confident += calculateAverage(responses, conflictEngagementQuestions) * 1.5;
+  // Reverse score idealism (low idealism = rational)
+  const idealismQuestions = [17, 18, 19, 29, 30];
+  scores.rational += (5 - calculateAverage(responses, idealismQuestions)) * 1.5;
   
-  // Cautious: worried about patterns, takes time to trust
-  const cautiousConflictQuestions = [26, 27, 28]; // "worry about patterns", "trust earned slowly"
-  scores.cautious += calculateAverage(responses, cautiousConflictQuestions) * 2;
+  // Not as extreme on commitment as Resolute, but practical
+  const practicalQuestions = [46, 47, 48];
+  scores.rational += calculateAverage(responses, practicalQuestions) * 1;
   
-  // Reserved: prefers private emotional handling
-  const reservedConflictQuestions = [25]; // "handle emotions privately"
-  scores.reserved += calculateAverage(responses, reservedConflictQuestions) * 1.5;
+  // ROMANTIC: Soulmates, magic, intense passion, expects excitement
+  // High on soul mate beliefs (Q17-21, 29-30)
+  // High on passion/intensity (Q21, 34)
+  // High on emotional expression (Q37-40)
+  const soulMateQuestions = [17, 18, 19, 20, 21, 29, 30];
+  scores.romantic += calculateAverage(responses, soulMateQuestions) * 2;
   
-  // DIMENSION 3: Trust & Vulnerability
-  // Cautious: shaped by past hurts, slow to open up
-  const trustCautiousQuestions = [45]; // "unresolved pain from past"
-  scores.cautious += (5 - calculateAverage(responses, trustCautiousQuestions)) * 2; // Reverse score
+  const passionQuestions = [34];
+  scores.romantic += calculateAverage(responses, passionQuestions) * 1.5;
   
-  // Cautious: high parental dependence (lack of independence)
-  const dependenceQuestions = [44];
-  scores.cautious += calculateAverage(responses, dependenceQuestions) * 1;
-  
-  // Confident: trusts own judgment, comfortable with vulnerability
-  const trustConfidentQuestions = [46, 35, 36];
-  scores.confident += calculateAverage(responses, trustConfidentQuestions) * 1;
-  
-  // DIMENSION 4: Emotional Expression
-  // Reserved: low emotional expression, values self-control
   const expressionQuestions = [37, 38, 39, 40];
-  const expressionAvg = calculateAverage(responses, expressionQuestions);
-  scores.reserved += (5 - expressionAvg) * 1.5; // Reverse: low expression = reserved
+  scores.romantic += calculateAverage(responses, expressionQuestions) * 1;
   
-  // Romantic: high emotional expression, shares deeply
-  scores.romantic += expressionAvg * 1;
+  // RESTLESS: Cautious, exploring options, unsure about commitment
+  // High on worry/anxiety (Q26-28)
+  // Lower confidence (Q47-50 - reverse)
+  // Trust issues (Q27, 28, 45)
+  const restlessWorryQuestions = [26, 27, 28];
+  scores.restless += calculateAverage(responses, restlessWorryQuestions) * 2;
   
-  // Idealistic: high optimism about emotions
-  const optimismQuestions = [41, 42, 43];
-  scores.idealistic += calculateAverage(responses, optimismQuestions) * 1;
+  // Reverse score confidence (low confidence = restless)
+  const confidenceQuestions = [47, 48, 49, 50];
+  scores.restless += (5 - calculateAverage(responses, confidenceQuestions)) * 1.5;
   
-  // DIMENSION 5: Resilience & Realism
-  // Confident: high resilience, prepared for challenges
-  const resilienceQuestions = [47, 48, 49, 50];
-  scores.confident += calculateAverage(responses, resilienceQuestions) * 1.5;
+  // Past pain/trust issues
+  const trustIssuesQuestions = [45];
+  scores.restless += (5 - calculateAverage(responses, trustIssuesQuestions)) * 1;
   
-  // Cautious: lower resilience, more worried
-  scores.cautious += (5 - calculateAverage(responses, resilienceQuestions)) * 1;
+  // RELUCTANT: Not inclined to marry, resistant to traditional roles
+  // Very low on all commitment questions (Q17-36)
+  // High on independence
+  // Low on marriage enthusiasm
+  const marriageEnthusiasmQuestions = [17, 18, 19, 20, 21, 22, 24, 27, 28, 31, 32, 33, 35, 36];
+  scores.reluctant += (5 - calculateAverage(responses, marriageEnthusiasmQuestions)) * 2;
+  
+  // High on independence (Q44 - reverse scored, low dependence = high independence)
+  const independenceQuestions = [44];
+  scores.reluctant += (5 - calculateAverage(responses, independenceQuestions)) * 1;
   
   // Find highest scoring mindset
   const maxMindset = Object.entries(scores).reduce((max, [key, value]) => 
     value > max.value ? { key, value } : max, 
-    { key: 'confident', value: scores.confident }
+    { key: 'rational', value: scores.rational }
   );
   
   const typeMap = {
-    idealistic: "Idealistic Mindset",
-    cautious: "Cautious Mindset",
-    confident: "Confident Mindset",
-    reserved: "Reserved Mindset",
-    romantic: "Romantic Mindset"
+    resolute: "Resolute Mindset",
+    rational: "Rational Mindset",
+    romantic: "Romantic Mindset",
+    restless: "Restless Mindset",
+    reluctant: "Reluctant Mindset"
   };
   
   return typeMap[maxMindset.key];
