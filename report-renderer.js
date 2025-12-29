@@ -160,7 +160,8 @@ function updateText(selector, value, fallback = '[Data not available]') {
     return;
   }
   
-  const displayValue = value || fallback;
+  // Use nullish coalescing to properly handle 0 as a valid value
+  const displayValue = (value !== null && value !== undefined) ? value : fallback;
   el.textContent = displayValue;
   
   if (debugMode && displayValue === fallback) {
@@ -181,7 +182,8 @@ function updateHTML(selector, value, fallback = '<p class="text-gray-500 italic"
     return;
   }
   
-  if (!value) {
+  // Use explicit null/undefined check to properly handle 0 and empty strings
+  if (value === null || value === undefined || value === '') {
     el.innerHTML = fallback;
     if (debugMode) {
       el.style.backgroundColor = '#FFF3CD';
@@ -215,7 +217,8 @@ function updateAll(selector, value, fallback = '') {
     console.warn(`⚠️ No elements found: ${selector}`);
   }
   
-  const displayValue = value || fallback;
+  // Use explicit null/undefined check to properly handle 0 as a valid value
+  const displayValue = (value !== null && value !== undefined) ? value : fallback;
   elements.forEach(el => {
     el.textContent = displayValue;
     if (debugMode && displayValue === fallback) {
