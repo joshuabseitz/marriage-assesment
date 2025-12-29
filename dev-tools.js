@@ -64,40 +64,29 @@
   console.log('✅ Dev tools: All required APIs available');
   
   // Sample data for current user
+  // Note: Photo, gender, colors, name, age, religion, education, employment are now in user_profiles table
+  // Survey now starts with Q1 = ethnic background
   const sampleResponses = {
-    // Demographics (Q1-20)
-    1: "Dev User",
-    2: "Female",
-    3: "https://i.pravatar.cc/150?u=dev",
-    4: "#E88B88",
-    5: "#E54D42",
-    6: 27,
-    7: "Caucasian",
-    8: "Christian/Non-denominational",
-    9: "College",
-    10: "Full Time",
-    11: "Education",
-    12: "Divorced",
-    13: "Raised by mother",
-    14: 3,
-    15: "Third born",
-    16: "2024-10-01",
-    17: "DEV12345",
-    18: "Engaged (not living together)",
-    19: false,
-    20: false,
+    // Demographics & Family (Q1-6)
+    1: "Caucasian",  // Ethnic background
+    2: "Divorced",  // Parents' marital status
+    3: "Raised by mother",  // How you were raised
+    4: 3,  // Number of siblings
+    5: "Third born",  // Birth order
+    6: "2024-10-01",  // Wedding date (optional)
     
-    // Relationship History (Q21-30)
-    21: "18-24 months",
-    22: 0,
-    23: 0,
-    24: false,
-    25: 5,
-    26: 5,
-    27: 4,
-    28: 5,
-    29: 4,
-    30: "Smooth sailing",
+    // Relationship History (Q7-11)
+    7: "18-24 months",  // Dating length
+    8: 0,  // Previous marriages
+    9: 0,  // Children
+    10: false,  // Expecting
+    11: 4,  // Relationship stability (1-5 scale)
+    
+    // Placeholder for removed questions (Q12-30 to maintain numbering)
+    12: null, 13: null, 14: null, 15: null, 16: null,
+    17: null, 18: null, 19: null, 20: null,
+    21: null, 22: null, 23: null, 24: null, 25: null,
+    26: null, 27: null, 28: null, 29: null, 30: null,
     
     // Mindset (Q31-50)
     31: 4, 32: 4, 33: 3, 34: 5, 35: 3,
