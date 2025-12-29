@@ -1,4 +1,16 @@
 {
+  "buildCommand": null,
+  "installCommand": "npm install",
+  "functions": {
+    "api/generate-report.js": {
+      "includeFiles": [
+        "report-data-extractor.js",
+        "prompt-pass1-personality.txt",
+        "prompt-pass2-wellbeing.txt",
+        "prompt-pass3-communication.txt"
+      ]
+    }
+  },
   "rewrites": [
     { "source": "/", "destination": "/index.html" },
     { "source": "/signup", "destination": "/signup.html" },
