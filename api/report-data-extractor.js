@@ -1,0 +1,386 @@
+/**
+ * Report Data Extractor
+ * 
+ * Extracts and maps survey responses directly to report JSON structure
+ * WITHOUT needing AI generation. Handles:
+ * - Demographics
+ * - Family background
+ * - Relationship status
+ * - Financial basics
+ * - Sexuality preferences
+ * - Spiritual practices
+ * - Role expectations
+ */
+
+// ============================================================================
+// MAIN EXTRACTION FUNCTION
+// ============================================================================
+
+function extractBaseReport(person1Responses, person2Responses, user1Profile = null, user2Profile = null) {
+  const today = new Date();
+  const completionDate = `${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}/${today.getFullYear()}`;
+
+  return {
+    report_metadata: extractMetadata(person1Responses, completionDate),
+    couple: extractCouple(person1Responses, person2Responses, user1Profile, user2Profile),
+    family_of_origin: extractFamilyOfOrigin(person1Responses, person2Responses),
+    relationship: extractRelationship(person1Responses, person2Responses, user1Profile, user2Profile),
+    finances: extractFinances(person1Responses, person2Responses),
+    love: {
+      sexuality: extractSexuality(person1Responses, person2Responses)
+    },
+    spirituality: extractSpirituality(person1Responses, person2Responses),
+    expectations: extractExpectations(person1Responses, person2Responses)
+  };
+}
+
+// ============================================================================
+// EXTRACTION HELPERS
+// ============================================================================
+
+function extractMetadata(person1Responses, completionDate) {
+  return {
+    completion_date: completionDate,
+    invite_code: person1Responses[17] || "N/A",
+    wedding_date: person1Responses[16] || null,
+    report_version: "1.0",
+    facilitator_name: null
+  };
+}
+
+function extractCouple(person1Responses, person2Responses, user1Profile, user2Profile) {
+  return {
+    person_1: extractPersonDemographics(person1Responses, user1Profile),
+    person_2: extractPersonDemographics(person2Responses, user2Profile)
+  };
+}
+
+function extractPersonDemographics(responses, userProfile) {
+  // Note: Photo URL and colors are now auto-assigned (not from survey questions)
+  // Photo comes from profile picture uploaded during signup
+  // Colors are assigned based on gender (blue for men, red/pink for women)
+  
+  const gender = userProfile?.gender ? userProfile.gender.toLowerCase() : "male";
+  
+  // Auto-assign colors based on gender
+  const isMale = gender === "male" || gender === "m";
+  const color_primary = isMale ? "#4FB8B1" : "#E88B88";  // Blue for men, red/pink for women
+  const color_secondary = isMale ? "#3B9B95" : "#D67875";  // Darker shades for secondary
+  
+  return {
+    name: userProfile?.full_name || "Unknown",
+    gender: gender,
+    photo_url: userProfile?.profile_picture_url || "https://i.pravatar.cc/150",
+    color_primary: color_primary,
+    color_secondary: color_secondary,
+    age: userProfile?.age || 25,
+    ethnic_background: responses[1] || "Not specified",  // Now Q1 (was Q4)
+    religious_affiliation: userProfile?.religious_affiliation || "Not specified",
+    education: userProfile?.education || "Not specified",
+    employment_status: userProfile?.employment_status || "Not specified",
+    employment_category: userProfile?.employment_category || "Not specified"
+  };
+}
+
+function extractFamilyOfOrigin(person1Responses, person2Responses) {
+  return {
+    person_1: extractPersonFamily(person1Responses),
+    person_2: extractPersonFamily(person2Responses)
+  };
+}
+
+function extractPersonFamily(responses) {
+  return {
+    parents_marital_status: responses[2] || "Not specified",  // Now Q2 (was Q5)
+    how_raised: responses[3] || "Not specified",  // Now Q3 (was Q6)
+    number_of_siblings: parseInt(responses[4]) || 0,  // Now Q4 (was Q7)
+    birth_order: responses[5] || "Not specified"  // Now Q5 (was Q8)
+  };
+}
+
+function extractRelationship(person1Responses, person2Responses, user1Profile, user2Profile) {
+  // Pull status from user_profiles instead of responses (questions were moved to signup)
+  // After removing photo URL and color questions (Q1-3 removed), questions shifted by -3
+  const status = user1Profile?.relationship_status || "Dating";
+  const longDistance = user1Profile?.long_distance ?? false;
+  
+  // New numbering: Q7=dating_length, Q8=prev_marriages, Q9=children, Q10=expecting, Q11=stability
+  const expecting = person1Responses[10] === true || person1Responses[10] === "true";
+  
+  return {
+    status: status,
+    previous_marriages: {
+      person_1: parseInt(person1Responses[8]) || 0,
+      person_2: parseInt(person2Responses[8]) || 0
+    },
+    children: {
+      person_1: parseInt(person1Responses[9]) || 0,
+      person_2: parseInt(person2Responses[9]) || 0
+    },
+    expecting: expecting,
+    dating_length: person1Responses[7] || "Not specified",
+    stability: getStabilityLabel(person1Responses[11]),
+    long_distance: longDistance
+  };
+}
+
+function getStabilityLabel(score) {
+  const numScore = parseInt(score);
+  if (numScore >= 4) return "Very Stable";
+  if (numScore === 3) return "Moderately Stable";
+  if (numScore === 2) return "Somewhat Rocky";
+  return "Rocky";
+}
+
+function extractFinances(person1Responses, person2Responses) {
+  return {
+    person_1: extractPersonFinances(person1Responses),
+    person_2: extractPersonFinances(person2Responses),
+    money_talks_prompts: [
+      "In my home growing up, money was...",
+      "When I think about our financial future...",
+      "What you may not know about money and me is...",
+      "The thing I appreciate about you in relationship to money is...",
+      "When it comes to money, I'd like to improve my...",
+      "One specific action we could take right now that would help me is..."
+    ]
+  };
+}
+
+function extractPersonFinances(responses) {
+  const fears = [];
+  const fearsNotSelected = [];
+  
+  // Q113-116: Financial fears
+  const fearQuestions = [
+    { id: 113, text: "Not having enough money" },
+    { id: 114, text: "Going into debt" },
+    { id: 115, text: "Not being able to retire comfortably" },
+    { id: 116, text: "Partner's spending habits" }
+  ];
+  
+  fearQuestions.forEach(fear => {
+    if (responses[fear.id] === true || responses[fear.id] === "true") {
+      fears.push(fear.text);
+    } else {
+      fearsNotSelected.push(fear.text);
+    }
+  });
+
+  const debtAmount = responses[108] || "None";
+  
+  return {
+    money_style: responses[106] || "Not specified",
+    budget_approach: responses[107] || "Not specified",
+    budget_icon: getBudgetIcon(responses[107]),
+    debt: {
+      amount: debtAmount,
+      has_debt: debtAmount !== "None" && debtAmount !== "No debt",
+      description: debtAmount === "None" ? "No current debt" : `Current debt: ${debtAmount}`
+    },
+    financial_fears: fears,
+    financial_fears_not_selected: fearsNotSelected
+  };
+}
+
+function getBudgetIcon(budgetApproach) {
+  if (!budgetApproach) return "none";
+  const approach = budgetApproach.toLowerCase();
+  if (approach.includes("detailed") || approach.includes("track")) return "pencil";
+  if (approach.includes("plan") || approach.includes("budget")) return "calculator";
+  return "none";
+}
+
+function extractSexuality(person1Responses, person2Responses) {
+  return {
+    person_1: extractPersonSexuality(person1Responses),
+    person_2: extractPersonSexuality(person2Responses)
+  };
+}
+
+function extractPersonSexuality(responses) {
+  const abstaining = responses[202] || "Not specified";
+  const desireRating = parseInt(responses[203]) || 5;
+  
+  return {
+    abstaining: abstaining,
+    desire_rating: desireRating,
+    initiate_expectation: responses[204] || "Both",
+    frequency_expectation: responses[205] || "Not specified"
+  };
+}
+
+function extractSpirituality(person1Responses, person2Responses) {
+  const person1 = extractPersonSpirituality(person1Responses);
+  const person2 = extractPersonSpirituality(person2Responses);
+  
+  // Calculate spiritual sync
+  const practices = Object.keys(person1.spiritual_practices);
+  let matchCount = 0;
+  const differences = [];
+  
+  practices.forEach(practice => {
+    if (person1.spiritual_practices[practice] === person2.spiritual_practices[practice]) {
+      matchCount++;
+    } else {
+      differences.push(practice.replace(/_/g, ' '));
+    }
+  });
+  
+  const syncPercentage = (matchCount / practices.length) * 100;
+  let syncLevel = "low";
+  if (syncPercentage >= 70) syncLevel = "high";
+  else if (syncPercentage >= 40) syncLevel = "medium";
+  
+  return {
+    person_1: person1,
+    person_2: person2,
+    spiritual_sync: syncLevel,
+    areas_of_difference: differences
+  };
+}
+
+function extractPersonSpirituality(responses) {
+  return {
+    feels_closest_to_god_through: responses[261] || "Not specified",
+    spiritual_practices: {
+      attend_church_weekly: (parseInt(responses[262]) || 0) >= 4,
+      go_to_same_church: (parseInt(responses[263]) || 0) >= 4,
+      discuss_spiritual_issues: (parseInt(responses[264]) || 0) >= 4,
+      receive_communion_regularly: (parseInt(responses[265]) || 0) >= 4,
+      agree_on_theology: (parseInt(responses[266]) || 0) >= 4,
+      give_financial_tithe: (parseInt(responses[267]) || 0) >= 4,
+      pray_for_each_other: (parseInt(responses[268]) || 0) >= 4,
+      pray_together_daily: (parseInt(responses[269]) || 0) >= 4,
+      serve_others_together: (parseInt(responses[270]) || 0) >= 4,
+      study_bible_together: (parseInt(responses[271]) || 0) >= 4
+    }
+  };
+}
+
+function extractExpectations(person1Responses, person2Responses) {
+  const roleQuestions = [
+    { id: 131, task: "Cooking meals" },
+    { id: 132, task: "Cleaning the house" },
+    { id: 133, task: "Doing laundry" },
+    { id: 134, task: "Managing finances" },
+    { id: 135, task: "Taking out trash" },
+    { id: 136, task: "Grocery shopping" },
+    { id: 137, task: "Yard work" },
+    { id: 138, task: "Car maintenance" },
+    { id: 139, task: "Planning date nights" },
+    { id: 140, task: "Caring for children" },
+    { id: 141, task: "Disciplining children" },
+    { id: 142, task: "Making major decisions" }
+  ];
+  
+  const agreedRoles = [];
+  const needsDiscussion = [];
+  
+  roleQuestions.forEach(role => {
+    const person1View = person1Responses[role.id];
+    const person2View = person2Responses[role.id];
+    
+    // Normalize answers
+    const p1Who = normalizeWho(person1View);
+    const p2Who = normalizeWho(person2View);
+    
+    // Check if they agree
+    const agreed = p1Who === p2Who;
+    
+    // Determine assignment
+    let assignedTo = "Neither";
+    if (agreed) {
+      if (p1Who === "Me") assignedTo = person1Responses[1] || "Person 1";
+      else if (p1Who === "You") assignedTo = person2Responses[1] || "Person 2";
+      else if (p1Who === "Both") assignedTo = "Both";
+    }
+    
+    agreedRoles.push({
+      task: role.task,
+      person_1_view: { who: p1Who },
+      person_2_view: { who: p2Who },
+      agreed: agreed,
+      assigned_to: assignedTo
+    });
+    
+    if (!agreed) {
+      needsDiscussion.push(role.task);
+    }
+  });
+  
+  return {
+    agreed_roles: agreedRoles,
+    needs_discussion: needsDiscussion
+  };
+}
+
+function normalizeWho(answer) {
+  if (!answer) return null;
+  const ans = answer.toString().toLowerCase();
+  if (ans.includes("me") || ans.includes("myself") || ans.includes("i will")) return "Me";
+  if (ans.includes("you") || ans.includes("partner") || ans.includes("spouse")) return "You";
+  if (ans.includes("both") || ans.includes("together") || ans.includes("we")) return "Both";
+  return null;
+}
+
+// ============================================================================
+// UTILITY FUNCTIONS
+// ============================================================================
+
+/**
+ * Get responses for specific question ranges (for AI prompts)
+ */
+function getResponsesForQuestions(responses, questionIds) {
+  const filtered = {};
+  questionIds.forEach(id => {
+    if (responses[id] !== undefined) {
+      filtered[id] = responses[id];
+    }
+  });
+  return filtered;
+}
+
+/**
+ * Calculate average of multiple questions
+ */
+function calculateAverage(responses, questionIds) {
+  const values = questionIds
+    .map(id => parseInt(responses[id]))
+    .filter(val => !isNaN(val));
+  
+  if (values.length === 0) return 0;
+  return values.reduce((sum, val) => sum + val, 0) / values.length;
+}
+
+/**
+ * Convert 1-5 scale to 0-100
+ */
+function scaleToPercentage(score) {
+  return (score / 5) * 100;
+}
+
+// ============================================================================
+// EXPORTS
+// ============================================================================
+
+if (typeof module !== 'undefined' && module.exports) {
+  // Node.js export
+  module.exports = {
+    extractBaseReport,
+    getResponsesForQuestions,
+    calculateAverage,
+    scaleToPercentage
+  };
+}
+
+// Browser global export
+if (typeof window !== 'undefined') {
+  window.ReportDataExtractor = {
+    extractBaseReport,
+    getResponsesForQuestions,
+    calculateAverage,
+    scaleToPercentage
+  };
+}
+

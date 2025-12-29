@@ -12,7 +12,6 @@ import { fileURLToPath } from 'url';
 // Get the directory of the current module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const PROJECT_ROOT = join(__dirname, '..');
 
 // Helper: Extract JSON from AI response text
 function extractJSON(responseText) {
@@ -65,7 +64,7 @@ async function callGeminiAPI(genAI, prompt, passName, maxRetries = 2) {
 // Helper: Load data extractor
 function loadDataExtractor() {
   try {
-    const extractorPath = join(PROJECT_ROOT, 'report-data-extractor.js');
+    const extractorPath = join(__dirname, 'report-data-extractor.js');
     console.log('Loading data extractor from:', extractorPath);
     const extractorCode = readFileSync(extractorPath, 'utf-8');
     console.log('Data extractor loaded successfully');
@@ -100,7 +99,6 @@ export default async function handler(req, res) {
 
   try {
     console.log('📊 MULTI-PASS REPORT GENERATION STARTED');
-    console.log('PROJECT_ROOT:', PROJECT_ROOT);
     console.log('__dirname:', __dirname);
     
     const { person1_responses, person2_responses, user1_id, user2_id } = req.body;
@@ -162,7 +160,7 @@ export default async function handler(req, res) {
 
     // AI Pass 1 - Personality
     console.log('🎭 AI Pass 1 - Personality Analysis...');
-    const pass1TemplatePath = join(PROJECT_ROOT, 'prompt-pass1-personality.txt');
+    const pass1TemplatePath = join(__dirname, 'prompt-pass1-personality.txt');
     console.log('Loading prompt template from:', pass1TemplatePath);
     const pass1Template = readFileSync(pass1TemplatePath, 'utf-8');
     const pass1Prompt = pass1Template
@@ -177,7 +175,7 @@ export default async function handler(req, res) {
 
     // AI Pass 2 - Wellbeing
     console.log('💚 AI Pass 2 - Wellbeing & Social...');
-    const pass2Template = readFileSync(join(PROJECT_ROOT, 'prompt-pass2-wellbeing.txt'), 'utf-8');
+    const pass2Template = readFileSync(join(__dirname, 'prompt-pass2-wellbeing.txt'), 'utf-8');
     const pass2Prompt = pass2Template
       .replace('{person1_name}', baseReport.couple.person_1.name)
       .replace('{person2_name}', baseReport.couple.person_2.name)
@@ -198,7 +196,7 @@ export default async function handler(req, res) {
 
     // AI Pass 3 - Communication
     console.log('💬 AI Pass 3 - Communication & Conflict...');
-    const pass3Template = readFileSync(join(PROJECT_ROOT, 'prompt-pass3-communication.txt'), 'utf-8');
+    const pass3Template = readFileSync(join(__dirname, 'prompt-pass3-communication.txt'), 'utf-8');
     const pass3Prompt = pass3Template
       .replace('{person1_name}', baseReport.couple.person_1.name)
       .replace('{person2_name}', baseReport.couple.person_2.name)
