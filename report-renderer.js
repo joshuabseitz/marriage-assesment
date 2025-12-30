@@ -498,6 +498,49 @@ function renderPage3() {
   updateText('[data-field="person2_mindset_desc"]', momentum?.mindset?.person_2?.description || '');
   
   updateText('[data-field="mindsets_mesh"]', momentum?.how_mindsets_mesh || '');
+  
+  // Populate mindset card names (first names only)
+  renderMindsetCardNames(momentum, couple);
+}
+
+/**
+ * Helper function to populate mindset card names
+ * Extracts first names and places them in the appropriate mindset cards
+ * Handles cases where both partners have the same mindset
+ */
+function renderMindsetCardNames(momentum, couple) {
+  // Extract first names
+  const person1FullName = couple?.person_1?.name || '';
+  const person2FullName = couple?.person_2?.name || '';
+  const person1FirstName = person1FullName.split(' ')[0];
+  const person2FirstName = person2FullName.split(' ')[0];
+  
+  // Get mindset types (extract the base type without "Mindset" suffix)
+  const person1Type = (momentum?.mindset?.person_1?.type || '').toLowerCase().replace(' mindset', '');
+  const person2Type = (momentum?.mindset?.person_2?.type || '').toLowerCase().replace(' mindset', '');
+  
+  // Initialize name mapping for each mindset
+  const mindsetNames = {
+    resolute: [],
+    rational: [],
+    romantic: [],
+    restless: [],
+    reluctant: []
+  };
+  
+  // Add names to appropriate mindsets
+  if (person1Type && mindsetNames.hasOwnProperty(person1Type)) {
+    mindsetNames[person1Type].push(person1FirstName);
+  }
+  if (person2Type && mindsetNames.hasOwnProperty(person2Type)) {
+    mindsetNames[person2Type].push(person2FirstName);
+  }
+  
+  // Update each mindset card
+  for (const [mindsetType, names] of Object.entries(mindsetNames)) {
+    const nameText = names.length === 2 ? `${names[0]} & ${names[1]}` : (names[0] || '');
+    updateText(`[data-field="mindset_${mindsetType}_names"]`, nameText);
+  }
 }
 
 // PAGE 4: Wellbeing
@@ -633,13 +676,6 @@ function renderPage6() {
 }
 
 // Helper to update lists
-function updateList(selector, items) {
-  const container = document.querySelector(selector);
-  if (container && Array.isArray(items)) {
-    container.innerHTML = items.map(item => `<li>${item}</li>`).join('');
-  }
-}
-
 // PAGE 7: Expectations
 function renderPage7() {
   if (!reportData) return;
