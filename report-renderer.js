@@ -744,33 +744,180 @@ function updateRatingBar(selector, value) {
   }
 }
 
-// PAGE 6: Finances
+// PAGE 6: Finances - DETERMINISTIC RENDERING
 function renderPage6() {
   if (!reportData) return;
 
   const { finances, couple } = reportData;
+  const person1Name = couple?.person_1?.name || 'Person 1';
+  const person2Name = couple?.person_2?.name || 'Person 2';
+
+  console.log('💰 Rendering Page 6 - Finances (Deterministic)');
 
   // Names
-  updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
-  updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
+  updateAll('[data-person="person1"]', person1Name);
+  updateAll('[data-person="person2"]', person2Name);
 
-  // Money styles
-  updateText('[data-field="person1_money_style"]', finances?.person_1?.money_style || '');
-  updateText('[data-field="person2_money_style"]', finances?.person_2?.money_style || '');
+  // Money Styles with colored badges
+  renderMoneyStyleBadge('[data-field="person1_money_style_badge"]', finances?.person_1?.money_style);
+  renderMoneyStyleBadge('[data-field="person2_money_style_badge"]', finances?.person_2?.money_style);
 
-  // Budget approaches
-  updateText('[data-field="person1_budget"]', finances?.person_1?.budget_approach || '');
-  updateText('[data-field="person2_budget"]', finances?.person_2?.budget_approach || '');
+  // Budget Skills
+  renderBudgetSkills(
+    '[data-container="budget_skills"]',
+    finances?.person_1,
+    finances?.person_2,
+    person1Name,
+    person2Name
+  );
 
-  // Debt
-  updateText('[data-field="person1_debt"]', finances?.person_1?.debt?.amount || 'None');
-  updateText('[data-field="person2_debt"]', finances?.person_2?.debt?.amount || 'None');
+  // Debt Section with color-coded icons
+  renderDebtSection(
+    '[data-container="person1_debt"]',
+    finances?.person_1?.debt,
+    person1Name
+  );
+  renderDebtSection(
+    '[data-container="person2_debt"]',
+    finances?.person_2?.debt,
+    person2Name
+  );
 
-  // Financial fears
-  const p1Fears = finances?.person_1?.financial_fears || [];
-  const p2Fears = finances?.person_2?.financial_fears || [];
-  updateList('[data-list="person1_fears"]', p1Fears);
-  updateList('[data-list="person2_fears"]', p2Fears);
+  // Financial Fears with active/inactive badges
+  renderFinancialFears('[data-container="person1_fears"]', finances?.person_1?.financial_fears);
+  renderFinancialFears('[data-container="person2_fears"]', finances?.person_2?.financial_fears);
+
+  // Contextual discussion question
+  const discussionQuestion = getFinanceDiscussionQuestion(
+    finances?.person_1,
+    finances?.person_2,
+    person1Name,
+    person2Name
+  );
+  updateText('[data-field="finance_discussion_question"]', discussionQuestion);
+
+  console.log('  ✅ Page 6 rendered with finances:', {
+    person1: {
+      money_style: finances?.person_1?.money_style,
+      budget_approach: finances?.person_1?.budget_approach,
+      debt: finances?.person_1?.debt?.amount,
+      fears: finances?.person_1?.financial_fears
+    },
+    person2: {
+      money_style: finances?.person_2?.money_style,
+      budget_approach: finances?.person_2?.budget_approach,
+      debt: finances?.person_2?.debt?.amount,
+      fears: finances?.person_2?.financial_fears
+    }
+  });
+}
+
+// Helper: Money style badge with color
+function renderMoneyStyleBadge(selector, style) {
+  const el = document.querySelector(selector);
+  if (!el) return;
+
+  const template = typeof FinancesTemplates !== 'undefined'
+    ? FinancesTemplates.getMoneyStyleTemplate(style)
+    : { badge_class: 'bg-gray-100 text-gray-800' };
+
+  el.textContent = style || 'Not specified';
+  el.className = `px-4 py-2 rounded-lg font-semibold text-sm ${template.badge_class}`;
+}
+
+// Helper: Budget skills section with icons
+function renderBudgetSkills(selector, person1, person2, name1, name2) {
+  const container = document.querySelector(selector);
+  if (!container) return;
+
+  const renderPerson = (name, budgetApproach) => {
+    const template = typeof FinancesTemplates !== 'undefined'
+      ? FinancesTemplates.getBudgetTemplate(budgetApproach)
+      : { emoji: '📝' };
+
+    return `
+      <div class="budget-item">
+        <span class="budget-emoji">${template.emoji}</span>
+        <span class="text-sm text-gray-700">${name}: "${budgetApproach || 'Not specified'}"</span>
+      </div>
+    `;
+  };
+
+  container.innerHTML = `
+    ${renderPerson(name1, person1?.budget_approach)}
+    ${renderPerson(name2, person2?.budget_approach)}
+  `;
+}
+
+// Helper: Debt section with icon and color based on amount
+function renderDebtSection(selector, debt, name) {
+  const container = document.querySelector(selector);
+  if (!container) return;
+
+  const debtAmount = debt?.amount || 'None';
+  const template = typeof FinancesTemplates !== 'undefined'
+    ? FinancesTemplates.getDebtTemplate(debtAmount)
+    : { bgClass: 'bg-green-100', iconClass: 'text-green-600', nameClass: 'text-green-700', template: 'No debt status.' };
+
+  // Icon SVGs mapped to library names
+  const iconSvgs = {
+    check: `<svg class="w-6 h-6 ${template.iconClass}" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>`,
+    warning: `<svg class="w-6 h-6 ${template.iconClass}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`,
+    alert: `<svg class="w-6 h-6 ${template.iconClass}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.5L19.5 19H4.5L12 5.5zM11 10h2v4h-2v-4zm0 5h2v2h-2v-2z"/></svg>`
+  };
+
+  const iconHtml = iconSvgs[template.icon] || iconSvgs.check;
+  const description = template.template.replace('{name}', name);
+
+  container.innerHTML = `
+    <div class="debt-icon ${template.bgClass}">
+      ${iconHtml}
+    </div>
+    <div>
+      <div class="font-bold text-sm ${template.nameClass} mb-1">${name}</div>
+      <p class="text-sm text-gray-600">${description}</p>
+    </div>
+  `;
+}
+
+// Helper: Financial fears with active/inactive badges
+function renderFinancialFears(selector, fears) {
+  const container = document.querySelector(selector);
+  if (!container) return;
+
+  const fearKeys = [
+    { key: 'lack_of_influence', label: 'Lack of Influence', emoji: '💡' },
+    { key: 'lack_of_security', label: 'Lack of Security', emoji: '🔒' },
+    { key: 'lack_of_respect', label: 'Lack of Respect', emoji: '🤝' },
+    { key: 'not_realizing_dreams', label: 'Not Realizing Dreams', emoji: '💰' }
+  ];
+
+  const isObject = fears && typeof fears === 'object' && !Array.isArray(fears);
+
+  container.innerHTML = fearKeys.map(fear => {
+    let isActive = false;
+    if (isObject) {
+      isActive = fears[fear.key] === true;
+    } else if (Array.isArray(fears)) {
+      isActive = fears.some(f => f.toLowerCase().includes(fear.label.toLowerCase().replace('lack of ', '')));
+    }
+
+    const badgeClass = isActive ? 'active-badge' : 'inactive-badge';
+
+    return `
+      <div class="money-badge ${badgeClass}">
+        ${isActive ? fear.emoji + ' ' : ''}${fear.label}
+      </div>
+    `;
+  }).join('');
+}
+
+// Helper: Wrap library discussion question generator
+function getFinanceDiscussionQuestion(person1Finances, person2Finances, name1, name2) {
+  if (typeof FinancesTemplates !== 'undefined') {
+    return FinancesTemplates.getFinanceDiscussionQuestion(person1Finances, person2Finances, name1, name2);
+  }
+  return "What concerns you most about the financial context you're each bringing into your marriage and why? What gives you peace about your financial future?";
 }
 
 // Helper to update lists

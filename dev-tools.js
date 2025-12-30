@@ -2,11 +2,11 @@
 // Adds a floating button to populate sample data for testing
 // Only visible to users with 'developer' or 'admin' role
 
-(async function() {
+(async function () {
   'use strict';
-  
+
   console.log('🛠️ Dev tools: Script loaded and executing');
-  
+
   // Wait for supabaseAuth to be available
   console.log('🛠️ Dev tools: Waiting for supabaseAuth...');
   let attempts = 0;
@@ -14,24 +14,24 @@
     await new Promise(resolve => setTimeout(resolve, 100));
     attempts++;
   }
-  
+
   if (!window.supabaseAuth) {
     console.error('❌ Dev tools: Supabase auth not available after 5 seconds');
     return;
   }
-  
+
   console.log('✅ Dev tools: supabaseAuth is available');
-  
+
   // Check if user has developer role
   try {
     console.log('🛠️ Dev tools: Fetching user profile...');
     const profile = await window.supabaseAuth.getUserProfile();
     console.log('🛠️ Dev tools: Profile received:', profile);
     console.log('🛠️ Dev tools: User role:', profile?.role);
-    
+
     const isDeveloper = profile && (profile.role === 'developer' || profile.role === 'admin');
     console.log('🛠️ Dev tools: Is developer?', isDeveloper);
-    
+
     if (!isDeveloper) {
       console.warn('⚠️ Dev tools: User does not have developer role. Role is:', profile?.role);
       return;
@@ -40,29 +40,29 @@
     console.error('❌ Dev tools: Could not check user role', error);
     return;
   }
-  
+
   console.log('✅ Dev tools: User has developer role, initializing dev tools...');
-  
+
   // Check for required APIs
   console.log('🛠️ Dev tools: Checking for required APIs...');
   console.log('  - supabaseAuth:', !!window.supabaseAuth);
   console.log('  - responsesApi:', !!window.responsesApi);
   console.log('  - partnershipsApi:', !!window.partnershipsApi);
   console.log('  - reportsApi:', !!window.reportsApi);
-  
+
   // Use global APIs (browser version)
   const supabaseAuth = window.supabaseAuth;
   const responsesApi = window.responsesApi;
   const partnershipsApi = window.partnershipsApi;
   const reportsApi = window.reportsApi;
-  
+
   if (!responsesApi || !partnershipsApi || !reportsApi) {
     console.error('❌ Dev tools: Missing required APIs. Cannot initialize dev tools.');
     return;
   }
-  
+
   console.log('✅ Dev tools: All required APIs available');
-  
+
   // Multiple test profiles for AI personalization testing
   // Each profile has distinct personality characteristics to verify AI generates unique outputs
   const profiles = {
@@ -70,122 +70,124 @@
       name: "Highly Compatible",
       description: "Resolute mindset, Cooperating spouse, 85% wellbeing, 0 flags, 5⭐ context",
       responses: {
-    // Demographics & Family (Q1-6) - Same across profiles
-    1: "Caucasian",
-    2: "Married", // Parents stable for Profile A
-    3: "Raised by both parents",
-    4: 2,
-    5: "First born",
-    6: "2025-06-15", // Wedding 6 months out
-    
-    // Relationship History (Q7-11) - Strong for Profile A
-    7: "2-3 years", // Established relationship
-    8: 0, // No previous marriages
-    9: 0, // No children
-    10: false, // Not expecting
-    11: 5, // Very stable relationship
-    
-    // Placeholder for removed questions (Q12-16)
-    12: null, 13: null, 14: null, 15: null, 16: null,
-    // RESOLUTE MINDSET: Marriage for life, divorce unacceptable, steadfast commitment
-    17: 1, 18: 1, 19: 2, 20: 1, 21: 2, // LOW on divorce acceptance (Q17, 20 reversed)
-    22: 5, 23: 4, 24: 5, 25: 3, 26: 2, // HIGH on work/commitment (Q22, 24)
-    27: 5, 28: 5, 29: 2, 30: 2, // HIGH on commitment (Q27-28), moderate idealism
-    
-    // Mindset (Q31-50) - RESOLUTE: High sacrifice, perseverance, covenant thinking
-    31: 5, 32: 5, 33: 5, 34: 2, 35: 5, // HIGH commitment (Q31-33, 35-36)
-    36: 5, 37: 4, 38: 4, 39: 4, 40: 4, // Moderate expression
-    41: 5, 42: 5, 43: 5, 44: 2, 45: 5, // High optimism, low parental dependence, no past pain
-    46: 5, 47: 5, 48: 5, 49: 5, 50: 5, // HIGH resilience
-    
-    // Wellbeing (Q51-90) - HIGH (85%): Low stress, emotionally stable
-    51: 5, 52: 5, 53: 5, 54: 5, // Strong self-concept
-    55: 5, 56: 5, 57: 5, // High confidence
-    58: 1, 59: 5, 60: 5, // Low stress
-    61: 5, 62: 5, 63: 5, 64: 5, // Good regulation
-    65: 5, 66: 5, 67: false, 68: false, 69: false, // NO CAUTION FLAGS
-    70: false, 71: false, 72: false, 73: 5, 74: 5, // Q73-82 HIGH for Cooperating
-    75: 5, 76: 5, 77: 5, 78: 5, 79: 5, 80: 5,
-    81: 5, 82: 5, 83: 3, 84: 3, 85: 3, // Q81-82 Cooperating, Q83+ not
-    86: 3, 87: 3, 88: 3, 89: 3, 90: 3,
-    
-    // Social Support (Q91-105) - Strong network
-    91: 3, 92: 3, 93: 3, 94: "Less than $10,000", 95: 5, // Low debt Q94!
-    96: 5, 97: 5, 98: 4, 99: false, // No financial fears
-    100: false, 101: false, 102: false, 103: 1, 104: 1, 105: 5,
-    
-    // Finances (Q106-130) - LOW DEBT for 5-star context
-    106: "Saver",
-    107: "I live by a budget religiously",
-    108: "Less than $10,000", // Low debt
-    109: 3, 110: 3, 111: 3, 112: 3,
-    113: 5, 114: 5, 115: 5, 116: 5, // Q113-121 HIGH for Cooperating
-    117: 5, 118: 5, 119: 5, 120: 5, 121: 5, 
-    122: 3, 123: 3, 124: 3, 125: 3, 126: 3,
-    127: 3, 128: 3, 129: 3, 130: 3,
-    
-    // Role Expectations (Q131-150) - Flexible, collaborative
-    131: "Both", 132: "Both", 133: "Both", 134: "Both", 135: "Both",
-    136: "Both", 137: "Both", 138: "Both", 139: "Both", 140: "Both",
-    141: "Both", 142: "Both", 143: "Both", 144: "Both", 145: "Both",
-    146: "Both", 147: "Both", 148: "Both", 149: "Both", 150: "Both",
-    
-    // Personality (Q151-200) - COOPERATING SPOUSE: Collaborative, flexible, consensus-seeking
-    151: 5, 152: 5, 153: 5, 154: 5, 155: 5, // High collaboration
-    156: 5, 157: 5, 158: 5, 159: 5, 160: 5, // Flexible, adaptive
-    161: 5, 162: 5, 163: 5, 164: 5, 165: 5, // Seeks consensus
-    166: 5, 167: 5, 168: 5, 169: 5, 170: 5, // Team-oriented
-    171: 5, 172: 5, 173: 5, 174: 5, 175: 5, // Negotiates well
-    176: 5, 177: 5, 178: 5, 179: 5, 180: 5, // Partnership focus
-    181: 4, 182: 4, 183: 4, 184: 4, 185: 4,
-    186: 4, 187: 4, 188: 4, 189: 4, 190: 4,
-    191: 4, 192: 4, 193: 4, 194: 4, 195: 4,
-    196: 4, 197: 4, 198: 4, 199: 4, 200: 4,
-    
-    // Love & Sexuality (Q201-230)
-    201: ["Commitment", "Trust", "Respect", "Honesty", "Friendship", "Kindness", "Longing", "Excitement"],
-    202: "Yes",
-    203: 8,
-    204: "Both",
-    205: "Daily",
-    206: 5, 207: 1, 208: 5, 209: 5, 210: 5,
-    211: 5, 212: 5, 213: 5, 214: 5, 215: 5,
-    216: 5, 217: 5, 218: 5, 219: 5, 220: 5,
-    221: 4, 222: 5, 223: 5, 224: 4, 225: 4,
-    226: 5, 227: 1, 228: 5, 229: 5, 230: 5,
-    
-    // Conflict & Communication (Q231-260) - Collaborative communication
-    231: ["Communication", "Priorities", "Time"],
-    232: true, 233: false, 234: true, 235: false, 236: true,
-    237: true, 238: true, 239: 5, 240: 5, 241: 5,
-    242: 1, 243: 1, 244: 1, 245: 1, 246: 1,
-    247: 1, 248: 1, 249: 5, 250: 5, 251: 5,
-    252: 5, 253: 5, 254: 5, 255: 5, 256: 5,
-    257: 5, 258: 5, 259: 5, 260: 5,
-    
-    // Spirituality (Q261-280)
-    261: "Being compassionate/Helping others",
-    262: 5, 263: 5, 264: 5, 265: 5, 266: 5,
-    267: 5, 268: 5, 269: 5, 270: 5, 271: 5,
-    272: 5, 273: 5, 274: 5, 275: 5, 276: 5,
-    277: 5, 278: 1, 279: 1, 280: 5,
-    
-    // Reflections (Q281-300)
-    281: "comfortable and stable",
-    282: "I feel confident and prepared",
-    283: "I'm better at compromising than I thought",
-    284: "your willingness to work together",
-    285: "building a strong partnership",
-    286: "work as a team on all major decisions",
-    287: "growing stronger every day",
-    288: "we truly partner well together",
-    289: "you genuinely seek my input",
-    290: "forgetting to prioritize our relationship",
-    291: 5, 292: 5, 293: 5, 294: 5, 295: 5,
-    296: 5, 297: 5, 298: 5, 299: 5, 300: 5
+        // Demographics & Family (Q1-6) - Same across profiles
+        1: "Caucasian",
+        2: "Married", // Parents stable for Profile A
+        3: "Raised by both parents",
+        4: 2,
+        5: "First born",
+        6: "2025-06-15", // Wedding 6 months out
+
+        // Relationship History (Q7-11) - Strong for Profile A
+        7: "2-3 years", // Established relationship
+        8: 0, // No previous marriages
+        9: 0, // No children
+        10: false, // Not expecting
+        11: 5, // Very stable relationship
+
+        // Placeholder for removed questions (Q12-16)
+        12: null, 13: null, 14: null, 15: null, 16: null,
+        // RESOLUTE MINDSET: Marriage for life, divorce unacceptable, steadfast commitment
+        17: 1, 18: 1, 19: 2, 20: 1, 21: 2, // LOW on divorce acceptance (Q17, 20 reversed)
+        22: 5, 23: 4, 24: 5, 25: 3, 26: 2, // HIGH on work/commitment (Q22, 24)
+        27: 5, 28: 5, 29: 2, 30: 2, // HIGH on commitment (Q27-28), moderate idealism
+
+        // Mindset (Q31-50) - RESOLUTE: High sacrifice, perseverance, covenant thinking
+        31: 5, 32: 5, 33: 5, 34: 2, 35: 5, // HIGH commitment (Q31-33, 35-36)
+        36: 5, 37: 4, 38: 4, 39: 4, 40: 4, // Moderate expression
+        41: 5, 42: 5, 43: 5, 44: 2, 45: 5, // High optimism, low parental dependence, no past pain
+        46: 5, 47: 5, 48: 5, 49: 5, 50: 5, // HIGH resilience
+
+        // Wellbeing (Q51-90) - HIGH (85%): Low stress, emotionally stable
+        51: 5, 52: 5, 53: 5, 54: 5, // Strong self-concept
+        55: 5, 56: 5, 57: 5, // High confidence
+        58: 1, 59: 5, 60: 5, // Low stress
+        61: 5, 62: 5, 63: 5, 64: 5, // Good regulation
+        65: 5, 66: 5, 67: false, 68: false, 69: false, // NO CAUTION FLAGS
+        70: false, 71: false, 72: false, 73: 5, 74: 5, // Q73-82 HIGH for Cooperating
+        75: 5, 76: 5, 77: 5, 78: 5, 79: 5, 80: 5,
+        81: 5, 82: 5, 83: 3, 84: 3, 85: 3, // Q81-82 Cooperating, Q83+ not
+        86: 3, 87: 3, 88: 3, 89: 3, 90: 3,
+
+        // Social Support (Q77-91) - Strong network
+        77: 5, 78: 5, 79: 5, 80: 5, 81: 5, 82: 5, 83: 5, 84: 5, 85: 5,
+        86: 5, 87: 5, 88: 5, 89: 1, 90: 1, 91: 5,
+
+        // Finances (Q92-116) - LOW DEBT for 5-star context (CORRECT IDs)
+        92: "Saver",  // Money style
+        93: "I live by a budget religiously",  // Budget approach
+        94: "Less than $10,000",  // Debt amount - Low debt
+        95: 5, 96: 5, 97: 5, 98: 5,  // Debt comfort
+        99: false, 100: false, 101: false, 102: false,  // Financial fears (all false = no fears)
+        103: 1, 104: 1, 105: 5,  // Growing up money stress, anxiety, trust
+        106: 4, 107: 2, 108: 4, 109: 4, 110: 4, 111: 4, 112: 4,
+        113: 5, 114: 5, 115: 5, 116: 5,
+        117: 5, 118: 5, 119: 5, 120: 5, 121: 5,
+        122: 3, 123: 3, 124: 3, 125: 3, 126: 3,
+        127: 3, 128: 3, 129: 3, 130: 3,
+
+        // Role Expectations (Q131-150) - Flexible, collaborative
+        131: "Both", 132: "Both", 133: "Both", 134: "Both", 135: "Both",
+        136: "Both", 137: "Both", 138: "Both", 139: "Both", 140: "Both",
+        141: "Both", 142: "Both", 143: "Both", 144: "Both", 145: "Both",
+        146: "Both", 147: "Both", 148: "Both", 149: "Both", 150: "Both",
+
+        // Personality (Q151-200) - COOPERATING SPOUSE: Collaborative, flexible, consensus-seeking
+        151: 5, 152: 5, 153: 5, 154: 5, 155: 5, // High collaboration
+        156: 5, 157: 5, 158: 5, 159: 5, 160: 5, // Flexible, adaptive
+        161: 5, 162: 5, 163: 5, 164: 5, 165: 5, // Seeks consensus
+        166: 5, 167: 5, 168: 5, 169: 5, 170: 5, // Team-oriented
+        171: 5, 172: 5, 173: 5, 174: 5, 175: 5, // Negotiates well
+        176: 5, 177: 5, 178: 5, 179: 5, 180: 5, // Partnership focus
+        181: 4, 182: 4, 183: 4, 184: 4, 185: 4,
+        186: 4, 187: 4, 188: 4, 189: 4, 190: 4,
+        191: 4, 192: 4, 193: 4, 194: 4, 195: 4,
+        196: 4, 197: 4, 198: 4, 199: 4, 200: 4,
+
+        // Love & Sexuality (Q201-230)
+        201: ["Commitment", "Trust", "Respect", "Honesty", "Friendship", "Kindness", "Longing", "Excitement"],
+        202: "Yes",
+        203: 8,
+        204: "Both",
+        205: "Daily",
+        206: 5, 207: 1, 208: 5, 209: 5, 210: 5,
+        211: 5, 212: 5, 213: 5, 214: 5, 215: 5,
+        216: 5, 217: 5, 218: 5, 219: 5, 220: 5,
+        221: 4, 222: 5, 223: 5, 224: 4, 225: 4,
+        226: 5, 227: 1, 228: 5, 229: 5, 230: 5,
+
+        // Conflict & Communication (Q231-260) - Collaborative communication
+        231: ["Communication", "Priorities", "Time"],
+        232: true, 233: false, 234: true, 235: false, 236: true,
+        237: true, 238: true, 239: 5, 240: 5, 241: 5,
+        242: 1, 243: 1, 244: 1, 245: 1, 246: 1,
+        247: 1, 248: 1, 249: 5, 250: 5, 251: 5,
+        252: 5, 253: 5, 254: 5, 255: 5, 256: 5,
+        257: 5, 258: 5, 259: 5, 260: 5,
+
+        // Spirituality (Q261-280)
+        261: "Being compassionate/Helping others",
+        262: 5, 263: 5, 264: 5, 265: 5, 266: 5,
+        267: 5, 268: 5, 269: 5, 270: 5, 271: 5,
+        272: 5, 273: 5, 274: 5, 275: 5, 276: 5,
+        277: 5, 278: 1, 279: 1, 280: 5,
+
+        // Reflections (Q281-300)
+        281: "comfortable and stable",
+        282: "I feel confident and prepared",
+        283: "I'm better at compromising than I thought",
+        284: "your willingness to work together",
+        285: "building a strong partnership",
+        286: "work as a team on all major decisions",
+        287: "growing stronger every day",
+        288: "we truly partner well together",
+        289: "you genuinely seek my input",
+        290: "forgetting to prioritize our relationship",
+        291: 5, 292: 5, 293: 5, 294: 5, 295: 5,
+        296: 5, 297: 5, 298: 5, 299: 5, 300: 5
       }
     },
-    
+
     B: {
       name: "Growth-Oriented",
       description: "Rational mindset, Affirming spouse, 72% wellbeing, 2 flags, 3⭐ context",
@@ -206,13 +208,16 @@
         70: false, 71: false, 72: false, 73: 3, 74: 3,
         75: 3, 76: 3, 77: 3, 78: 3, 79: 3, 80: 3,
         81: 3, 82: 3, 83: 5, 84: 5, 85: 5, 86: 5, 87: 5, 88: 5, 89: 5, 90: 5, // Q83-92 HIGH for Affirming
-        91: 5, 92: 5, 93: 3, 94: "$10,000-$50,000", 95: 3, // Q91-92 HIGH for Affirming (then Q94 context)
-        // MODERATE CONTEXT (3 stars): Some debt, shorter relationship
-        96: 3, 97: 4, 98: 3, 99: false, 100: false, 101: true, 102: false, 103: 3, 104: 3, 105: 4,
-        106: "Balanced", 107: "I try to budget but struggle", 108: "$10,000-$50,000",
-        109: 3, 110: 3, 111: 3, 112: 3, 113: false, 114: true, 115: false, 116: false,
-        117: 3, 118: 3, 119: 3, 120: 3, 121: 3, 122: 5, 123: 5, 124: 5, 125: 5, 126: 5, // Q122-131 HIGH for Affirming
-        127: 5, 128: 5, 129: 5, 130: 5, 131: 5,
+        77: 5, 78: 5, 79: 3, 80: 3, 81: 3, 82: 4, 83: 4, 84: 4, 85: 4,
+        86: 4, 87: 4, 88: 3, 89: 3, 90: 2, 91: 4,
+        // FINANCES (Q92-116) - MODERATE CONTEXT (3 stars): Some debt
+        92: "Balanced",  // Money style (not saver, not spender)
+        93: "I track generally",  // Budget approach
+        94: "$10,000 - $50,000",  // Moderate debt
+        95: 3, 96: 3, 97: 4, 98: 3,
+        99: false, 100: false, 101: true, 102: false,  // One fear: lack of respect
+        103: 3, 104: 3, 105: 4, 106: 3, 107: 3, 108: 3, 109: 3, 110: 3, 111: 3, 112: 3,
+        113: 3, 114: 3, 115: 3, 116: 3,
         131: "Both", 132: "Both", 133: "You", 134: "Both", 135: "Me", 136: "Both", 137: "Both", 138: "You", 139: "Both", 140: "Both",
         141: "Both", 142: "Me", 143: "Both", 144: "You", 145: "Both", 146: "Both", 147: "Both", 148: "Me", 149: "Both", 150: "You",
         // AFFIRMING SPOUSE: Supportive, encouraging, emotionally responsive
@@ -240,14 +245,14 @@
         296: 4, 297: 4, 298: 4, 299: 4, 300: 4
       }
     },
-    
+
     C: {
       name: "Analytical Realist",
       description: "Romantic mindset, Analyzing spouse, 65% wellbeing, 3 flags, 2⭐ context",
       responses: {
         1: "Asian", 2: "Divorced", 3: "Raised by mother", 4: 1, 5: "Only child", 6: "2025-02-01",
         7: "6-12 months", 8: 1, 9: 2, 10: false, 11: 3, // Previous marriage, children, newer relationship
-        12: null, 13: null, 14: null, 15: null, 16: null, 
+        12: null, 13: null, 14: null, 15: null, 16: null,
         // ROMANTIC MINDSET: Soulmates, magic, intense passion (Q17-21, 29-30, 34 HIGH, Q37-40 HIGH)
         17: 5, 18: 5, 19: 5, 20: 5, 21: 5, // HIGH soul mate beliefs
         22: 2, 23: 2, 24: 2, 25: 2, 26: 2, // Low on work (expects magic, not work)
@@ -264,11 +269,16 @@
         75: 2, 76: 4, 77: 3, 78: 3, 79: 2, 80: 4,
         81: false, 82: true, 83: false, 84: true, 85: true, 86: false, 87: false, 88: false, 89: false, 90: false,
         // HIGH CONTEXT STRESS (2 stars): High debt, children, long-distance
-        91: 3, 92: 3, 93: 2, 94: "More than $50,000", 95: 2, // High debt
-        96: 2, 97: 3, 98: 2, 99: true, 100: true, 101: true, 102: true, 103: 5, 104: 5, 105: 3, // Q103-112 HIGH for Analyzing
-        106: "Spender", 107: "I don't really budget", 108: "More than $50,000",
-        109: 5, 110: 5, 111: 5, 112: 5, 113: 2, 114: 2, 115: 2, 116: 2, // Q109-112 HIGH, rest low
-        117: 2, 118: 2, 119: 2, 120: 2, 121: 2, 122: 2, 123: 2, 124: 2, 125: 2, 126: 2,
+        77: 3, 78: 3, 79: 2, 80: 2, 81: 2, 82: 3, 83: 3, 84: 2, 85: 2,
+        86: 2, 87: 2, 88: 2, 89: 3, 90: 4, 91: 3,
+        // FINANCES (Q92-116) - HIGH DEBT (2 stars): Stressful situation
+        92: "Spender",  // Money style
+        93: "I don't budget",  // No budget
+        94: "More than $50,000",  // High debt
+        95: 2, 96: 2, 97: 3, 98: 2,
+        99: true, 100: true, 101: true, 102: true,  // All 4 fears active
+        103: 5, 104: 5, 105: 3, 106: 2, 107: 4, 108: 3, 109: 5, 110: 5, 111: 5, 112: 5,
+        113: 2, 114: 2, 115: 2, 116: 2,
         127: 2, 128: 2, 129: 2, 130: 2,
         131: "Me", 132: "Me", 133: "Me", 134: "You", 135: "You", 136: "Me", 137: "Me", 138: "You", 139: "Me", 140: "You",
         141: "Me", 142: 5, 143: 5, 144: 5, 145: 5, 146: 5, 147: 5, 148: 5, 149: 5, 150: 5, // Q142-150 HIGH for Analyzing
@@ -297,14 +307,14 @@
         296: 3, 297: 3, 298: 3, 299: 3, 300: 3
       }
     },
-    
+
     D: {
       name: "Decisive Leader",
       description: "Restless mindset, Directing spouse, 78% wellbeing, 1 flag, 4⭐ context",
       responses: {
         1: "African American", 2: "Married", 3: "Raised by both parents", 4: 3, 5: "First born", 6: "2024-12-31",
         7: "2-3 years", 8: 0, 9: 0, 10: false, 11: 3, // Lower relationship stability
-        12: null, 13: null, 14: null, 15: null, 16: null, 
+        12: null, 13: null, 14: null, 15: null, 16: null,
         // RESTLESS MINDSET: Cautious, unsure about commitment, worry/anxiety
         17: 3, 18: 3, 19: 3, 20: 3, 21: 3, // Moderate on idealism
         22: 3, 23: 3, 24: 3, 25: 3, 26: 5, // HIGH on worry (Q26)
@@ -321,11 +331,16 @@
         75: 4, 76: 4, 77: 4, 78: 4, 79: 4, 80: 4,
         81: 3, 82: 3, 83: 3, 84: 3, 85: 3, 86: 3, 87: 3, 88: 3, 89: 3, 90: 3,
         // MODERATE-LOW CONTEXT (4 stars): Some financial stress, imminent wedding
-        91: 3, 92: 3, 93: 5, 94: "$10,000-$50,000", 95: 4, // Q93-102 HIGH for Directing
-        96: 4, 97: 4, 98: 4, 99: false, 100: 5, 101: 5, 102: 5, 103: 3, 104: 3, 105: 4,
-        106: "Balanced", 107: "I budget when needed", 108: "$10,000-$50,000",
-        109: 3, 110: 3, 111: 3, 112: 3, 113: 3, 114: 3, 115: 3, 116: 3,
-        117: 3, 118: 3, 119: 3, 120: 3, 121: 3, 122: 3, 123: 3, 124: 3, 125: 3, 126: 3,
+        77: 4, 78: 4, 79: 4, 80: 4, 81: 4, 82: 4, 83: 4, 84: 4, 85: 4,
+        86: 4, 87: 4, 88: 4, 89: 2, 90: 2, 91: 4,
+        // FINANCES (Q92-116) - MODERATE-LOW CONTEXT (4 stars)
+        92: "Saver",  // Money style
+        93: "I track generally",  // Budget approach
+        94: "Less than $10,000",  // Low debt
+        95: 4, 96: 4, 97: 4, 98: 4,
+        99: false, 100: true, 101: false, 102: false,  // One fear: lack of security
+        103: 3, 104: 3, 105: 4, 106: 4, 107: 3, 108: 3, 109: 3, 110: 3, 111: 3, 112: 3,
+        113: 3, 114: 3, 115: 3, 116: 3,
         127: 3, 128: 3, 129: 3, 130: 3,
         131: "Me", 132: 5, 133: 5, 134: 5, 135: 5, 136: 5, 137: 5, 138: 5, 139: 5, 140: 5, // Q132-141 HIGH for Directing
         141: 5, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3, 148: 3, 149: 3, 150: 3,
@@ -355,17 +370,17 @@
       }
     }
   };
-  
+
   // Create the floating button
   function createDevButton() {
     console.log('🛠️ Dev tools: createDevButton() called');
     console.log('🛠️ Dev tools: document.body exists?', !!document.body);
-    
+
     if (!document.body) {
       console.error('❌ Dev tools: document.body is null! Cannot create button.');
       return;
     }
-    
+
     const button = document.createElement('button');
     button.id = 'dev-tools-btn';
     button.innerHTML = '🛠️ DEV';
@@ -386,26 +401,26 @@
       transition: all 0.3s ease;
       font-family: monospace;
     `;
-    
+
     console.log('🛠️ Dev tools: Button element created:', button);
-    
+
     button.addEventListener('mouseenter', () => {
       button.style.transform = 'translateY(-2px)';
       button.style.boxShadow = '0 6px 20px rgba(0,0,0,0.4)';
     });
-    
+
     button.addEventListener('mouseleave', () => {
       button.style.transform = 'translateY(0)';
       button.style.boxShadow = '0 4px 15px rgba(0,0,0,0.3)';
     });
-    
+
     button.addEventListener('click', showDevMenu);
-    
+
     document.body.appendChild(button);
     console.log('✅ Dev tools: Button appended to document.body');
     console.log('🛠️ Dev tools: Button in DOM?', document.getElementById('dev-tools-btn') !== null);
   }
-  
+
   // Create dev menu
   async function showDevMenu() {
     // Remove existing menu if present
@@ -414,7 +429,7 @@
       existing.remove();
       return;
     }
-    
+
     const menu = document.createElement('div');
     menu.id = 'dev-menu';
     menu.style.cssText = `
@@ -432,7 +447,7 @@
       overflow-y: auto;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     `;
-    
+
     menu.innerHTML = `
       <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 2px solid #eee;">
         <h3 style="margin: 0 0 5px 0; font-size: 16px; color: #333;">🛠️ Dev Tools</h3>
@@ -502,39 +517,39 @@
         🔄 Refresh Status
       </button>
     `;
-    
+
     document.body.appendChild(menu);
-    
+
     // Update status and enable partner buttons if applicable
     await updateStatus();
     await checkPartnershipAndEnableButtons();
-    
+
     // Add event listeners
     document.getElementById('populate-my-survey').addEventListener('click', async () => {
       await populateCurrentUserSurvey();
       await updateStatus();
     });
-    
+
     document.getElementById('populate-partner-survey').addEventListener('click', async () => {
       await populatePartnerSurvey();
       await updateStatus();
     });
-    
+
     document.getElementById('populate-both-surveys').addEventListener('click', async () => {
       await populateBothSurveys();
       await updateStatus();
     });
-    
+
     document.getElementById('mark-complete').addEventListener('click', async () => {
       await markComplete();
       await updateStatus();
     });
-    
+
     document.getElementById('refresh-status').addEventListener('click', async () => {
       await updateStatus();
       await checkPartnershipAndEnableButtons();
     });
-    
+
     // Close menu when clicking outside
     setTimeout(() => {
       document.addEventListener('click', function closeMenu(e) {
@@ -545,18 +560,18 @@
       });
     }, 100);
   }
-  
+
   // Check partnership and enable/disable partner buttons
   async function checkPartnershipAndEnableButtons() {
     const partnerBtn = document.getElementById('populate-partner-survey');
     const bothBtn = document.getElementById('populate-both-surveys');
     const partnerProfileSelect = document.getElementById('partner-profile-select');
-    
+
     if (!partnerBtn || !bothBtn) return;
-    
+
     try {
       const partnership = await partnershipsApi.getAcceptedPartnership();
-      
+
       if (partnership) {
         partnerBtn.disabled = false;
         bothBtn.disabled = false;
@@ -576,7 +591,7 @@
       if (partnerProfileSelect) partnerProfileSelect.disabled = true;
     }
   }
-  
+
   // Populate current user's survey with sample data
   async function populateCurrentUserSurvey() {
     try {
@@ -585,21 +600,21 @@
         alert('❌ Not authenticated. Please log in first.');
         return;
       }
-      
+
       const profileSelect = document.getElementById('my-profile-select');
       const selectedProfile = profileSelect ? profileSelect.value : 'A';
-      
+
       const btn = document.getElementById('populate-my-survey');
       btn.disabled = true;
       btn.textContent = 'Populating...';
-      
+
       await populateSurveyForUser(user.id, 'Your', selectedProfile);
-      
+
       alert(`✅ Your survey populated with Profile ${selectedProfile}:\n${profiles[selectedProfile].description}`);
-      
+
       btn.disabled = false;
       btn.textContent = '📝 My Survey';
-      
+
       // Reload page if we're on the survey page
       if (window.location.pathname.includes('survey')) {
         setTimeout(() => window.location.reload(), 500);
@@ -614,7 +629,7 @@
       }
     }
   }
-  
+
   // Populate partner's survey with sample data
   async function populatePartnerSurvey() {
     try {
@@ -623,18 +638,18 @@
         alert('❌ No partner connected. Please connect with a partner first.');
         return;
       }
-      
+
       const profileSelect = document.getElementById('partner-profile-select');
       const selectedProfile = profileSelect ? profileSelect.value : 'B';
-      
+
       const btn = document.getElementById('populate-partner-survey');
       btn.disabled = true;
       btn.textContent = 'Populating...';
-      
+
       await populateSurveyForUser(partnership.partner.id, partnership.partner.full_name, selectedProfile);
-      
+
       alert(`✅ ${partnership.partner.full_name}'s survey populated with Profile ${selectedProfile}:\n${profiles[selectedProfile].description}`);
-      
+
       btn.disabled = false;
       btn.textContent = '👥 Partner\'s Survey';
     } catch (error) {
@@ -647,38 +662,38 @@
       }
     }
   }
-  
+
   // Populate both surveys
   async function populateBothSurveys() {
     try {
       const user = await supabaseAuth.getCurrentUser();
       const partnership = await partnershipsApi.getAcceptedPartnership();
-      
+
       if (!partnership) {
         alert('❌ No partner connected. Please connect with a partner first.');
         return;
       }
-      
+
       const myProfileSelect = document.getElementById('my-profile-select');
       const partnerProfileSelect = document.getElementById('partner-profile-select');
       const myProfile = myProfileSelect ? myProfileSelect.value : 'A';
       const partnerProfile = partnerProfileSelect ? partnerProfileSelect.value : 'B';
-      
+
       const btn = document.getElementById('populate-both-surveys');
       btn.disabled = true;
       btn.textContent = 'Populating Both...';
-      
+
       // Populate current user first
       await populateSurveyForUser(user.id, 'Your', myProfile, false);
-      
+
       // Then populate partner
       await populateSurveyForUser(partnership.partner.id, partnership.partner.full_name, partnerProfile, false);
-      
+
       alert(`✅ Both surveys populated!\n\nYou: Profile ${myProfile} (${profiles[myProfile].description})\n${partnership.partner.full_name}: Profile ${partnerProfile} (${profiles[partnerProfile].description})`);
-      
+
       btn.disabled = false;
       btn.textContent = '🎯 Both Surveys';
-      
+
       // Reload page if we're on the survey page
       if (window.location.pathname.includes('survey')) {
         setTimeout(() => window.location.reload(), 500);
@@ -693,14 +708,14 @@
       }
     }
   }
-  
+
   // Helper function to populate survey for a specific user
   async function populateSurveyForUser(userId, userName, profileKey = 'A', showAlert = true) {
     const supabase = await supabaseAuth.getSupabase();
     const selectedResponses = profiles[profileKey].responses;
     let successCount = 0;
     let errorCount = 0;
-    
+
     // Batch insert responses directly (bypassing RLS for dev purposes)
     for (const [questionId, value] of Object.entries(selectedResponses)) {
       try {
@@ -715,7 +730,7 @@
           }, {
             onConflict: 'user_id,question_id'
           });
-        
+
         if (error) throw error;
         successCount++;
       } catch (error) {
@@ -723,14 +738,14 @@
         errorCount++;
       }
     }
-    
+
     if (showAlert) {
       alert(`✅ ${userName}'s survey populated!\n\n${successCount} questions answered${errorCount > 0 ? `\n${errorCount} errors` : ''}`);
     }
-    
+
     return { successCount, errorCount };
   }
-  
+
   // Mark survey as complete
   async function markComplete() {
     try {
@@ -741,7 +756,7 @@
       alert('❌ Error: ' + error.message);
     }
   }
-  
+
   // Get question type helper
   function getQuestionType(questionId) {
     // Simplified type mapping based on question ID ranges
@@ -756,37 +771,37 @@
     if (questionId >= 281 && questionId <= 300) return 'text';
     return 'text';
   }
-  
+
   // Update status display
   async function updateStatus() {
     const statusEl = document.getElementById('status-info');
     if (!statusEl) return;
-    
+
     statusEl.textContent = 'Loading...';
-    
+
     try {
       const user = await supabaseAuth.getCurrentUser();
       if (!user) {
         statusEl.innerHTML = '<span style="color: #f44336;">Not authenticated</span>';
         return;
       }
-      
+
       const profile = await supabaseAuth.getUserProfile();
       const count = await reportsApi.getResponseCountForUser(user.id);
       const complete = count >= 290;
       const partnership = await partnershipsApi.getAcceptedPartnership();
-      
+
       let status = '';
       status += `<strong>You (${profile?.full_name || 'User'}):</strong><br>`;
       status += `${count}/300 questions ${complete ? '✅' : '⏳'}<br><br>`;
-      
+
       if (partnership) {
         const partnerId = partnership.partner.id;
         const partnerCount = await reportsApi.getResponseCountForUser(partnerId);
         const partnerComplete = partnerCount >= 290;
         status += `<strong>Partner (${partnership.partner.full_name}):</strong><br>`;
         status += `${partnerCount}/300 questions ${partnerComplete ? '✅' : '⏳'}<br><br>`;
-        
+
         if (complete && partnerComplete) {
           status += `<span style="color: #4caf50; font-weight: bold;">✅ Ready to generate report!</span>`;
         } else {
@@ -795,18 +810,18 @@
       } else {
         status += `<span style="color: #999;">No partner connected</span>`;
       }
-      
+
       statusEl.innerHTML = status;
     } catch (error) {
       console.error('Error updating status:', error);
       statusEl.innerHTML = '<span style="color: #f44336;">Error loading status</span>';
     }
   }
-  
+
   // Initialize when DOM is ready
   console.log('🛠️ Dev tools: Initializing button...');
   console.log('🛠️ Dev tools: Document ready state:', document.readyState);
-  
+
   if (document.readyState === 'loading') {
     console.log('🛠️ Dev tools: Waiting for DOMContentLoaded...');
     document.addEventListener('DOMContentLoaded', () => {
@@ -817,5 +832,5 @@
     console.log('🛠️ Dev tools: DOM already ready, creating button immediately...');
     createDevButton();
   }
-  
+
 })();
