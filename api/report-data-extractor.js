@@ -168,47 +168,76 @@ function extractFinances(person1Responses, person2Responses) {
 }
 
 function extractPersonFinances(responses) {
-  const fears = [];
-  const fearsNotSelected = [];
+  // CORRECT QUESTION IDS from questions-data.json:
+  // Q92: Money style (Saver/Spender)
+  // Q93: Budget approach
+  // Q94: Debt amount
+  // Q99-102: Financial fears (SYMBIS 4 fears)
+  // Q95-96: Debt comfort levels
+  // Q103-105: Financial context questions
 
-  // Q113-116: Financial fears
-  const fearQuestions = [
-    { id: 113, text: "Not having enough money" },
-    { id: 114, text: "Going into debt" },
-    { id: 115, text: "Not being able to retire comfortably" },
-    { id: 116, text: "Partner's spending habits" }
-  ];
+  // Money Style - Q92
+  const moneyStyle = responses[92] || "Not specified";
 
-  fearQuestions.forEach(fear => {
-    if (responses[fear.id] === true || responses[fear.id] === "true") {
-      fears.push(fear.text);
-    } else {
-      fearsNotSelected.push(fear.text);
-    }
-  });
+  // Budget Approach - Q93
+  const budgetApproach = responses[93] || "Not specified";
 
-  const debtAmount = responses[108] || "None";
+  // Debt Amount - Q94
+  const debtAmount = responses[94] || "None";
+
+  // SYMBIS Financial Fears - Q99-102 (structured as object for badge rendering)
+  const financialFears = {
+    lack_of_influence: responses[99] === true || responses[99] === "true" || responses[99] === 1,
+    lack_of_security: responses[100] === true || responses[100] === "true" || responses[100] === 1,
+    lack_of_respect: responses[101] === true || responses[101] === "true" || responses[101] === 1,
+    not_realizing_dreams: responses[102] === true || responses[102] === "true" || responses[102] === 1
+  };
+
+  // Get list of active fears for backwards compatibility
+  const activeFears = [];
+  if (financialFears.lack_of_influence) activeFears.push("Lack of Influence");
+  if (financialFears.lack_of_security) activeFears.push("Lack of Security");
+  if (financialFears.lack_of_respect) activeFears.push("Lack of Respect");
+  if (financialFears.not_realizing_dreams) activeFears.push("Not Realizing Dreams");
+
+  // Context questions for deeper analysis
+  const growingUpMoneyStress = parseInt(responses[103]) || 3;
+  const financialFutureAnxiety = parseInt(responses[104]) || 3;
+  const trustPartnerWithMoney = parseInt(responses[105]) || 3;
+
+  // Debt comfort levels
+  const comfortWithOwnDebt = parseInt(responses[95]) || 3;
+  const comfortWithPartnerDebt = parseInt(responses[96]) || 3;
 
   return {
-    money_style: responses[106] || "Not specified",
-    budget_approach: responses[107] || "Not specified",
-    budget_icon: getBudgetIcon(responses[107]),
+    money_style: moneyStyle,
+    budget_approach: budgetApproach,
+    budget_icon: getBudgetIcon(budgetApproach),
     debt: {
       amount: debtAmount,
-      has_debt: debtAmount !== "None" && debtAmount !== "No debt",
-      description: debtAmount === "None" ? "No current debt" : `Current debt: ${debtAmount}`
+      has_debt: debtAmount !== "None" && debtAmount !== "No debt" && debtAmount.toLowerCase() !== "none",
+      comfort_own: comfortWithOwnDebt,
+      comfort_partner: comfortWithPartnerDebt
     },
-    financial_fears: fears,
-    financial_fears_not_selected: fearsNotSelected
+    financial_fears: financialFears,
+    active_fears: activeFears,
+    context: {
+      grew_up_stressed: growingUpMoneyStress >= 4,
+      growing_up_score: growingUpMoneyStress,
+      future_anxiety: financialFutureAnxiety >= 4,
+      anxiety_score: financialFutureAnxiety,
+      trusts_partner: trustPartnerWithMoney >= 4,
+      trust_score: trustPartnerWithMoney
+    }
   };
 }
 
 function getBudgetIcon(budgetApproach) {
   if (!budgetApproach) return "none";
   const approach = budgetApproach.toLowerCase();
-  if (approach.includes("detailed") || approach.includes("track")) return "pencil";
-  if (approach.includes("plan") || approach.includes("budget")) return "calculator";
-  return "none";
+  if (approach.includes("religiously") || approach.includes("strict")) return "bars";
+  if (approach.includes("track") || approach.includes("generally")) return "clipboard";
+  return "warning";
 }
 
 function extractSexuality(person1Responses, person2Responses) {
