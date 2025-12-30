@@ -25,6 +25,8 @@ function extractBaseReport(person1Responses, person2Responses, user1Profile = nu
     couple: extractCouple(person1Responses, person2Responses, user1Profile, user2Profile),
     family_of_origin: extractFamilyOfOrigin(person1Responses, person2Responses),
     relationship: extractRelationship(person1Responses, person2Responses, user1Profile, user2Profile),
+    // DETERMINISTIC WELLBEING - calculated from survey, not AI-generated
+    wellbeing: extractWellbeing(person1Responses, person2Responses, user1Profile, user2Profile),
     finances: extractFinances(person1Responses, person2Responses),
     love: {
       sexuality: extractSexuality(person1Responses, person2Responses)
@@ -75,14 +77,14 @@ function extractPersonDemographics(responses, userProfile) {
   // Note: Photo URL and colors are now auto-assigned (not from survey questions)
   // Photo comes from profile picture uploaded during signup
   // Colors are assigned based on gender (blue for men, red/pink for women)
-  
+
   const gender = userProfile?.gender ? userProfile.gender.toLowerCase() : "male";
-  
+
   // Auto-assign colors based on gender
   const isMale = gender === "male" || gender === "m";
   const color_primary = isMale ? "#4FB8B1" : "#E88B88";  // Blue for men, red/pink for women
   const color_secondary = isMale ? "#3B9B95" : "#D67875";  // Darker shades for secondary
-  
+
   return {
     name: userProfile?.full_name || "Unknown",
     gender: gender,
@@ -119,10 +121,10 @@ function extractRelationship(person1Responses, person2Responses, user1Profile, u
   // After removing photo URL and color questions (Q1-3 removed), questions shifted by -3
   const status = user1Profile?.relationship_status || "Dating";
   const longDistance = user1Profile?.long_distance ?? false;
-  
+
   // New numbering: Q7=dating_length, Q8=prev_marriages, Q9=children, Q10=expecting, Q11=stability
   const expecting = person1Responses[10] === true || person1Responses[10] === "true";
-  
+
   return {
     status: status,
     previous_marriages: {
@@ -166,7 +168,7 @@ function extractFinances(person1Responses, person2Responses) {
 function extractPersonFinances(responses) {
   const fears = [];
   const fearsNotSelected = [];
-  
+
   // Q113-116: Financial fears
   const fearQuestions = [
     { id: 113, text: "Not having enough money" },
@@ -174,7 +176,7 @@ function extractPersonFinances(responses) {
     { id: 115, text: "Not being able to retire comfortably" },
     { id: 116, text: "Partner's spending habits" }
   ];
-  
+
   fearQuestions.forEach(fear => {
     if (responses[fear.id] === true || responses[fear.id] === "true") {
       fears.push(fear.text);
@@ -184,7 +186,7 @@ function extractPersonFinances(responses) {
   });
 
   const debtAmount = responses[108] || "None";
-  
+
   return {
     money_style: responses[106] || "Not specified",
     budget_approach: responses[107] || "Not specified",
@@ -217,7 +219,7 @@ function extractSexuality(person1Responses, person2Responses) {
 function extractPersonSexuality(responses) {
   const abstaining = responses[202] || "Not specified";
   const desireRating = parseInt(responses[203]) || 5;
-  
+
   return {
     abstaining: abstaining,
     desire_rating: desireRating,
@@ -229,12 +231,12 @@ function extractPersonSexuality(responses) {
 function extractSpirituality(person1Responses, person2Responses) {
   const person1 = extractPersonSpirituality(person1Responses);
   const person2 = extractPersonSpirituality(person2Responses);
-  
+
   // Calculate spiritual sync
   const practices = Object.keys(person1.spiritual_practices);
   let matchCount = 0;
   const differences = [];
-  
+
   practices.forEach(practice => {
     if (person1.spiritual_practices[practice] === person2.spiritual_practices[practice]) {
       matchCount++;
@@ -242,12 +244,12 @@ function extractSpirituality(person1Responses, person2Responses) {
       differences.push(practice.replace(/_/g, ' '));
     }
   });
-  
+
   const syncPercentage = (matchCount / practices.length) * 100;
   let syncLevel = "low";
   if (syncPercentage >= 70) syncLevel = "high";
   else if (syncPercentage >= 40) syncLevel = "medium";
-  
+
   return {
     person_1: person1,
     person_2: person2,
@@ -289,21 +291,21 @@ function extractExpectations(person1Responses, person2Responses) {
     { id: 141, task: "Disciplining children" },
     { id: 142, task: "Making major decisions" }
   ];
-  
+
   const agreedRoles = [];
   const needsDiscussion = [];
-  
+
   roleQuestions.forEach(role => {
     const person1View = person1Responses[role.id];
     const person2View = person2Responses[role.id];
-    
+
     // Normalize answers
     const p1Who = normalizeWho(person1View);
     const p2Who = normalizeWho(person2View);
-    
+
     // Check if they agree
     const agreed = p1Who === p2Who;
-    
+
     // Determine assignment
     let assignedTo = "Neither";
     if (agreed) {
@@ -311,7 +313,7 @@ function extractExpectations(person1Responses, person2Responses) {
       else if (p1Who === "You") assignedTo = person2Responses[1] || "Person 2";
       else if (p1Who === "Both") assignedTo = "Both";
     }
-    
+
     agreedRoles.push({
       task: role.task,
       person_1_view: { who: p1Who },
@@ -319,12 +321,12 @@ function extractExpectations(person1Responses, person2Responses) {
       agreed: agreed,
       assigned_to: assignedTo
     });
-    
+
     if (!agreed) {
       needsDiscussion.push(role.task);
     }
   });
-  
+
   return {
     agreed_roles: agreedRoles,
     needs_discussion: needsDiscussion
@@ -364,7 +366,7 @@ function calculateAverage(responses, questionIds) {
   const values = questionIds
     .map(id => parseInt(responses[id]))
     .filter(val => !isNaN(val));
-  
+
   if (values.length === 0) return 0;
   return values.reduce((sum, val) => sum + val, 0) / values.length;
 }
@@ -387,11 +389,11 @@ function scaleToPercentage(score) {
 function calculateCompatibilityScore(person1Responses, person2Responses, questionIds) {
   let totalDifference = 0;
   let validQuestions = 0;
-  
+
   questionIds.forEach(id => {
     const p1 = parseFloat(person1Responses[id]);
     const p2 = parseFloat(person2Responses[id]);
-    
+
     if (!isNaN(p1) && !isNaN(p2)) {
       // Calculate normalized difference (0-1 scale)
       const maxPossible = 5; // Most questions use 1-5 scale
@@ -400,13 +402,13 @@ function calculateCompatibilityScore(person1Responses, person2Responses, questio
       validQuestions++;
     }
   });
-  
+
   if (validQuestions === 0) return 50; // Neutral score if no data
-  
+
   // Convert to 0-100 where 100 = perfect alignment
   const avgDifference = totalDifference / validQuestions;
   const compatibilityScore = (1 - avgDifference) * 100;
-  
+
   return Math.round(compatibilityScore);
 }
 
@@ -416,7 +418,7 @@ function calculateCompatibilityScore(person1Responses, person2Responses, questio
  */
 function extractTopValues(responses, questionIds, topN = 5) {
   const values = [];
-  
+
   questionIds.forEach(id => {
     const score = parseFloat(responses[id]);
     if (!isNaN(score)) {
@@ -427,10 +429,10 @@ function extractTopValues(responses, questionIds, topN = 5) {
       });
     }
   });
-  
+
   // Sort by score descending
   values.sort((a, b) => b.score - a.score);
-  
+
   // Return top N
   return values.slice(0, topN);
 }
@@ -441,14 +443,14 @@ function extractTopValues(responses, questionIds, topN = 5) {
  */
 function identifyAgreementGaps(person1Responses, person2Responses, questionIds, threshold = 2) {
   const gaps = [];
-  
+
   questionIds.forEach(id => {
     const p1 = parseFloat(person1Responses[id]);
     const p2 = parseFloat(person2Responses[id]);
-    
+
     if (!isNaN(p1) && !isNaN(p2)) {
       const difference = Math.abs(p1 - p2);
-      
+
       if (difference >= threshold) {
         gaps.push({
           questionId: id,
@@ -461,10 +463,10 @@ function identifyAgreementGaps(person1Responses, person2Responses, questionIds, 
       }
     }
   });
-  
+
   // Sort by difference descending (biggest gaps first)
   gaps.sort((a, b) => b.difference - a.difference);
-  
+
   return gaps;
 }
 
@@ -476,15 +478,15 @@ function calculateDimensionScore(responses, questionIds) {
   const scores = questionIds
     .map(id => parseInt(responses[id]))
     .filter(val => !isNaN(val) && val >= 1 && val <= 5);
-  
+
   if (scores.length === 0) return 50; // Neutral if no data
-  
+
   const avgScore = scores.reduce((sum, val) => sum + val, 0) / scores.length;
-  
+
   // Convert 1-5 scale to 0-100 position
   // 1 = 0, 3 = 50, 5 = 100
   const position = ((avgScore - 1) / 4) * 100;
-  
+
   return Math.round(position);
 }
 
@@ -498,12 +500,12 @@ function determinePersonalityType(responses) {
   // Q73-82: Low = Cooperating (not aggressive)
   // Q83-92: High = Affirming (feelings over facts)
   // Q103-112: High = Analyzing (cautious, methodical)
-  
+
   const steadiness = calculateAverage(responses, [53, 54, 55]); // Cooperating indicators
   const aggressiveness = calculateAverage(responses, [73, 74, 75, 76, 77]); // Directing indicators
   const expressiveness = calculateAverage(responses, [83, 84, 85, 86, 87]); // Affirming indicators
   const cautiousness = calculateAverage(responses, [103, 104, 105, 106, 107]); // Analyzing indicators
-  
+
   // Find dominant trait
   const scores = {
     'Cooperating Spouse': steadiness,
@@ -511,17 +513,17 @@ function determinePersonalityType(responses) {
     'Directing Spouse': aggressiveness,
     'Analyzing Spouse': cautiousness
   };
-  
+
   let maxType = 'Cooperating Spouse';
   let maxScore = steadiness;
-  
+
   Object.entries(scores).forEach(([type, score]) => {
     if (score > maxScore) {
       maxScore = score;
       maxType = type;
     }
   });
-  
+
   return maxType;
 }
 
@@ -538,9 +540,9 @@ function extractCautionFlags(responses) {
     71: "Undisclosed financial concerns",
     72: "Anger management challenges"
   };
-  
+
   const flags = [];
-  
+
   Object.entries(flagQuestions).forEach(([qId, description]) => {
     const response = responses[parseInt(qId)];
     if (response === true || response === "true" || response === "True") {
@@ -551,7 +553,7 @@ function extractCautionFlags(responses) {
       });
     }
   });
-  
+
   return flags;
 }
 
@@ -561,10 +563,10 @@ function extractCautionFlags(responses) {
  */
 function assessRelationshipTimeline(datingLength, age1, age2) {
   const avgAge = (age1 + age2) / 2;
-  
+
   let score = 50; // Default neutral
   let assessment = "moderate";
-  
+
   if (datingLength === "2+ years") {
     score = 90;
     assessment = "excellent";
@@ -581,12 +583,12 @@ function assessRelationshipTimeline(datingLength, age1, age2) {
     score = 25;
     assessment = "significant_concern";
   }
-  
+
   // Adjust for age - younger couples need more time
   if (avgAge < 23 && score > 50) {
     score -= 10;
   }
-  
+
   return {
     score: score,
     assessment: assessment,
@@ -605,6 +607,392 @@ function generateCompatibilitySummary(person1Responses, person2Responses) {
     conflict: calculateCompatibilityScore(person1Responses, person2Responses, [311, 312, 313, 314, 315]),
     spirituality: calculateCompatibilityScore(person1Responses, person2Responses, [341, 342, 343, 344, 345])
   };
+}
+
+// ============================================================================
+// DETERMINISTIC WELLBEING EXTRACTION
+// ============================================================================
+
+/**
+ * SYMBIS-style templates for wellbeing descriptions
+ * These are pulled directly from official SYMBIS sample reports
+ */
+const WELLBEING_TEMPLATES = {
+  self_concept: {
+    strong: {
+      level: "Strong",
+      description: "You have a strong sense of yourself. You know who you are and you have confidence in your abilities. In short, you have a healthy self-concept that bolsters emotional health and wellbeing."
+    },
+    moderate: {
+      level: "Moderate",
+      description: "When it comes to your sense of self and your confidence in your abilities, you vacillate. At times you feel strong and sure of yourself but you also have just as many times when you feel unstable. Your self-esteem wavers."
+    },
+    needs_work: {
+      level: "Needs Work",
+      description: "Your self-concept scores suggest you may struggle with confidence and self-worth at times. This doesn't disqualify you from marriage, but building a stronger sense of self will help you show up more fully in your partnership."
+    }
+  },
+  maturity: {
+    optimal: {
+      level: "Optimal",
+      description: "By default, your age (over 25) puts you in an optimal zone for lifelong marriage. Ages 24 and younger are correlated with higher divorce rates."
+    },
+    good: {
+      level: "Good",
+      description: "Your age is within a generally good range for marriage. While brain development continues into the mid-20s, your survey responses indicate emotional maturity that bodes well for marriage."
+    },
+    developing: {
+      level: "Developing",
+      description: "At your age, you are in a developmental stage where significant personal growth still occurs. This doesn't preclude a successful marriage, but be aware that you may change significantly in the next few years."
+    }
+  },
+  independence: {
+    healthy: {
+      level: "Healthy",
+      description: "You tend to be your own person who is likely to be more objective about your current relationship. As a result, you report having minimal unresolved issues or pain in relation to your parents. This sense of healthy autonomy will aid you in building a strong alliance in your marriage."
+    },
+    moderate: {
+      level: "Moderate",
+      description: "You show a moderate level of independence from your family of origin. While you maintain appropriate connections, there may be areas where family expectations still influence your decisions. Being intentional about prioritizing your spouse will strengthen your marriage."
+    },
+    dependent: {
+      level: "Dependent",
+      description: "Your responses indicate significant reliance on your parents for decision-making and emotional support. While family closeness can be positive, it's important that your spouse becomes your primary confidant and decision-making partner in marriage."
+    }
+  },
+  longevity: {
+    excellent: {
+      assessment: "excellent",
+      description: "You have dated for more than two years, which research shows correlates strongly with marital satisfaction. This timeframe allows you to see each other through multiple seasons, challenges, and life circumstances."
+    },
+    moderate: {
+      assessment: "moderate",
+      description: "You've dated between 18-24 months. This is approaching the research-backed ideal of 2+ years. You likely have a solid foundation, but ensure you've weathered various life circumstances together before committing to marriage."
+    },
+    moderate_caution: {
+      assessment: "moderate_caution",
+      description: "The mere fact that you two have dated for less than two years puts you into a moderate caution zone for longevity. Dating for a minimum of two years correlates with the highest rate of marital satisfaction. Consider an extended engagement if you haven't hit the two-year mark."
+    },
+    concern: {
+      assessment: "concern",
+      description: "Your dating relationship is relatively new. While some couples successfully marry after brief courtships, research shows significantly higher success rates for couples who date 2+ years. Slow down and give yourselves time to see each other in varied circumstances."
+    }
+  },
+  stability: {
+    excellent: {
+      assessment: "excellent",
+      description: "Because you characterize your relationship as being consistent, reliable, and dependable, with little turbulence or conflict, you are more likely to have practiced negotiation and compromise. Your stability bodes well for your marital readiness."
+    },
+    good: {
+      assessment: "good",
+      description: "Your relationship shows reasonable stability, though you've experienced some ups and downs. This is normal—the key is that you've navigated these together and learned from the experience."
+    },
+    concern: {
+      assessment: "concern",
+      description: "Your characterization of the relationship as having significant turbulence raises concerns about readiness. On-again, off-again patterns often continue into marriage. Consider pre-marital counseling to address the sources of instability."
+    }
+  },
+  similarity: {
+    excellent: {
+      assessment: "excellent",
+      description: "You share a great deal of your core values and this heightens your marital readiness."
+    },
+    good: {
+      assessment: "good",
+      description: "You generally agree on relationship fundamentals, though some areas may benefit from continued discussion. This is manageable with intentional communication."
+    },
+    concern: {
+      assessment: "concern",
+      description: "There appears to be a gap in how you view your relationship readiness. Before marrying, ensure you're truly on the same page about timing, expectations, and what marriage means to each of you."
+    }
+  }
+};
+
+/**
+ * Caution flag definitions from Q67-76
+ */
+const CAUTION_FLAG_DEFINITIONS = [
+  { id: 67, label: "Abuse between parents" },
+  { id: 68, label: "Depression" },
+  { id: 69, label: "Partner's annoying habit" },
+  { id: 70, label: "Addiction concerns" },
+  { id: 71, label: "Secret debt" },
+  { id: 72, label: "Anger management" },
+  { id: 73, label: "Family divorce history" },
+  { id: 74, label: "Unconfessed secrets" },
+  { id: 75, label: "Unresolved trauma" },
+  { id: 76, label: "Trust issues" }
+];
+
+/**
+ * Extract complete wellbeing data deterministically
+ */
+function extractWellbeing(person1Responses, person2Responses, user1Profile, user2Profile) {
+  const person1Age = user1Profile?.age || 25;
+  const person2Age = user2Profile?.age || 25;
+
+  // Get dating length from Q7
+  const datingLength = person1Responses[7] || person2Responses[7] || "12-18 months";
+
+  // Get stability rating from Q11
+  const stabilityRating = parseInt(person1Responses[11]) || parseInt(person2Responses[11]) || 3;
+
+  // Calculate similarity from Q12-15 averages
+  const p1SimAvg = calculateWellbeingQuestionAverage(person1Responses, [12, 13, 14, 15]);
+  const p2SimAvg = calculateWellbeingQuestionAverage(person2Responses, [12, 13, 14, 15]);
+
+  return {
+    individual: {
+      person_1: extractPersonWellbeing(person1Responses, person1Age),
+      person_2: extractPersonWellbeing(person2Responses, person2Age)
+    },
+    relationship: extractRelationshipWellbeing(datingLength, stabilityRating, p1SimAvg, p2SimAvg)
+  };
+}
+
+/**
+ * Extract individual person wellbeing with deterministic templates
+ */
+function extractPersonWellbeing(responses, age) {
+  // Calculate scores
+  const selfConceptScore = calculateSelfConceptScore(responses);
+  const independenceScore = calculateIndependenceScore(responses);
+  const maturityScore = calculateMaturityScore(age);
+
+  // Calculate overall (average of three, scaled to 0-100)
+  const overallScore = Math.round(((selfConceptScore + independenceScore + maturityScore) / 3) * 10);
+
+  // Get templates based on scores
+  const selfConceptTemplate = getSelfConceptTemplate(selfConceptScore);
+  const maturityTemplate = getMaturityTemplate(maturityScore);
+  const independenceTemplate = getIndependenceTemplate(independenceScore);
+
+  // Extract caution flags for this person
+  const cautionFlags = extractWellbeingCautionFlags(responses);
+
+  return {
+    overall_score: overallScore,
+    categories: {
+      self_concept: {
+        score: selfConceptScore,
+        level: selfConceptTemplate.level,
+        description: selfConceptTemplate.description
+      },
+      maturity: {
+        score: maturityScore,
+        level: maturityTemplate.level,
+        description: maturityTemplate.description
+      },
+      independence: {
+        score: independenceScore,
+        level: independenceTemplate.level,
+        description: independenceTemplate.description
+      }
+    },
+    caution_flags: cautionFlags
+  };
+}
+
+/**
+ * Calculate self-concept score from Q37-40, Q47
+ * Formula: (Q37 + Q38 + Q39 + Q40 + (6 - Q47)) / 5, then scale to 1-10
+ */
+function calculateSelfConceptScore(responses) {
+  const q37 = parseFloat(responses[37]) || 3;
+  const q38 = parseFloat(responses[38]) || 3;
+  const q39 = parseFloat(responses[39]) || 3;
+  const q40 = parseFloat(responses[40]) || 3;
+  const q47 = parseFloat(responses[47]) || 3; // Reverse scored
+
+  const rawScore = (q37 + q38 + q39 + q40 + (6 - q47)) / 5;
+  return Math.round(rawScore * 2 * 10) / 10; // Scale to 1-10
+}
+
+/**
+ * Calculate independence score from Q44-46
+ * Formula: ((6 - Q44) + Q45 + Q46) / 3, then scale to 1-10
+ */
+function calculateIndependenceScore(responses) {
+  const q44 = parseFloat(responses[44]) || 3; // Reverse scored
+  const q45 = parseFloat(responses[45]) || 3;
+  const q46 = parseFloat(responses[46]) || 3;
+
+  const rawScore = ((6 - q44) + q45 + q46) / 3;
+  return Math.round(rawScore * 2 * 10) / 10; // Scale to 1-10
+}
+
+/**
+ * Calculate maturity score from age
+ */
+function calculateMaturityScore(age) {
+  if (!age || age < 18) return 5;
+  if (age >= 25) return 9;
+  return Math.round((age / 25) * 9 * 10) / 10;
+}
+
+/**
+ * Get self-concept template based on score
+ */
+function getSelfConceptTemplate(score) {
+  if (score >= 8.0) return WELLBEING_TEMPLATES.self_concept.strong;
+  if (score >= 5.0) return WELLBEING_TEMPLATES.self_concept.moderate;
+  return WELLBEING_TEMPLATES.self_concept.needs_work;
+}
+
+/**
+ * Get maturity template based on score
+ */
+function getMaturityTemplate(score) {
+  if (score >= 8.0) return WELLBEING_TEMPLATES.maturity.optimal;
+  if (score >= 6.0) return WELLBEING_TEMPLATES.maturity.good;
+  return WELLBEING_TEMPLATES.maturity.developing;
+}
+
+/**
+ * Get independence template based on score
+ */
+function getIndependenceTemplate(score) {
+  if (score >= 8.0) return WELLBEING_TEMPLATES.independence.healthy;
+  if (score >= 5.0) return WELLBEING_TEMPLATES.independence.moderate;
+  return WELLBEING_TEMPLATES.independence.dependent;
+}
+
+/**
+ * Extract caution flags for a person from Q67-76
+ */
+function extractWellbeingCautionFlags(responses) {
+  const flags = [];
+
+  CAUTION_FLAG_DEFINITIONS.forEach(q => {
+    const response = responses[q.id];
+    if (response === true || response === 'true' || response === 'Yes' || response === 'yes' || response === 1) {
+      flags.push(q.label);
+    }
+  });
+
+  // Sort alphabetically
+  flags.sort((a, b) => a.localeCompare(b));
+
+  return {
+    count: flags.length,
+    items: flags
+  };
+}
+
+/**
+ * Extract relationship wellbeing with deterministic templates
+ */
+function extractRelationshipWellbeing(datingLength, stabilityRating, person1SimAvg, person2SimAvg) {
+  // Longevity assessment
+  const longevity = getLongevityTemplate(datingLength);
+
+  // Stability assessment
+  const stability = getStabilityTemplateWellbeing(stabilityRating);
+
+  // Similarity assessment
+  const similarity = getSimilarityTemplate(person1SimAvg, person2SimAvg);
+
+  // Calculate overall score
+  const overallScore = Math.round((longevity.score + stability.score + similarity.score) / 3);
+
+  return {
+    overall_score: overallScore,
+    longevity: {
+      assessment: longevity.assessment,
+      description: longevity.description
+    },
+    stability: {
+      assessment: stability.assessment,
+      description: stability.description
+    },
+    similarity: {
+      assessment: similarity.assessment,
+      description: similarity.description
+    }
+  };
+}
+
+/**
+ * Get longevity template based on dating length
+ * SYMBIS specifies 4 distinct categories:
+ * - 2+ years → excellent
+ * - 18-24 months → moderate 
+ * - 12-18 months → moderate_caution
+ * - 0-12 months → concern
+ */
+function getLongevityTemplate(datingLength) {
+  const length = (datingLength || '').toLowerCase().trim();
+
+  // Check in order from shortest to longest durations to avoid false matches
+
+  // 0-6 months (concern)
+  if (length.includes('0-6') || length.includes('0 to 6') || length === 'less than 6 months') {
+    return { ...WELLBEING_TEMPLATES.longevity.concern, score: 40 };
+  }
+
+  // 6-12 months (concern)
+  if (length.includes('6-12') || length.includes('6 to 12') || length.includes('half a year')) {
+    return { ...WELLBEING_TEMPLATES.longevity.concern, score: 40 };
+  }
+
+  // 12-18 months (moderate_caution)
+  if (length.includes('12-18') || length.includes('12 to 18') || length === '1 year' || length === 'one year') {
+    return { ...WELLBEING_TEMPLATES.longevity.moderate_caution, score: 65 };
+  }
+
+  // 18-24 months (moderate)
+  if (length.includes('18-24') || length.includes('18 to 24') || length.includes('18 months') || length.includes('1.5 year')) {
+    return { ...WELLBEING_TEMPLATES.longevity.moderate, score: 75 };
+  }
+
+  // 2+ years (excellent) - check last to avoid matching "18-24" due to the "2"
+  if (length.includes('2+') || length.includes('2 years') || length.includes('two years') ||
+    length.includes('3 years') || length.includes('4 years') || length.includes('5 years') ||
+    length.includes('more than 2') || length.includes('over 2') ||
+    length.match(/^[3-9]/) || length.match(/\d{2,}/)) {
+    return { ...WELLBEING_TEMPLATES.longevity.excellent, score: 90 };
+  }
+
+  // Default to moderate_caution if unclear
+  return { ...WELLBEING_TEMPLATES.longevity.moderate_caution, score: 65 };
+}
+
+/**
+ * Get stability template based on Q11 rating
+ */
+function getStabilityTemplateWellbeing(stabilityRating) {
+  if (stabilityRating >= 4) {
+    return { ...WELLBEING_TEMPLATES.stability.excellent, score: 90 };
+  }
+  if (stabilityRating === 3) {
+    return { ...WELLBEING_TEMPLATES.stability.good, score: 70 };
+  }
+  return { ...WELLBEING_TEMPLATES.stability.concern, score: 40 };
+}
+
+/**
+ * Get similarity template based on Q12-15 averages
+ */
+function getSimilarityTemplate(person1Avg, person2Avg) {
+  if (person1Avg >= 4.0 && person2Avg >= 4.0) {
+    return { ...WELLBEING_TEMPLATES.similarity.excellent, score: 90 };
+  }
+  if (person1Avg >= 3.0 && person2Avg >= 3.0) {
+    return { ...WELLBEING_TEMPLATES.similarity.good, score: 70 };
+  }
+  return { ...WELLBEING_TEMPLATES.similarity.concern, score: 40 };
+}
+
+/**
+ * Calculate average of specific questions for wellbeing
+ */
+function calculateWellbeingQuestionAverage(responses, questionIds) {
+  const values = questionIds
+    .map(id => parseFloat(responses[id]))
+    .filter(val => !isNaN(val));
+
+  if (values.length === 0) return 3; // Default to middle
+  return values.reduce((sum, val) => sum + val, 0) / values.length;
 }
 
 // ============================================================================
@@ -631,77 +1019,77 @@ function calculateMindsetType(responses) {
     restless: 0,
     reluctant: 0
   };
-  
+
   // RESOLUTE: Marriage for life, divorce unacceptable, steadfast commitment
   // Low on divorce acceptance (Q17, 20, 23 - reverse scored)
   // High on commitment, sacrifice, perseverance (Q22, 24, 27, 28, 31-33, 35-36)
   const resoluteCommitmentQuestions = [22, 24, 27, 28, 31, 32, 33, 35, 36];
   scores.resolute += calculateAverage(responses, resoluteCommitmentQuestions) * 2;
-  
+
   // Reverse score divorce acceptance questions (low = resolute)
   const divorceAcceptanceQuestions = [17, 20, 23];
   scores.resolute += (5 - calculateAverage(responses, divorceAcceptanceQuestions)) * 2;
-  
+
   // RATIONAL: Marriage as hard work, logical partnership, realistic expectations
   // High on "work required" (Q22-24)
   // Low on idealism/magic (Q17-21, 29-30 - reverse)
   // Moderate-high on practical approach
   const rationalWorkQuestions = [22, 23, 24];
   scores.rational += calculateAverage(responses, rationalWorkQuestions) * 2;
-  
+
   // Reverse score idealism (low idealism = rational)
   const idealismQuestions = [17, 18, 19, 29, 30];
   scores.rational += (5 - calculateAverage(responses, idealismQuestions)) * 1.5;
-  
+
   // Not as extreme on commitment as Resolute, but practical
   const practicalQuestions = [46, 47, 48];
   scores.rational += calculateAverage(responses, practicalQuestions) * 1;
-  
+
   // ROMANTIC: Soulmates, magic, intense passion, expects excitement
   // High on soul mate beliefs (Q17-21, 29-30)
   // High on passion/intensity (Q21, 34)
   // High on emotional expression (Q37-40)
   const soulMateQuestions = [17, 18, 19, 20, 21, 29, 30];
   scores.romantic += calculateAverage(responses, soulMateQuestions) * 2;
-  
+
   const passionQuestions = [34];
   scores.romantic += calculateAverage(responses, passionQuestions) * 1.5;
-  
+
   const expressionQuestions = [37, 38, 39, 40];
   scores.romantic += calculateAverage(responses, expressionQuestions) * 1;
-  
+
   // RESTLESS: Cautious, exploring options, unsure about commitment
   // High on worry/anxiety (Q26-28)
   // Lower confidence (Q47-50 - reverse)
   // Trust issues (Q27, 28, 45)
   const restlessWorryQuestions = [26, 27, 28];
   scores.restless += calculateAverage(responses, restlessWorryQuestions) * 2;
-  
+
   // Reverse score confidence (low confidence = restless)
   const confidenceQuestions = [47, 48, 49, 50];
   scores.restless += (5 - calculateAverage(responses, confidenceQuestions)) * 1.5;
-  
+
   // Past pain/trust issues
   const trustIssuesQuestions = [45];
   scores.restless += (5 - calculateAverage(responses, trustIssuesQuestions)) * 1;
-  
+
   // RELUCTANT: Not inclined to marry, resistant to traditional roles
   // Very low on all commitment questions (Q17-36)
   // High on independence
   // Low on marriage enthusiasm
   const marriageEnthusiasmQuestions = [17, 18, 19, 20, 21, 22, 24, 27, 28, 31, 32, 33, 35, 36];
   scores.reluctant += (5 - calculateAverage(responses, marriageEnthusiasmQuestions)) * 2;
-  
+
   // High on independence (Q44 - reverse scored, low dependence = high independence)
   const independenceQuestions = [44];
   scores.reluctant += (5 - calculateAverage(responses, independenceQuestions)) * 1;
-  
+
   // Find highest scoring mindset
-  const maxMindset = Object.entries(scores).reduce((max, [key, value]) => 
-    value > max.value ? { key, value } : max, 
+  const maxMindset = Object.entries(scores).reduce((max, [key, value]) =>
+    value > max.value ? { key, value } : max,
     { key: 'rational', value: scores.rational }
   );
-  
+
   const typeMap = {
     resolute: "Resolute Mindset",
     rational: "Rational Mindset",
@@ -709,7 +1097,7 @@ function calculateMindsetType(responses) {
     restless: "Restless Mindset",
     reluctant: "Reluctant Mindset"
   };
-  
+
   return typeMap[maxMindset.key];
 }
 
@@ -722,36 +1110,36 @@ function calculateMindsetType(responses) {
 function calculateDynamicsType(responses) {
   // Cooperation indicators: Q73-82, Q113-121 (collaborative, flexible questions)
   const cooperationQuestions = [73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 113, 114, 115, 116, 117, 118, 119, 120, 121];
-  
+
   // Affirmation indicators: Q83-92, Q122-131 (supportive, encouraging questions)
   const affirmationQuestions = [83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131];
-  
+
   // Direction indicators: Q93-102, Q132-141 (leadership, decisive questions)
   const directionQuestions = [93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141];
-  
+
   // Analysis indicators: Q103-112, Q142-150 (thoughtful, processing questions)
   const analysisQuestions = [103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 142, 143, 144, 145, 146, 147, 148, 149, 150];
-  
+
   const scores = {
     cooperation: calculateAverage(responses, cooperationQuestions),
     affirmation: calculateAverage(responses, affirmationQuestions),
     direction: calculateAverage(responses, directionQuestions),
     analysis: calculateAverage(responses, analysisQuestions)
   };
-  
+
   // Find highest scoring dimension
-  const maxDimension = Object.entries(scores).reduce((max, [key, value]) => 
-    value > max.value ? { key, value } : max, 
+  const maxDimension = Object.entries(scores).reduce((max, [key, value]) =>
+    value > max.value ? { key, value } : max,
     { key: 'cooperation', value: scores.cooperation }
   );
-  
+
   const typeMap = {
     cooperation: "Cooperating Spouse",
     affirmation: "Affirming Spouse",
     direction: "Directing Spouse",
     analysis: "Analyzing Spouse"
   };
-  
+
   return typeMap[maxDimension.key];
 }
 

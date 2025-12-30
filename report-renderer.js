@@ -12,29 +12,29 @@ document.addEventListener('DOMContentLoaded', () => {
   if (debugMode) {
     console.log('🐛 Debug mode enabled');
   }
-  
+
   loadReportData();
 });
 
 // Load report data from localStorage
 function loadReportData() {
   const savedReport = localStorage.getItem('generated_report');
-  
+
   if (!savedReport) {
     console.warn('No report data found in localStorage');
     showNoDataMessage();
     return;
   }
-  
+
   try {
     reportData = JSON.parse(savedReport);
     console.log('✅ Report data loaded successfully');
     console.log('📊 Report sections:', Object.keys(reportData));
-    
+
     if (debugMode) {
       console.log('📝 Full report data:', reportData);
     }
-    
+
     renderCurrentPage();
   } catch (error) {
     console.error('❌ Error parsing report data:', error);
@@ -59,9 +59,9 @@ function showNoDataMessage() {
 function renderCurrentPage() {
   const path = window.location.pathname;
   const page = path.substring(path.lastIndexOf('/') + 1);
-  
+
   console.log(`🎨 Rendering page: ${page || 'index'}`);
-  
+
   switch (page) {
     case 'index':
     case 'index.html':
@@ -125,7 +125,7 @@ function renderCurrentPage() {
       renderPage15();
       break;
   }
-  
+
   console.log('✨ Page rendering complete');
 }
 
@@ -159,11 +159,11 @@ function updateText(selector, value, fallback = '[Data not available]') {
     }
     return;
   }
-  
+
   // Use nullish coalescing to properly handle 0 as a valid value
   const displayValue = (value !== null && value !== undefined) ? value : fallback;
   el.textContent = displayValue;
-  
+
   if (debugMode && displayValue === fallback) {
     el.style.backgroundColor = '#FFF3CD'; // Light yellow highlight
     el.title = 'Using fallback value';
@@ -181,7 +181,7 @@ function updateHTML(selector, value, fallback = '<p class="text-gray-500 italic"
     }
     return;
   }
-  
+
   // Use explicit null/undefined check to properly handle 0 and empty strings
   if (value === null || value === undefined || value === '') {
     el.innerHTML = fallback;
@@ -191,7 +191,7 @@ function updateHTML(selector, value, fallback = '<p class="text-gray-500 italic"
     }
     return;
   }
-  
+
   // Convert plain text with line breaks to proper HTML paragraphs
   let htmlContent = value;
   if (typeof value === 'string' && !value.includes('<')) {
@@ -199,9 +199,9 @@ function updateHTML(selector, value, fallback = '<p class="text-gray-500 italic"
     const paragraphs = value.split('\n\n').filter(p => p.trim());
     htmlContent = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
   }
-  
+
   el.innerHTML = htmlContent;
-  
+
   if (debugMode) {
     el.style.border = '1px dashed #28a745'; // Green border for AI content
     el.title = 'AI-generated content';
@@ -216,7 +216,7 @@ function updateAll(selector, value, fallback = '') {
   if (elements.length === 0 && debugMode) {
     console.warn(`⚠️ No elements found: ${selector}`);
   }
-  
+
   // Use explicit null/undefined check to properly handle 0 as a valid value
   const displayValue = (value !== null && value !== undefined) ? value : fallback;
   elements.forEach(el => {
@@ -238,13 +238,13 @@ function updateList(selector, items, fallback = ['No items available']) {
     }
     return;
   }
-  
+
   const displayItems = (items && items.length > 0) ? items : fallback;
-  
+
   el.innerHTML = displayItems
     .map(item => `<li>${item}</li>`)
     .join('');
-  
+
   if (debugMode && items === fallback) {
     el.style.backgroundColor = '#FFF3CD';
   }
@@ -261,9 +261,9 @@ function updateImage(selector, src, fallback = '/images/default-avatar.png') {
     }
     return;
   }
-  
+
   el.src = src || fallback;
-  el.onerror = function() {
+  el.onerror = function () {
     this.src = fallback;
     if (debugMode) {
       console.warn(`⚠️ Image failed to load: ${src}`);
@@ -282,10 +282,10 @@ function updateStars(selector, rating) {
     }
     return;
   }
-  
+
   const numRating = parseInt(rating) || 0;
   const stars = [];
-  
+
   for (let i = 1; i <= 5; i++) {
     if (i <= numRating) {
       stars.push('<span style="color: #E8C547;">★</span>');
@@ -293,7 +293,7 @@ function updateStars(selector, rating) {
       stars.push('<span class="opacity-30">★</span>');
     }
   }
-  
+
   el.innerHTML = stars.join('');
 }
 
@@ -303,16 +303,16 @@ function updateStars(selector, rating) {
 function updateScore(selector, score, maxScore = 100) {
   const el = document.querySelector(selector);
   if (!el) return;
-  
+
   const percentage = (score / maxScore) * 100;
   el.textContent = Math.round(score);
-  
+
   // Update progress bars if they exist
   const progressBar = el.querySelector('.progress-fill');
   if (progressBar) {
     progressBar.style.width = `${percentage}%`;
   }
-  
+
   if (debugMode) {
     el.title = `Score: ${score}/${maxScore} (${percentage.toFixed(1)}%)`;
   }
@@ -321,14 +321,14 @@ function updateScore(selector, score, maxScore = 100) {
 // PAGE 1: Demographics, Family, Relationship
 function renderPage1() {
   if (!reportData) return;
-  
+
   const { couple, family_of_origin, relationship, report_metadata } = reportData;
-  
+
   // Header info
   updateText('[data-field="completion_date"]', report_metadata?.completion_date || '');
   updateText('[data-field="invite_code"]', report_metadata?.invite_code || '');
   updateText('[data-field="wedding_date"]', report_metadata?.wedding_date || '');
-  
+
   // Person 1
   updateText('[data-field="person1_name"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
@@ -338,7 +338,7 @@ function renderPage1() {
   updateText('[data-field="person1_education"]', couple?.person_1?.education || '');
   updateText('[data-field="person1_employment"]', couple?.person_1?.employment_status || '');
   updateText('[data-field="person1_job"]', couple?.person_1?.employment_category || '');
-  
+
   // Person 2
   updateText('[data-field="person2_name"]', couple?.person_2?.name || 'Person 2');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
@@ -348,7 +348,7 @@ function renderPage1() {
   updateText('[data-field="person2_education"]', couple?.person_2?.education || '');
   updateText('[data-field="person2_employment"]', couple?.person_2?.employment_status || '');
   updateText('[data-field="person2_job"]', couple?.person_2?.employment_category || '');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
@@ -360,24 +360,24 @@ function renderPage1() {
   });
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // Colors
   const person1Color = document.querySelectorAll('[data-color="person1"]');
   const person2Color = document.querySelectorAll('[data-color="person2"]');
   person1Color.forEach(el => el.style.backgroundColor = couple?.person_1?.color_primary || '#E88B88');
   person2Color.forEach(el => el.style.backgroundColor = couple?.person_2?.color_primary || '#4FB8B1');
-  
+
   // Family of Origin
   updateText('[data-field="person1_parents"]', family_of_origin?.person_1?.parents_marital_status || '');
   updateText('[data-field="person1_raised"]', family_of_origin?.person_1?.how_raised || '');
   updateText('[data-field="person1_birth_order"]', family_of_origin?.person_1?.birth_order || '');
   updateText('[data-field="person1_siblings"]', family_of_origin?.person_1?.number_of_siblings || '');
-  
+
   updateText('[data-field="person2_parents"]', family_of_origin?.person_2?.parents_marital_status || '');
   updateText('[data-field="person2_raised"]', family_of_origin?.person_2?.how_raised || '');
   updateText('[data-field="person2_birth_order"]', family_of_origin?.person_2?.birth_order || '');
   updateText('[data-field="person2_siblings"]', family_of_origin?.person_2?.number_of_siblings || '');
-  
+
   // Relationship
   updateText('[data-field="relationship_status"]', relationship?.status || '');
   updateText('[data-field="person1_prev_marriages"]', relationship?.previous_marriages?.person_1 || '0');
@@ -393,73 +393,73 @@ function renderPage1() {
 // PAGE 2: Momentum & Overview
 function renderPage2() {
   if (!reportData) return;
-  
+
   const { momentum, couple, wellbeing, dynamics } = reportData;
-  
+
   console.log('🎨 Rendering Page 2');
   console.log('  - Momentum:', momentum?.overall_level);
   console.log('  - Wellbeing P1:', wellbeing?.individual?.person_1?.overall_score);
   console.log('  - Wellbeing P2:', wellbeing?.individual?.person_2?.overall_score);
   console.log('  - Dynamics P1:', dynamics?.person_1?.type);
   console.log('  - Dynamics P2:', dynamics?.person_2?.type);
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // Momentum Level
   updateText('[data-field="momentum_level"]', momentum?.overall_level || 'MODERATE');
   updateText('[data-field="momentum_description"]', momentum?.overall_description || '');
-  
+
   // Mindset types
   updateText('[data-field="person1_mindset"]', momentum?.mindset?.person_1?.type || 'Balanced Mindset');
   updateText('[data-field="person2_mindset"]', momentum?.mindset?.person_2?.type || 'Balanced Mindset');
-  
+
   // Wellbeing scores (with % symbol)
   const p1Score = wellbeing?.individual?.person_1?.overall_score;
   const p2Score = wellbeing?.individual?.person_2?.overall_score;
   updateText('[data-field="person1_wellbeing"]', p1Score ? `${Math.round(p1Score)}%` : '0%');
   updateText('[data-field="person2_wellbeing"]', p2Score ? `${Math.round(p2Score)}%` : '0%');
-  
+
   // Caution flags
   const p1Flags = wellbeing?.individual?.person_1?.caution_flags?.count || 0;
   const p2Flags = wellbeing?.individual?.person_2?.caution_flags?.count || 0;
   console.log('  - Caution Flags P1:', p1Flags, '(from:', wellbeing?.individual?.person_1?.caution_flags, ')');
   console.log('  - Caution Flags P2:', p2Flags, '(from:', wellbeing?.individual?.person_2?.caution_flags, ')');
-  
+
   const p1Element = document.querySelector('[data-field="person1_caution_count"]');
   const p2Element = document.querySelector('[data-field="person2_caution_count"]');
   console.log('  - P1 Caution Element found:', !!p1Element, 'Current text:', p1Element?.textContent);
   console.log('  - P2 Caution Element found:', !!p2Element, 'Current text:', p2Element?.textContent);
-  
+
   updateText('[data-field="person1_caution_count"]', p1Flags);
   updateText('[data-field="person2_caution_count"]', p2Flags);
-  
+
   console.log('  - After update P1:', p1Element?.textContent);
   console.log('  - After update P2:', p2Element?.textContent);
-  
+
   // Dynamics types
   console.log('  - Trying to render dynamics P1:', dynamics?.person_1?.type);
   console.log('  - Trying to render dynamics P2:', dynamics?.person_2?.type);
   updateText('[data-field="person1_dynamics_type"]', dynamics?.person_1?.type || 'Cooperating Spouse');
   updateText('[data-field="person2_dynamics_type"]', dynamics?.person_2?.type || 'Affirming Spouse');
-  
+
   // Context stars (external life load - AI-calculated per person)
   const p1Context = wellbeing?.individual?.person_1?.context?.star_rating || 3;
   const p2Context = wellbeing?.individual?.person_2?.context?.star_rating || 3;
-  
+
   console.log('  - Context P1:', p1Context, 'stars, stressors:', wellbeing?.individual?.person_1?.context?.stressors);
   console.log('  - Context P2:', p2Context, 'stars, stressors:', wellbeing?.individual?.person_2?.context?.stressors);
-  
+
   updateStars('[data-field="person1_context_stars"]', p1Context);
   updateStars('[data-field="person2_context_stars"]', p2Context);
-  
+
   // Set momentum bar height dynamically
   const momentumLevelMap = {
     'HIGH': '85%',
@@ -477,28 +477,28 @@ function renderPage2() {
 // PAGE 3: Mindset Details
 function renderPage3() {
   if (!reportData) return;
-  
+
   const { momentum, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // Mindset details
   updateText('[data-field="person1_mindset_type"]', momentum?.mindset?.person_1?.type || '');
   updateText('[data-field="person1_mindset_desc"]', momentum?.mindset?.person_1?.description || '');
-  
+
   updateText('[data-field="person2_mindset_type"]', momentum?.mindset?.person_2?.type || '');
   updateText('[data-field="person2_mindset_desc"]', momentum?.mindset?.person_2?.description || '');
-  
+
   updateText('[data-field="mindsets_mesh"]', momentum?.how_mindsets_mesh || '');
-  
+
   // Populate mindset card names (first names only)
   renderMindsetCardNames(momentum, couple);
 }
@@ -514,11 +514,11 @@ function renderMindsetCardNames(momentum, couple) {
   const person2FullName = couple?.person_2?.name || '';
   const person1FirstName = person1FullName.split(' ')[0];
   const person2FirstName = person2FullName.split(' ')[0];
-  
+
   // Get mindset types (extract the base type without "Mindset" suffix)
   const person1Type = (momentum?.mindset?.person_1?.type || '').toLowerCase().replace(' mindset', '');
   const person2Type = (momentum?.mindset?.person_2?.type || '').toLowerCase().replace(' mindset', '');
-  
+
   // Initialize name mapping for each mindset
   const mindsetNames = {
     resolute: [],
@@ -527,7 +527,7 @@ function renderMindsetCardNames(momentum, couple) {
     restless: [],
     reluctant: []
   };
-  
+
   // Add names to appropriate mindsets
   if (person1Type && mindsetNames.hasOwnProperty(person1Type)) {
     mindsetNames[person1Type].push(person1FirstName);
@@ -535,7 +535,7 @@ function renderMindsetCardNames(momentum, couple) {
   if (person2Type && mindsetNames.hasOwnProperty(person2Type)) {
     mindsetNames[person2Type].push(person2FirstName);
   }
-  
+
   // Update each mindset card
   for (const [mindsetType, names] of Object.entries(mindsetNames)) {
     const nameText = names.length === 2 ? `${names[0]} & ${names[1]}` : (names[0] || '');
@@ -546,26 +546,37 @@ function renderMindsetCardNames(momentum, couple) {
 // PAGE 4: Wellbeing
 function renderPage4() {
   if (!reportData) return;
-  
+
   const { wellbeing, couple } = reportData;
-  
-  // Names
-  updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
-  updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
+  console.log('🌱 Rendering Page 4 - Wellbeing');
+
+  // Names - update all name-related elements
+  const person1Name = couple?.person_1?.name || 'Person 1';
+  const person2Name = couple?.person_2?.name || 'Person 2';
+
+  updateAll('[data-person="person1"]', person1Name);
+  updateAll('[data-person="person2"]', person2Name);
+  updateText('[data-field="person1_name_label"]', person1Name);
+  updateText('[data-field="person2_name_label"]', person2Name);
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
-  // Overall scores (with % symbol)
+
+  // Individual Wellbeing Scores (with % symbol)
   const p1Score = wellbeing?.individual?.person_1?.overall_score;
   const p2Score = wellbeing?.individual?.person_2?.overall_score;
-  updateText('[data-field="person1_wellbeing"]', p1Score ? `${Math.round(p1Score)}%` : '0%');
-  updateText('[data-field="person2_wellbeing"]', p2Score ? `${Math.round(p2Score)}%` : '0%');
-  
-  // Person 1 categories
+  updateText('[data-field="person1_wellbeing_score"]', p1Score != null ? `${Math.round(p1Score)}%` : '--%');
+  updateText('[data-field="person2_wellbeing_score"]', p2Score != null ? `${Math.round(p2Score)}%` : '--%');
+
+  // Also update the old data-field names for backwards compatibility
+  updateText('[data-field="person1_wellbeing"]', p1Score != null ? `${Math.round(p1Score)}%` : '--%');
+  updateText('[data-field="person2_wellbeing"]', p2Score != null ? `${Math.round(p2Score)}%` : '--%');
+
+  // Person 1 categories - descriptions from deterministic templates
   const p1 = wellbeing?.individual?.person_1?.categories || {};
   updateText('[data-field="person1_self_concept"]', p1.self_concept?.level || '');
   updateText('[data-field="person1_self_concept_desc"]', p1.self_concept?.description || '');
@@ -573,7 +584,7 @@ function renderPage4() {
   updateText('[data-field="person1_maturity_desc"]', p1.maturity?.description || '');
   updateText('[data-field="person1_independence"]', p1.independence?.level || '');
   updateText('[data-field="person1_independence_desc"]', p1.independence?.description || '');
-  
+
   // Person 2 categories
   const p2 = wellbeing?.individual?.person_2?.categories || {};
   updateText('[data-field="person2_self_concept"]', p2.self_concept?.level || '');
@@ -582,56 +593,93 @@ function renderPage4() {
   updateText('[data-field="person2_maturity_desc"]', p2.maturity?.description || '');
   updateText('[data-field="person2_independence"]', p2.independence?.level || '');
   updateText('[data-field="person2_independence_desc"]', p2.independence?.description || '');
-  
-  // Caution flags
+
+  // Caution flags - counts and lists
   const p1Flags = wellbeing?.individual?.person_1?.caution_flags?.items || [];
   const p2Flags = wellbeing?.individual?.person_2?.caution_flags?.items || [];
+
+  // Update counts
   updateText('[data-field="person1_caution_count"]', p1Flags.length);
   updateText('[data-field="person2_caution_count"]', p2Flags.length);
-  
-  // Relationship wellbeing
-  updateText('[data-field="relationship_wellbeing"]', wellbeing?.relationship?.overall_score || '0');
+
+  // Update caution flag lists with bullets
+  const p1CautionList = document.querySelector('[data-field="person1_caution_list"]');
+  const p2CautionList = document.querySelector('[data-field="person2_caution_list"]');
+
+  if (p1CautionList) {
+    if (p1Flags.length > 0) {
+      // Sort alphabetically and create bullet list
+      const sortedFlags = [...p1Flags].sort((a, b) => a.localeCompare(b));
+      p1CautionList.innerHTML = sortedFlags.map(flag => `<li>• ${flag}</li>`).join('');
+    } else {
+      p1CautionList.innerHTML = '<li>None</li>';
+    }
+  }
+
+  if (p2CautionList) {
+    if (p2Flags.length > 0) {
+      const sortedFlags = [...p2Flags].sort((a, b) => a.localeCompare(b));
+      p2CautionList.innerHTML = sortedFlags.map(flag => `<li>• ${flag}</li>`).join('');
+    } else {
+      p2CautionList.innerHTML = '<li>None</li>';
+    }
+  }
+
+  // Relationship wellbeing score with %
+  const relScore = wellbeing?.relationship?.overall_score;
+  updateText('[data-field="relationship_wellbeing_score"]', relScore != null ? `${Math.round(relScore)}%` : '--%');
+  updateText('[data-field="relationship_wellbeing"]', relScore != null ? `${Math.round(relScore)}%` : '--%');
+
+  // Relationship assessments - deterministic descriptions
   updateText('[data-field="longevity_assessment"]', wellbeing?.relationship?.longevity?.description || '');
   updateText('[data-field="stability_assessment"]', wellbeing?.relationship?.stability?.description || '');
   updateText('[data-field="similarity_assessment"]', wellbeing?.relationship?.similarity?.description || '');
+
+  console.log('  ✅ Page 4 rendered with scores:', {
+    person1: p1Score,
+    person2: p2Score,
+    relationship: relScore,
+    p1Flags: p1Flags.length,
+    p2Flags: p2Flags.length
+  });
 }
 
 // PAGE 5: Social Support
 function renderPage5() {
   if (!reportData) return;
-  
+
   const { social_support, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // Person 1 support scores
   const p1 = social_support?.person_1 || {};
   updateText('[data-field="person1_friends_family"]', p1.friends_family_support?.score || '0');
   updateText('[data-field="person1_in_laws"]', p1.in_laws_relationship?.score || '0');
   updateText('[data-field="person1_mutual_friends"]', p1.mutual_friends?.score || '0');
   updateText('[data-field="person1_faith"]', p1.faith_community?.score || '0');
-  
+
   // Person 2 support scores
   const p2 = social_support?.person_2 || {};
   updateText('[data-field="person2_friends_family"]', p2.friends_family_support?.score || '0');
   updateText('[data-field="person2_in_laws"]', p2.in_laws_relationship?.score || '0');
   updateText('[data-field="person2_mutual_friends"]', p2.mutual_friends?.score || '0');
   updateText('[data-field="person2_faith"]', p2.faith_community?.score || '0');
-  
+
   // Update rating bars if they exist
   updateRatingBar('[data-rating="person1_friends_family"]', p1.friends_family_support?.score || 0);
   updateRatingBar('[data-rating="person1_in_laws"]', p1.in_laws_relationship?.score || 0);
   updateRatingBar('[data-rating="person1_mutual_friends"]', p1.mutual_friends?.score || 0);
   updateRatingBar('[data-rating="person1_faith"]', p1.faith_community?.score || 0);
-  
+
   updateRatingBar('[data-rating="person2_friends_family"]', p2.friends_family_support?.score || 0);
   updateRatingBar('[data-rating="person2_in_laws"]', p2.in_laws_relationship?.score || 0);
   updateRatingBar('[data-rating="person2_mutual_friends"]', p2.mutual_friends?.score || 0);
@@ -649,25 +697,25 @@ function updateRatingBar(selector, value) {
 // PAGE 6: Finances
 function renderPage6() {
   if (!reportData) return;
-  
+
   const { finances, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Money styles
   updateText('[data-field="person1_money_style"]', finances?.person_1?.money_style || '');
   updateText('[data-field="person2_money_style"]', finances?.person_2?.money_style || '');
-  
+
   // Budget approaches
   updateText('[data-field="person1_budget"]', finances?.person_1?.budget_approach || '');
   updateText('[data-field="person2_budget"]', finances?.person_2?.budget_approach || '');
-  
+
   // Debt
   updateText('[data-field="person1_debt"]', finances?.person_1?.debt?.amount || 'None');
   updateText('[data-field="person2_debt"]', finances?.person_2?.debt?.amount || 'None');
-  
+
   // Financial fears
   const p1Fears = finances?.person_1?.financial_fears || [];
   const p2Fears = finances?.person_2?.financial_fears || [];
@@ -679,26 +727,26 @@ function renderPage6() {
 // PAGE 7: Expectations
 function renderPage7() {
   if (!reportData) return;
-  
+
   const { expectations, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Render agreed roles and discussion items
   const agreedRoles = expectations?.agreed_roles || [];
   const needsDiscussion = expectations?.needs_discussion || [];
-  
+
   const agreedContainer = document.querySelector('[data-container="agreed_roles"]');
   const discussionContainer = document.querySelector('[data-container="needs_discussion"]');
-  
+
   if (agreedContainer) {
     agreedContainer.innerHTML = agreedRoles.map(role => `
       <div class="role-item">${role.task}: ${role.assigned_to}</div>
     `).join('');
   }
-  
+
   if (discussionContainer) {
     discussionContainer.innerHTML = needsDiscussion.map(item => `
       <div class="discussion-item">${item}</div>
@@ -717,30 +765,30 @@ function renderPage9() {
 
 function renderDynamics() {
   if (!reportData) return;
-  
+
   const { dynamics, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // Overall dynamics
   updateText('[data-field="dynamics_type"]', dynamics?.overall_type || '');
   updateText('[data-field="dynamics_description"]', dynamics?.overall_description || '');
-  
+
   // Individual types
   updateText('[data-field="person1_dynamics_type"]', dynamics?.person_1?.type || '');
   updateText('[data-field="person1_dynamics_desc"]', dynamics?.person_1?.full_description || '');
-  
+
   updateText('[data-field="person2_dynamics_type"]', dynamics?.person_2?.type || '');
   updateText('[data-field="person2_dynamics_desc"]', dynamics?.person_2?.full_description || '');
-  
+
   // Strengths
   updateList('[data-list="person1_strengths"]', dynamics?.person_1?.strengths || []);
   updateList('[data-list="person2_strengths"]', dynamics?.person_2?.strengths || []);
@@ -749,35 +797,35 @@ function renderDynamics() {
 // PAGE 10: Love & Sexuality
 function renderPage10() {
   if (!reportData) return;
-  
+
   const { love, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // Top 5 love definitions
   const p1Defs = love?.person_1?.top_5_definitions || [];
   const p2Defs = love?.person_2?.top_5_definitions || [];
-  
+
   updateList('[data-list="person1_love_defs"]', p1Defs.map(d => `${d.rank}. ${d.primary}`));
   updateList('[data-list="person2_love_defs"]', p2Defs.map(d => `${d.rank}. ${d.primary}`));
-  
+
   // Sexuality
   const p1Sex = love?.sexuality?.person_1 || {};
   const p2Sex = love?.sexuality?.person_2 || {};
-  
+
   updateText('[data-field="person1_abstaining"]', p1Sex.abstaining || '');
   updateText('[data-field="person1_desire"]', p1Sex.desire_rating || '');
   updateText('[data-field="person1_initiate"]', p1Sex.initiate_expectation || '');
   updateText('[data-field="person1_frequency"]', p1Sex.frequency_expectation || '');
-  
+
   updateText('[data-field="person2_abstaining"]', p2Sex.abstaining || '');
   updateText('[data-field="person2_desire"]', p2Sex.desire_rating || '');
   updateText('[data-field="person2_initiate"]', p2Sex.initiate_expectation || '');
@@ -787,32 +835,32 @@ function renderPage10() {
 // PAGE 11: Attitude
 function renderPage11() {
   if (!reportData) return;
-  
+
   const { attitude, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // Resilience
   updateText('[data-field="person1_resilience"]', attitude?.person_1?.resilience_score || '0');
   updateText('[data-field="person1_resilience_level"]', attitude?.person_1?.resilience_level || '');
   updateText('[data-field="person1_resilience_desc"]', attitude?.person_1?.description || '');
-  
+
   updateText('[data-field="person2_resilience"]', attitude?.person_2?.resilience_score || '0');
   updateText('[data-field="person2_resilience_level"]', attitude?.person_2?.resilience_level || '');
   updateText('[data-field="person2_resilience_desc"]', attitude?.person_2?.description || '');
-  
+
   // Best qualities
   updateList('[data-list="person1_qualities"]', attitude?.person_1?.best_qualities_under_challenge || []);
   updateList('[data-list="person2_qualities"]', attitude?.person_2?.best_qualities_under_challenge || []);
-  
+
   // Stress responses
   updateList('[data-list="person1_stress"]', attitude?.person_1?.perceived_under_stress || []);
   updateList('[data-list="person2_stress"]', attitude?.person_2?.perceived_under_stress || []);
@@ -821,30 +869,30 @@ function renderPage11() {
 // PAGE 12: Communication
 function renderPage12() {
   if (!reportData) return;
-  
+
   const { communication, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // Communication styles
   updateText('[data-field="person1_comm_style"]', communication?.person_1?.style || '');
   updateText('[data-field="person1_comm_desc"]', communication?.person_1?.description || '');
-  
+
   updateText('[data-field="person2_comm_style"]', communication?.person_2?.style || '');
   updateText('[data-field="person2_comm_desc"]', communication?.person_2?.description || '');
-  
+
   // Preferences
   updateList('[data-list="person1_preferences"]', communication?.person_1?.partner_communication_preferences || []);
   updateList('[data-list="person2_preferences"]', communication?.person_2?.partner_communication_preferences || []);
-  
+
   // Improvement areas
   updateList('[data-list="person1_improve"]', communication?.person_1?.improvement_areas || []);
   updateList('[data-list="person2_improve"]', communication?.person_2?.improvement_areas || []);
@@ -853,28 +901,28 @@ function renderPage12() {
 // PAGE 13: Gender Needs
 function renderPage13() {
   if (!reportData) return;
-  
+
   const { gender, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // Needs to know about partner
   updateText('[data-field="person1_needs_title"]', gender?.person_1?.needs_to_know_about_partner?.title || '');
   updateText('[data-field="person1_needs_desc"]', gender?.person_1?.needs_to_know_about_partner?.description || '');
   updateText('[data-field="person1_needs_why"]', gender?.person_1?.needs_to_know_about_partner?.why_it_matters || '');
-  
+
   updateText('[data-field="person2_needs_title"]', gender?.person_2?.needs_to_know_about_partner?.title || '');
   updateText('[data-field="person2_needs_desc"]', gender?.person_2?.needs_to_know_about_partner?.description || '');
   updateText('[data-field="person2_needs_why"]', gender?.person_2?.needs_to_know_about_partner?.why_it_matters || '');
-  
+
   // Top 5 needs
   updateList('[data-list="person1_top_needs"]', gender?.person_1?.top_5_needs || []);
   updateList('[data-list="person2_top_needs"]', gender?.person_2?.top_5_needs || []);
@@ -883,34 +931,34 @@ function renderPage13() {
 // PAGE 14: Conflict
 function renderPage14() {
   if (!reportData) return;
-  
+
   const { conflict, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // Conflict styles
   updateText('[data-field="person1_conflict_style"]', conflict?.person_1?.style || '');
   updateText('[data-field="person1_conflict_desc"]', conflict?.person_1?.style_description || '');
-  
+
   updateText('[data-field="person2_conflict_style"]', conflict?.person_2?.style || '');
   updateText('[data-field="person2_conflict_desc"]', conflict?.person_2?.style_description || '');
-  
+
   // Challenges
   updateList('[data-list="person1_challenges"]', conflict?.person_1?.challenges || []);
   updateList('[data-list="person2_challenges"]', conflict?.person_2?.challenges || []);
-  
+
   // Hot topics
   const p1Topics = conflict?.person_1?.hot_topics || [];
   const p2Topics = conflict?.person_2?.hot_topics || [];
-  
+
   updateList('[data-list="person1_hot_topics"]', p1Topics.map(t => `${t.rank}. ${t.topic}`));
   updateList('[data-list="person2_hot_topics"]', p2Topics.map(t => `${t.rank}. ${t.topic}`));
 }
@@ -918,33 +966,33 @@ function renderPage14() {
 // PAGE 15: Spirituality
 function renderPage15() {
   if (!reportData) return;
-  
+
   const { spirituality, couple } = reportData;
-  
+
   // Names
   updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
   updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
-  
+
   // Photos
   const person1Photo = document.querySelector('[data-field="person1_photo"]');
   const person2Photo = document.querySelector('[data-field="person2_photo"]');
   if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
   if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
-  
+
   // How they feel closest to God
   updateText('[data-field="person1_closest_to_god"]', spirituality?.person_1?.feels_closest_to_god_through || '');
   updateText('[data-field="person2_closest_to_god"]', spirituality?.person_2?.feels_closest_to_god_through || '');
-  
+
   // Spiritual sync
   updateText('[data-field="spiritual_sync"]', spirituality?.spiritual_sync || '');
-  
+
   // Areas of difference
   updateList('[data-list="spiritual_differences"]', spirituality?.areas_of_difference || []);
-  
+
   // Spiritual practices (render checkmarks for true values)
   const p1Practices = spirituality?.person_1?.spiritual_practices || {};
   const p2Practices = spirituality?.person_2?.spiritual_practices || {};
-  
+
   renderPractices('[data-practices="person1"]', p1Practices);
   renderPractices('[data-practices="person2"]', p2Practices);
 }
@@ -953,7 +1001,7 @@ function renderPage15() {
 function renderPractices(selector, practices) {
   const container = document.querySelector(selector);
   if (!container) return;
-  
+
   const practicesList = [
     'attend_church_weekly',
     'go_to_same_church',
@@ -966,7 +1014,7 @@ function renderPractices(selector, practices) {
     'serve_others_together',
     'study_bible_together'
   ];
-  
+
   container.innerHTML = practicesList.map(practice => {
     const hasIt = practices[practice];
     const label = practice.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());

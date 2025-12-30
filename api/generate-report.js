@@ -29,11 +29,11 @@ const TOTAL_TIMEOUT = 280000; // 280 seconds total (leaving 20s buffer for Verce
 function extractJSON(responseText) {
   const startIdx = responseText.indexOf('{');
   const endIdx = responseText.lastIndexOf('}') + 1;
-  
+
   if (startIdx === -1 || endIdx === 0) {
     throw new Error('No JSON found in response');
   }
-  
+
   const jsonStr = responseText.substring(startIdx, endIdx);
   return JSON.parse(jsonStr);
 }
@@ -46,12 +46,12 @@ async function callGeminiAPI(genAI, prompt, passName, maxRetries = MAX_RETRIES) 
     try {
       console.log(`🤖 ${passName}: Starting (attempt ${attempt}/${maxRetries})...`);
       const startTime = Date.now();
-      
+
       // Create timeout promise
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => reject(new Error(`${passName} timeout after ${PASS_TIMEOUT}ms`)), PASS_TIMEOUT);
       });
-      
+
       // Create API call promise
       const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
       const apiPromise = model.generateContent(prompt).then(async (result) => {
@@ -59,19 +59,19 @@ async function callGeminiAPI(genAI, prompt, passName, maxRetries = MAX_RETRIES) 
         const responseText = response.text();
         return extractJSON(responseText);
       });
-      
+
       // Race between timeout and API call
       const jsonData = await Promise.race([apiPromise, timeoutPromise]);
-      
+
       const duration = Date.now() - startTime;
       console.log(`✅ ${passName}: Completed in ${duration}ms`);
-      
+
       return jsonData;
-      
+
     } catch (error) {
       const errorMsg = error.message || String(error);
       console.error(`❌ ${passName} failed (attempt ${attempt}):`, errorMsg);
-      
+
       // Retry on rate limit or timeout
       if (attempt < maxRetries && (errorMsg.includes('429') || errorMsg.includes('quota') || errorMsg.includes('timeout'))) {
         const delay = 2000 * attempt;
@@ -92,12 +92,12 @@ function loadDataExtractor() {
   try {
     const extractorPath = join(__dirname, 'report-data-extractor.js');
     const extractorCode = readFileSync(extractorPath, 'utf-8');
-    
+
     const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', `
       ${extractorCode}
       return extractBaseReport(person1Responses, person2Responses, user1Profile, user2Profile);
     `);
-    
+
     return extractBaseReport;
   } catch (error) {
     console.error('Error loading data extractor:', error);
@@ -134,23 +134,23 @@ function fillPromptTemplate(template, replacements) {
 
 export default async function handler(req, res) {
   const overallStartTime = Date.now();
-  
+
   try {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    
+
     // Handle OPTIONS request
     if (req.method === 'OPTIONS') {
       return res.status(200).end();
     }
-    
+
     // Only allow POST
     if (req.method !== 'POST') {
       return res.status(405).json({ error: 'Method not allowed' });
     }
-    
+
     console.log('📊 ===== AI REPORT GENERATION STARTED =====');
     console.log('Model:', GEMINI_MODEL);
     console.log('Environment:', {
@@ -158,21 +158,21 @@ export default async function handler(req, res) {
       dirname: __dirname,
       cwd: process.cwd()
     });
-    
+
     // Validate environment variables
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
     const SUPABASE_URL = process.env.SUPABASE_URL || 'https://tobxdhqcdttgawqewpwl.supabase.co';
     const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
-    
+
     if (!GEMINI_API_KEY) {
       return res.status(500).json({ error: 'Gemini API key not configured' });
     }
     if (!SUPABASE_SERVICE_KEY) {
       return res.status(500).json({ error: 'Supabase service key not configured' });
     }
-    
+
     console.log('✅ Environment variables validated');
-    
+
     // Check required files
     const requiredFiles = [
       'report-data-extractor.js',
@@ -180,7 +180,7 @@ export default async function handler(req, res) {
       'prompt-pass2-wellbeing.txt',
       'prompt-pass3-communication.txt'
     ];
-    
+
     for (const file of requiredFiles) {
       const filePath = join(__dirname, file);
       if (!existsSync(filePath)) {
@@ -192,24 +192,24 @@ export default async function handler(req, res) {
       }
     }
     console.log('✅ All required files found');
-    
+
     // Parse request body
     const { person1_responses, person2_responses, user1_id, user2_id } = req.body;
-    
+
     if (!person1_responses || !person2_responses) {
       return res.status(400).json({ error: 'Both person responses are required' });
     }
     if (!user1_id || !user2_id) {
       return res.status(400).json({ error: 'User IDs are required' });
     }
-    
+
     console.log(`📥 Received ${Object.keys(person1_responses).length} responses for person 1`);
     console.log(`📥 Received ${Object.keys(person2_responses).length} responses for person 2`);
-    
+
     // Initialize services
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
     const adminSupabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-    
+
     // Fetch user profiles
     console.log('👤 Fetching user profiles...');
     const [profile1Result, profile2Result] = await Promise.all([
@@ -224,16 +224,16 @@ export default async function handler(req, res) {
         .eq('id', user2_id)
         .single()
     ]);
-    
+
     if (profile1Result.error || profile2Result.error) {
       console.error('Error fetching profiles:', profile1Result.error, profile2Result.error);
       return res.status(500).json({ error: 'Failed to fetch user profiles' });
     }
-    
+
     const user1Profile = profile1Result.data;
     const user2Profile = profile2Result.data;
     console.log(`✅ Profiles fetched: ${user1Profile.full_name} + ${user2Profile.full_name}`);
-    
+
     // Extract base data
     console.log('📦 Extracting base data...');
     const extractBaseReport = loadDataExtractor();
@@ -247,7 +247,7 @@ export default async function handler(req, res) {
     if (baseReport.caution_flags?.person_2?.length > 0) {
       console.log('  - P2 flags:', baseReport.caution_flags.person_2.map(f => f.description));
     }
-    
+
     // Prepare prompt data
     const promptData = {
       person1_name: baseReport.couple.person_1.name,
@@ -261,24 +261,24 @@ export default async function handler(req, res) {
       person2_relevant_responses: person2_responses,
       base_report_json: baseReport
     };
-    
+
     console.log('📊 Calculated Types:');
     console.log('  - Person 1:', baseReport.calculated_types.person_1.mindset, '+', baseReport.calculated_types.person_1.dynamics);
     console.log('  - Person 2:', baseReport.calculated_types.person_2.mindset, '+', baseReport.calculated_types.person_2.dynamics);
-    
+
     // ========================================================================
     // PARALLEL AI PROCESSING (Passes 1-3)
     // ========================================================================
-    
+
     console.log('\n🚀 Starting parallel AI processing (3 passes)...');
     const parallelStartTime = Date.now();
-    
+
     try {
       // Load all prompt templates
       const pass1Template = loadPromptTemplate('prompt-pass1-personality.txt');
       const pass2Template = loadPromptTemplate('prompt-pass2-wellbeing.txt');
       const pass3Template = loadPromptTemplate('prompt-pass3-communication.txt');
-      
+
       // Execute all three passes in parallel
       const [pass1Results, pass2Results, pass3Results] = await Promise.all([
         // Pass 1: Personality & Dynamics
@@ -287,14 +287,14 @@ export default async function handler(req, res) {
           fillPromptTemplate(pass1Template, promptData),
           'Pass 1 (Personality)'
         ),
-        
+
         // Pass 2: Wellbeing & Support
         callGeminiAPI(
           genAI,
           fillPromptTemplate(pass2Template, promptData),
           'Pass 2 (Wellbeing)'
         ),
-        
+
         // Pass 3: Communication & Life
         callGeminiAPI(
           genAI,
@@ -302,20 +302,20 @@ export default async function handler(req, res) {
           'Pass 3 (Communication)'
         )
       ]);
-      
+
       const parallelDuration = Date.now() - parallelStartTime;
       console.log(`✅ Parallel processing completed in ${parallelDuration}ms`);
-      
+
       // ========================================================================
       // SYNTHESIS PASS (Pass 4)
       // ========================================================================
-      
+
       console.log('\n🔄 Starting synthesis pass...');
-      
+
       // Check if synthesis prompt exists
       const synthesisPath = join(__dirname, 'prompt-pass4-synthesis.txt');
       let finalReport;
-      
+
       if (existsSync(synthesisPath)) {
         const synthesisTemplate = loadPromptTemplate('prompt-pass4-synthesis.txt');
         const synthesisPrompt = fillPromptTemplate(synthesisTemplate, {
@@ -324,20 +324,23 @@ export default async function handler(req, res) {
           pass2_results_json: pass2Results,
           pass3_results_json: pass3Results
         });
-        
+
         const synthesisResults = await callGeminiAPI(
           genAI,
           synthesisPrompt,
           'Pass 4 (Synthesis)'
         );
-        
+
         // Deep merge all results
+        // IMPORTANT: wellbeing is deterministic from baseReport, NOT from AI passes
         finalReport = {
           ...baseReport,
           ...pass1Results,
           ...pass2Results,
           ...pass3Results,
           ...synthesisResults,
+          // Preserve deterministic wellbeing from baseReport (do NOT use AI-generated wellbeing)
+          wellbeing: baseReport.wellbeing,
           momentum: {
             ...baseReport.momentum,
             ...pass1Results.momentum,
@@ -357,13 +360,16 @@ export default async function handler(req, res) {
         };
       } else {
         console.log('⚠️ Synthesis prompt not found, skipping Pass 4');
-        
+
         // Merge without synthesis
+        // IMPORTANT: wellbeing is deterministic from baseReport, NOT from AI passes
         finalReport = {
           ...baseReport,
           ...pass1Results,
           ...pass2Results,
           ...pass3Results,
+          // Preserve deterministic wellbeing from baseReport (do NOT use AI-generated wellbeing)
+          wellbeing: baseReport.wellbeing,
           momentum: {
             ...baseReport.momentum,
             ...pass1Results.momentum,
@@ -379,35 +385,35 @@ export default async function handler(req, res) {
           }
         };
       }
-      
+
       const totalDuration = Date.now() - overallStartTime;
       console.log(`\n✅ ===== REPORT GENERATION COMPLETE =====`);
       console.log(`Total time: ${totalDuration}ms (${(totalDuration / 1000).toFixed(1)}s)`);
       console.log(`Report sections: ${Object.keys(finalReport).length}`);
-      
+
       return res.status(200).json(finalReport);
-      
+
     } catch (parallelError) {
       console.error('❌ Parallel processing failed:', parallelError);
       throw parallelError;
     }
-    
+
   } catch (error) {
     const totalDuration = Date.now() - overallStartTime;
     console.error(`❌ ===== GENERATION ERROR (after ${totalDuration}ms) =====`);
     console.error('Error type:', error.constructor.name);
     console.error('Error message:', error.message);
     console.error('Error stack:', error.stack);
-    
+
     // Handle specific error types
     if (error.message && (error.message.includes('429') || error.message.includes('quota'))) {
-      return res.status(429).json({ 
+      return res.status(429).json({
         error: 'API quota exceeded',
         details: 'Rate limit reached. Please wait a few minutes and try again.',
         message: error.message
       });
     }
-    
+
     if (error.message && error.message.includes('timeout')) {
       return res.status(504).json({
         error: 'Generation timeout',
@@ -415,17 +421,17 @@ export default async function handler(req, res) {
         message: error.message
       });
     }
-    
+
     if (error instanceof SyntaxError) {
-      return res.status(500).json({ 
+      return res.status(500).json({
         error: 'Invalid JSON in AI response',
         details: 'The AI returned malformed data. Please try again.',
         message: error.message
       });
     }
-    
+
     // Generic error response
-    return res.status(500).json({ 
+    return res.status(500).json({
       error: error.message || 'Failed to generate report',
       type: error.constructor.name,
       details: 'An unexpected error occurred during report generation.'
