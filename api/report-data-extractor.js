@@ -170,27 +170,34 @@ function extractFinances(person1Responses, person2Responses) {
 function extractPersonFinances(responses) {
   // CORRECT QUESTION IDS from questions-data.json:
   // Q92: Money style (Saver/Spender)
-  // Q93: Budget approach
+  // Q93: Budget approach (Religious/Track/None)
   // Q94: Debt amount
   // Q99-102: Financial fears (SYMBIS 4 fears)
   // Q95-96: Debt comfort levels
   // Q103-105: Financial context questions
 
-  // Money Style - Q92
-  const moneyStyle = responses[92] || "Not specified";
+  // Helper to map choice indices to labels if needed
+  const getChoiceLabel = (val, options) => {
+    if (!val && val !== 0) return "Not specified";
+    if (typeof val === 'string') return val;
+    // Handle 1-based indexing common in some exports, or 0-based
+    const idx = parseInt(val);
+    if (isNaN(idx)) return "Not specified";
+    if (options[idx]) return options[idx];
+    if (options[idx - 1]) return options[idx - 1];
+    return "Not specified";
+  };
 
-  // Budget Approach - Q93
-  const budgetApproach = responses[93] || "Not specified";
-
-  // Debt Amount - Q94
-  const debtAmount = responses[94] || "None";
+  const moneyStyle = getChoiceLabel(responses[92], ["Saver", "Spender"]);
+  const budgetApproach = getChoiceLabel(responses[93], ["I live by a budget religiously", "I track generally", "I don't budget"]);
+  const debtAmount = getChoiceLabel(responses[94], ["None", "Less than $10,000", "$10,000 - $50,000", "More than $50,000"]);
 
   // SYMBIS Financial Fears - Q99-102 (structured as object for badge rendering)
   const financialFears = {
-    lack_of_influence: responses[99] === true || responses[99] === "true" || responses[99] === 1,
-    lack_of_security: responses[100] === true || responses[100] === "true" || responses[100] === 1,
-    lack_of_respect: responses[101] === true || responses[101] === "true" || responses[101] === 1,
-    not_realizing_dreams: responses[102] === true || responses[102] === "true" || responses[102] === 1
+    lack_of_influence: responses[99] === true || responses[99] === "true" || responses[99] === 1 || responses[99] === "1",
+    lack_of_security: responses[100] === true || responses[100] === "true" || responses[100] === 1 || responses[100] === "1",
+    lack_of_respect: responses[101] === true || responses[101] === "true" || responses[101] === 1 || responses[101] === "1",
+    not_realizing_dreams: responses[102] === true || responses[102] === "true" || responses[102] === 1 || responses[102] === "1"
   };
 
   // Get list of active fears for backwards compatibility

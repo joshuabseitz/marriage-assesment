@@ -744,25 +744,35 @@ function updateRatingBar(selector, value) {
   }
 }
 
-// PAGE 6: Finances - DETERMINISTIC RENDERING
+// PAGE 6: Finances - HIGH FIDELITY RENDERING
 function renderPage6() {
   if (!reportData) return;
 
   const { finances, couple } = reportData;
-  const person1Name = couple?.person_1?.name || 'Person 1';
-  const person2Name = couple?.person_2?.name || 'Person 2';
+  const person1Name = couple?.person_1?.name || 'Toni';
+  const person2Name = couple?.person_2?.name || 'Chris';
 
-  console.log('💰 Rendering Page 6 - Finances (Deterministic)');
+  console.log('💰 Rendering Page 6 - Finances (High Fidelity)');
 
   // Names
-  updateAll('[data-person="person1"]', person1Name);
-  updateAll('[data-person="person2"]', person2Name);
+  updateAll('[data-person="person1"]', p1Name => p1Name || person1Name);
+  updateAll('[data-person="person2"]', p2Name => p2Name || person2Name);
 
-  // Money Styles with colored badges
-  renderMoneyStyleBadge('[data-field="person1_money_style_badge"]', finances?.person_1?.money_style);
-  renderMoneyStyleBadge('[data-field="person2_money_style_badge"]', finances?.person_2?.money_style);
+  // Money Styles with Piggy Bank Icons
+  renderMoneyStyle(
+    '[data-container="person1_money_style"]',
+    finances?.person_1?.money_style,
+    person1Name,
+    'p1'
+  );
+  renderMoneyStyle(
+    '[data-container="person2_money_style"]',
+    finances?.person_2?.money_style,
+    person2Name,
+    'p2'
+  );
 
-  // Budget Skills
+  // Budget Skills with quoted text and icons
   renderBudgetSkills(
     '[data-container="budget_skills"]',
     finances?.person_1,
@@ -771,7 +781,7 @@ function renderPage6() {
     person2Name
   );
 
-  // Debt Section with color-coded icons
+  // Debt Section
   renderDebtSection(
     '[data-container="person1_debt"]',
     finances?.person_1?.debt,
@@ -783,9 +793,14 @@ function renderPage6() {
     person2Name
   );
 
-  // Financial Fears with active/inactive badges
-  renderFinancialFears('[data-container="person1_fears"]', finances?.person_1?.financial_fears);
-  renderFinancialFears('[data-container="person2_fears"]', finances?.person_2?.financial_fears);
+  // Financial Fears Comparison Table (pick top fear)
+  renderFinancialFearsGrid(
+    '[data-container="fears_grid"]',
+    finances?.person_1?.financial_fears,
+    finances?.person_2?.financial_fears,
+    person1Name,
+    person2Name
+  );
 
   // Contextual discussion question
   const discussionQuestion = getFinanceDiscussionQuestion(
@@ -795,57 +810,55 @@ function renderPage6() {
     person2Name
   );
   updateText('[data-field="finance_discussion_question"]', discussionQuestion);
-
-  console.log('  ✅ Page 6 rendered with finances:', {
-    person1: {
-      money_style: finances?.person_1?.money_style,
-      budget_approach: finances?.person_1?.budget_approach,
-      debt: finances?.person_1?.debt?.amount,
-      fears: finances?.person_1?.financial_fears
-    },
-    person2: {
-      money_style: finances?.person_2?.money_style,
-      budget_approach: finances?.person_2?.budget_approach,
-      debt: finances?.person_2?.debt?.amount,
-      fears: finances?.person_2?.financial_fears
-    }
-  });
 }
 
-// Helper: Money style badge with color
-function renderMoneyStyleBadge(selector, style) {
-  const el = document.querySelector(selector);
-  if (!el) return;
+// Helper: Money style with piggy bank SVG
+function renderMoneyStyle(selector, style, name, colorType) {
+  const container = document.querySelector(selector);
+  if (!container) return;
 
-  const template = typeof FinancesTemplates !== 'undefined'
-    ? FinancesTemplates.getMoneyStyleTemplate(style)
-    : { badge_class: 'bg-gray-100 text-gray-800' };
+  const color = colorType === 'p1' ? '#E88B88' : '#4FB8B1';
+  const label = (style || 'Saver').toUpperCase();
 
-  el.textContent = style || 'Not specified';
-  el.className = `px-4 py-2 rounded-lg font-semibold text-sm ${template.badge_class}`;
+  container.innerHTML = `
+    <div class="flex flex-col items-center">
+      <div class="text-xs font-bold text-gray-400 mb-1 uppercase tracking-tighter">${name}</div>
+      <svg class="w-16 h-16 mb-1" viewBox="0 0 100 100" fill="${color}">
+        <path d="M85,55c0-15-12-27-27-27c-3,0-6,1-9,2c-1-1-2-1-3-1c-1-6-6-11-12-11c-7,0-12,5-12,12c0,1,0,2,0,3 c-6,8-10,18-10,29c0,13,8,24,20,29v5h10v-5c2,0,4,0,6,0v5h10v-5c12-3,22-13,26-25C84,60,85,58,85,55z M66,45c-2,0-4-2-4-4s2-4,4-4 s4,2,4,4S68,45,66,45z M45,70 c-8,0-15-7-15-15h5c0,6,4,10,10,10V70z"/>
+        <path d="M50,45c-1,0-2,1-2,2v6c0,1,1,2,2,2s2-1,2-2v-6C52,46,51,45,50,45z" fill="white"/>
+      </svg>
+      <div class="text-xs font-black italic text-gray-700">${label}</div>
+    </div>
+  `;
 }
 
-// Helper: Budget skills section with icons
+// Helper: Budget skills with pencil/calculator icons
 function renderBudgetSkills(selector, person1, person2, name1, name2) {
   const container = document.querySelector(selector);
   if (!container) return;
 
-  const renderPerson = (name, budgetApproach) => {
-    const template = typeof FinancesTemplates !== 'undefined'
-      ? FinancesTemplates.getBudgetTemplate(budgetApproach)
-      : { emoji: '📝' };
-
+  const renderItem = (name, pData) => {
+    const icon = pData?.budget_icon === 'bars' ? '📝' : '📟';
+    const text = pData?.budget_approach || "I don't budget";
     return `
-      <div class="budget-item">
-        <span class="budget-emoji">${template.emoji}</span>
-        <span class="text-sm text-gray-700">${name}: "${budgetApproach || 'Not specified'}"</span>
+      <div class="flex items-center gap-4 py-2">
+        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl">
+          ${pData?.budget_icon === 'bars' ?
+        '<svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>' :
+        '<svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1zM7 7h2v2H7V7zm4 0h2v2h-2V7zm4 0h2v2h-2V7zm-8 4h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2zm-8 4h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v6h-2v-6z"/></svg>'}
+        </div>
+        <div>
+          <div class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">${name}</div>
+          <div class="text-[13px] text-gray-600 italic leading-none font-medium">"${text}"</div>
+        </div>
       </div>
     `;
   };
 
   container.innerHTML = `
-    ${renderPerson(name1, person1?.budget_approach)}
-    ${renderPerson(name2, person2?.budget_approach)}
+    ${renderItem(name1, person1)}
+    <div class="h-px bg-gray-100 my-1 w-full"></div>
+    ${renderItem(name2, person2)}
   `;
 }
 
@@ -880,36 +893,46 @@ function renderDebtSection(selector, debt, name) {
   `;
 }
 
-// Helper: Financial fears with active/inactive badges
-function renderFinancialFears(selector, fears) {
+// Helper: Financial fears grid with bills
+function renderFinancialFearsGrid(selector, p1Fears, p2Fears, name1, name2) {
   const container = document.querySelector(selector);
   if (!container) return;
 
   const fearKeys = [
-    { key: 'lack_of_influence', label: 'Lack of Influence', emoji: '💡' },
-    { key: 'lack_of_security', label: 'Lack of Security', emoji: '🔒' },
-    { key: 'lack_of_respect', label: 'Lack of Respect', emoji: '🤝' },
-    { key: 'not_realizing_dreams', label: 'Not Realizing Dreams', emoji: '💰' }
+    { key: 'lack_of_influence', label: 'Lack of Influence' },
+    { key: 'lack_of_security', label: 'Lack of Security' },
+    { key: 'lack_of_respect', label: 'Lack of Respect' },
+    { key: 'not_realizing_dreams', label: 'Not Realizing Dreams' }
   ];
 
-  const isObject = fears && typeof fears === 'object' && !Array.isArray(fears);
-
-  container.innerHTML = fearKeys.map(fear => {
-    let isActive = false;
-    if (isObject) {
-      isActive = fears[fear.key] === true;
-    } else if (Array.isArray(fears)) {
-      isActive = fears.some(f => String(f || "").toLowerCase().includes(fear.label.toLowerCase().replace('lack of ', '')));
+  const pickTopFear = (fears) => {
+    if (!fears) return null;
+    // Map of keys to return the first one that is true
+    for (const fear of fearKeys) {
+      if (fears[fear.key] === true) return fear.key;
     }
+    return null;
+  };
 
-    const badgeClass = isActive ? 'active-badge' : 'inactive-badge';
+  const p1Top = pickTopFear(p1Fears);
+  const p2Top = pickTopFear(p2Fears);
 
-    return `
-      <div class="money-badge ${badgeClass}">
-        ${isActive ? fear.emoji + ' ' : ''}${fear.label}
-      </div>
-    `;
-  }).join('');
+  const renderBill = (active) => {
+    if (!active) return `<div class="w-16 h-8 bg-gray-100 rounded flex items-center justify-center opacity-30"><svg class="w-10 h-10 text-gray-300" viewBox="0 0 100 60"><rect width="100" height="60" rx="8" fill="currentColor"/><circle cx="50" cy="30" r="15" fill="white" fill-opacity="0.3"/><text x="50" y="36" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text></svg></div>`;
+    return `<div class="w-16 h-8 bg-[#86C766] rounded flex items-center justify-center shadow-sm"><svg class="w-10 h-10 text-white" viewBox="0 0 100 60"><rect width="100" height="60" rx="8" fill="currentColor"/><circle cx="50" cy="30" r="15" fill="white" fill-opacity="0.5"/><text x="50" y="36" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text></svg></div>`;
+  };
+
+  container.innerHTML = `
+    <div class="grid grid-cols-[1fr_80px_80px] gap-2 items-center">
+      <div class="col-start-2 text-center text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${name1}</div>
+      <div class="col-start-3 text-center text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${name2}</div>
+      ${fearKeys.map(fear => `
+        <div class="text-[13px] font-medium text-gray-600">${fear.label}</div>
+        <div class="flex justify-center">${renderBill(p1Top === fear.key)}</div>
+        <div class="flex justify-center">${renderBill(p2Top === fear.key)}</div>
+      `).join('')}
+    </div>
+  `;
 }
 
 // Helper: Wrap library discussion question generator
