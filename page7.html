@@ -22,6 +22,8 @@
             --symbis-red: #E54D42;
             --symbis-teal: #4FB8B1;
             --symbis-blue: #5B8FB9;
+            --symbis-green: #83B643;
+            --symbis-lime: #C4D600;
         }
 
         body {
@@ -63,48 +65,129 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
 
+        /* Expectation Table Styles */
         .expectation-row {
             display: grid;
-            grid-template-columns: 1fr 80px 80px 80px 80px;
-            gap: 8px;
-            padding: 12px 0;
-            border-bottom: 1px solid #f3f4f6;
+            grid-template-columns: 80px 1fr 160px 160px;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
             align-items: center;
         }
 
-        .expectation-row:hover {
-            background-color: #f9fafb;
+        .expectation-row:nth-child(even) {
+            background-color: #fcfcfc;
         }
 
-        .role-icon {
-            width: 32px;
+        .assigned-badge {
+            font-size: 11px;
+            font-weight: 800;
+            text-align: right;
+            color: #666;
+            padding: 4px 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+        }
+
+        .assigned-toni {
+            background: #fee2e2;
+            color: #9f1239;
+        }
+
+        .assigned-chris {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .assigned-both {
+            background: #fef9c3;
+            color: #854d0e;
+        }
+
+        /* Grid Styles */
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid #ccc;
             height: 32px;
-            border-radius: 6px;
+            background: white;
+        }
+
+        .grid-cell {
+            border-right: 1px solid #ccc;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: bold;
+            position: relative;
         }
 
-        .role-mom {
-            background-color: #FED7E2;
-            color: #9F1239;
+        .grid-cell:last-child {
+            border-right: none;
         }
 
-        .role-dad {
-            background-color: #DBEAFE;
-            color: #1E40AF;
+        .grid-cell.highlight {
+            border-left: 2px dashed #999;
         }
 
-        .role-me {
-            background-color: #D1FAE5;
-            color: #065F46;
+        /* The "X" Marks */
+        .x-mark {
+            width: 16px;
+            height: 16px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .role-you {
-            background-color: #FEF3C7;
-            color: #92400E;
+        .x-mark::before,
+        .x-mark::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 14px;
+            background-color: #555;
+            border-radius: 1px;
+        }
+
+        .x-mark::before {
+            transform: rotate(45deg);
+        }
+
+        .x-mark::after {
+            transform: rotate(-45deg);
+        }
+
+        .x-mark.p1 {
+            background-color: transparent;
+        }
+
+        .x-mark.p1::before,
+        .x-mark.p1::after {
+            background-color: #E54D42;
+        }
+
+        /* Red for Toni */
+        .x-mark.p2 {
+            background-color: transparent;
+        }
+
+        .x-mark.p2::before,
+        .x-mark.p2::after {
+            background-color: #4FB8B1;
+        }
+
+        /* Teal for Chris */
+        .x-mark.gray::before,
+        .x-mark.gray::after {
+            background-color: #999;
+        }
+
+        /* Gray for FOO */
+
+        .empty-dash {
+            width: 80%;
+            height: 1px;
+            background: #ddd;
         }
     </style>
 </head>

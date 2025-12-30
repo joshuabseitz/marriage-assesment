@@ -921,34 +921,98 @@ function getFinanceDiscussionQuestion(person1Finances, person2Finances, name1, n
 }
 
 // Helper to update lists
-// PAGE 7: Expectations
+// PAGE 7: Expectations - HIGH FIDELITY GRID RENDERING
 function renderPage7() {
   if (!reportData) return;
 
   const { expectations, couple } = reportData;
+  const p1 = couple?.person_1;
+  const p2 = couple?.person_2;
+  const p1Name = p1?.name || 'Toni';
+  const p2Name = p2?.name || 'Chris';
 
-  // Names
-  updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
-  updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
+  console.log('📝 Rendering Page 7 - Expectations (Deterministic Grid)');
 
-  // Render agreed roles and discussion items
-  const agreedRoles = expectations?.agreed_roles || [];
-  const needsDiscussion = expectations?.needs_discussion || [];
+  // Update Photos and Names
+  const p1Photo = document.querySelector('[data-field="person1_photo"]');
+  const p2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (p1Photo && p1?.photo_url) p1Photo.src = p1.photo_url;
+  if (p2Photo && p2?.photo_url) p2Photo.src = p2.photo_url;
 
-  const agreedContainer = document.querySelector('[data-container="agreed_roles"]');
-  const discussionContainer = document.querySelector('[data-container="needs_discussion"]');
+  // Containers
+  const agreedContainer = document.getElementById('agreed-roles-container');
+  const discussionContainer = document.getElementById('discussion-roles-container');
 
   if (agreedContainer) {
-    agreedContainer.innerHTML = agreedRoles.map(role => `
-      <div class="role-item">${role.task}: ${role.assigned_to}</div>
-    `).join('');
+    agreedContainer.innerHTML = (expectations?.agreed_roles || [])
+      .map(role => renderRoleRow(role, p1Name, p2Name, true))
+      .join('');
   }
 
   if (discussionContainer) {
-    discussionContainer.innerHTML = needsDiscussion.map(item => `
-      <div class="discussion-item">${item}</div>
-    `).join('');
+    discussionContainer.innerHTML = (expectations?.needs_discussion || [])
+      .map(role => renderRoleRow(role, p1Name, p2Name, false))
+      .join('');
   }
+
+  // Reflection Question
+  if (reportData.reflection_questions?.page_7) {
+    updateText('[data-field="reflection_question"]', reportData.reflection_questions.page_7);
+  }
+}
+
+/**
+ * Helper to render a single row in the expectations grid
+ */
+function renderRoleRow(role, p1Name, p2Name, isAgreed) {
+  const getX = (active, type) => active ? `<div class="x-mark ${type}"></div>` : '<div class="empty-dash"></div>';
+
+  // Assignment Badge Logic
+  let assignmentLabel = '';
+  let assignmentClass = '';
+
+  if (isAgreed) {
+    assignmentLabel = role.assigned_to === 'Both' ? 'Both' : (role.assigned_to === 'Neither' ? 'Neither' : role.assigned_to);
+    assignmentClass = role.assigned_to === p1Name ? 'assigned-toni' : (role.assigned_to === p2Name ? 'assigned-chris' : (role.assigned_to === 'Both' ? 'assigned-both' : ''));
+  }
+
+  // Checkbox logic for Person 1 (Toni)
+  const p1Me = role.person_1_view.who === 'Me' || role.person_1_view.who === 'Both';
+  const p1You = role.person_1_view.who === 'You' || role.person_1_view.who === 'Both';
+
+  // Checkbox logic for Person 2 (Chris)
+  const p2Me = role.person_2_view.who === 'Me' || role.person_2_view.who === 'Both';
+  const p2You = role.person_2_view.who === 'You' || role.person_2_view.who === 'Both';
+
+  return `
+    <div class="expectation-row">
+      <!-- Assigned To -->
+      <div class="flex justify-end">
+        ${isAgreed ? `<div class="assigned-badge ${assignmentClass}">${assignmentLabel}</div>` : '<div class="w-12 h-0.5 bg-gray-200 mt-2"></div>'}
+      </div>
+      
+      <!-- Task Name -->
+      <div class="text-[13px] font-medium text-gray-700 pl-2">
+        ${role.task}
+      </div>
+      
+      <!-- Toni's Grid (Mom, Dad, Me, You) -->
+      <div class="checkbox-grid">
+        <div class="grid-cell">${getX(role.person_1_view.mom, 'gray')}</div>
+        <div class="grid-cell">${getX(role.person_1_view.dad, 'gray')}</div>
+        <div class="grid-cell highlight">${getX(p1Me, 'p1')}</div>
+        <div class="grid-cell">${getX(p1You, 'p1')}</div>
+      </div>
+      
+      <!-- Chris's Grid (Mom, Dad, Me, You) -->
+      <div class="checkbox-grid">
+        <div class="grid-cell">${getX(role.person_2_view.mom, 'gray')}</div>
+        <div class="grid-cell">${getX(role.person_2_view.dad, 'gray')}</div>
+        <div class="grid-cell highlight">${getX(p2Me, 'p2')}</div>
+        <div class="grid-cell">${getX(p2You, 'p2')}</div>
+      </div>
+    </div>
+  `;
 }
 
 // PAGE 8 & 9: Dynamics

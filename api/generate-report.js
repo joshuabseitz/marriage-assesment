@@ -342,6 +342,7 @@ export default async function handler(req, res) {
           // Preserve deterministic data from baseReport (do NOT use AI-generated versions)
           wellbeing: baseReport.wellbeing,
           social_support: baseReport.social_support,
+          expectations: baseReport.expectations,
           momentum: {
             ...baseReport.momentum,
             ...pass1Results.momentum,
@@ -372,6 +373,7 @@ export default async function handler(req, res) {
           // Preserve deterministic data from baseReport (do NOT use AI-generated versions)
           wellbeing: baseReport.wellbeing,
           social_support: baseReport.social_support,
+          expectations: baseReport.expectations,
           momentum: {
             ...baseReport.momentum,
             ...pass1Results.momentum,
