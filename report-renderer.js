@@ -644,46 +644,96 @@ function renderPage4() {
   });
 }
 
-// PAGE 5: Social Support
+// PAGE 5: Social Support - DETERMINISTIC
 function renderPage5() {
   if (!reportData) return;
 
   const { social_support, couple } = reportData;
 
-  // Names
-  updateAll('[data-person="person1"]', couple?.person_1?.name || 'Person 1');
-  updateAll('[data-person="person2"]', couple?.person_2?.name || 'Person 2');
+  // Names - update both data-person and data-field selectors
+  const p1Name = couple?.person_1?.name || 'Person 1';
+  const p2Name = couple?.person_2?.name || 'Person 2';
+  updateAll('[data-person="person1"]', p1Name);
+  updateAll('[data-person="person2"]', p2Name);
+  updateAll('[data-field="person1_name"]', p1Name);
+  updateAll('[data-field="person2_name"]', p2Name);
 
-  // Photos
-  const person1Photo = document.querySelector('[data-field="person1_photo"]');
-  const person2Photo = document.querySelector('[data-field="person2_photo"]');
-  if (person1Photo) person1Photo.src = couple?.person_1?.photo_url || '';
-  if (person2Photo) person2Photo.src = couple?.person_2?.photo_url || '';
+  // Photos - update all photo fields on the page
+  const p1Photo = couple?.person_1?.photo_url || '';
+  const p2Photo = couple?.person_2?.photo_url || '';
+  document.querySelectorAll('[data-field="person1_photo"]').forEach(el => {
+    if (el && el.tagName === 'IMG') el.src = p1Photo;
+  });
+  document.querySelectorAll('[data-field="person2_photo"]').forEach(el => {
+    if (el && el.tagName === 'IMG') el.src = p2Photo;
+  });
 
-  // Person 1 support scores
-  const p1 = social_support?.person_1 || {};
-  updateText('[data-field="person1_friends_family"]', p1.friends_family_support?.score || '0');
-  updateText('[data-field="person1_in_laws"]', p1.in_laws_relationship?.score || '0');
-  updateText('[data-field="person1_mutual_friends"]', p1.mutual_friends?.score || '0');
-  updateText('[data-field="person1_faith"]', p1.faith_community?.score || '0');
+  // Get deterministic social support data
+  const p1Support = social_support?.person_1 || {};
+  const p2Support = social_support?.person_2 || {};
 
-  // Person 2 support scores
-  const p2 = social_support?.person_2 || {};
-  updateText('[data-field="person2_friends_family"]', p2.friends_family_support?.score || '0');
-  updateText('[data-field="person2_in_laws"]', p2.in_laws_relationship?.score || '0');
-  updateText('[data-field="person2_mutual_friends"]', p2.mutual_friends?.score || '0');
-  updateText('[data-field="person2_faith"]', p2.faith_community?.score || '0');
+  // Friends/Family Support
+  const p1FriendsFamily = p1Support.friends_family || {};
+  const p2FriendsFamily = p2Support.friends_family || {};
+  updateRatingPosition('[data-field="person1_friends_family_position"]', p1FriendsFamily.score || 50);
+  updateRatingPosition('[data-field="person2_friends_family_position"]', p2FriendsFamily.score || 50);
+  updateText('[data-field="person1_friends_family_level"]', p1FriendsFamily.level || 'Good Support');
+  updateText('[data-field="person2_friends_family_level"]', p2FriendsFamily.level || 'Good Support');
+  updateText('[data-field="person1_friends_family_desc"]', p1FriendsFamily.description || '');
+  updateText('[data-field="person2_friends_family_desc"]', p2FriendsFamily.description || '');
 
-  // Update rating bars if they exist
-  updateRatingBar('[data-rating="person1_friends_family"]', p1.friends_family_support?.score || 0);
-  updateRatingBar('[data-rating="person1_in_laws"]', p1.in_laws_relationship?.score || 0);
-  updateRatingBar('[data-rating="person1_mutual_friends"]', p1.mutual_friends?.score || 0);
-  updateRatingBar('[data-rating="person1_faith"]', p1.faith_community?.score || 0);
+  // In-Laws Relationship
+  const p1InLaws = p1Support.in_laws || {};
+  const p2InLaws = p2Support.in_laws || {};
+  updateRatingPosition('[data-field="person1_in_laws_position"]', p1InLaws.score || 50);
+  updateRatingPosition('[data-field="person2_in_laws_position"]', p2InLaws.score || 50);
+  updateText('[data-field="person1_in_laws_level"]', p1InLaws.level || 'Neutral');
+  updateText('[data-field="person2_in_laws_level"]', p2InLaws.level || 'Neutral');
+  updateText('[data-field="person1_in_laws_desc"]', p1InLaws.description || '');
+  updateText('[data-field="person2_in_laws_desc"]', p2InLaws.description || '');
 
-  updateRatingBar('[data-rating="person2_friends_family"]', p2.friends_family_support?.score || 0);
-  updateRatingBar('[data-rating="person2_in_laws"]', p2.in_laws_relationship?.score || 0);
-  updateRatingBar('[data-rating="person2_mutual_friends"]', p2.mutual_friends?.score || 0);
-  updateRatingBar('[data-rating="person2_faith"]', p2.faith_community?.score || 0);
+  // Mutual Friends
+  const p1MutualFriends = p1Support.mutual_friends || {};
+  const p2MutualFriends = p2Support.mutual_friends || {};
+  updateRatingPosition('[data-field="person1_mutual_friends_position"]', p1MutualFriends.score || 50);
+  updateRatingPosition('[data-field="person2_mutual_friends_position"]', p2MutualFriends.score || 50);
+  updateText('[data-field="person1_mutual_friends_level"]', p1MutualFriends.level || 'Good');
+  updateText('[data-field="person2_mutual_friends_level"]', p2MutualFriends.level || 'Good');
+  updateText('[data-field="person1_mutual_friends_desc"]', p1MutualFriends.description || '');
+  updateText('[data-field="person2_mutual_friends_desc"]', p2MutualFriends.description || '');
+
+  // Faith Community
+  const p1Faith = p1Support.faith_community || {};
+  const p2Faith = p2Support.faith_community || {};
+  updateRatingPosition('[data-field="person1_faith_position"]', p1Faith.score || 50);
+  updateRatingPosition('[data-field="person2_faith_position"]', p2Faith.score || 50);
+  updateText('[data-field="person1_faith_level"]', p1Faith.level || 'Moderate');
+  updateText('[data-field="person2_faith_level"]', p2Faith.level || 'Moderate');
+  updateText('[data-field="person1_faith_desc"]', p1Faith.description || '');
+  updateText('[data-field="person2_faith_desc"]', p2Faith.description || '');
+
+  console.log('  ✅ Page 5 rendered with deterministic social support:', {
+    person1: {
+      friends_family: p1FriendsFamily.score,
+      in_laws: p1InLaws.score,
+      mutual_friends: p1MutualFriends.score,
+      faith: p1Faith.score
+    },
+    person2: {
+      friends_family: p2FriendsFamily.score,
+      in_laws: p2InLaws.score,
+      mutual_friends: p2MutualFriends.score,
+      faith: p2Faith.score
+    }
+  });
+}
+
+// Helper function to update rating bar indicator positions (left: X%)
+function updateRatingPosition(selector, score) {
+  const el = document.querySelector(selector);
+  if (el) {
+    el.style.left = `${Math.min(100, Math.max(0, score))}%`;
+  }
 }
 
 // Helper function to update rating bars

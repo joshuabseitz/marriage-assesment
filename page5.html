@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYMBIS Report - Page 5</title>
     <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Load Supabase for authentication -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/config.js"></script>
-  <script src="/lib/supabase-client-browser.js"></script>
-  <script src="/navigation.js"></script>
-  <script src="/status-manager.js"></script>
+    <!-- Load Supabase for authentication -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="/config.js"></script>
+    <script src="/lib/supabase-client-browser.js"></script>
+    <script src="/navigation.js"></script>
+    <script src="/status-manager.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Open+Sans:ital,wght@0,400;0,600;1,400&display=swap"
+        rel="stylesheet">
     <style>
         :root {
             --symbis-red: #E54D42;
@@ -23,12 +26,14 @@
             --toni-red: #E88B88;
             --chris-teal: #4FB8B1;
         }
+
         body {
             font-family: 'Open Sans', sans-serif;
             background-color: #e5e7eb;
             color: #333;
             -webkit-font-smoothing: antialiased;
         }
+
         .report-container {
             max-width: 950px;
             margin: 2rem auto;
@@ -36,25 +41,34 @@
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             position: relative;
         }
-        h1, h2, h3, .name-label {
+
+        h1,
+        h2,
+        h3,
+        .name-label {
             font-family: 'Montserrat', sans-serif;
         }
+
         .header-rule {
             border-bottom: 2px dashed #d1d5db;
             margin: 1.5rem 0;
         }
+
         .logo-text {
             font-family: 'Montserrat', sans-serif;
             font-weight: 900;
             letter-spacing: -0.05em;
         }
+
         .nav-button {
             transition: all 0.2s ease;
         }
+
         .nav-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
+
         .support-section {
             background: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
             border-radius: 16px;
@@ -64,6 +78,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .support-section::before {
             content: '';
             position: absolute;
@@ -73,6 +88,7 @@
             height: 6px;
             background: linear-gradient(90deg, var(--symbis-blue) 0%, var(--symbis-teal) 100%);
         }
+
         .section-title {
             font-family: 'Montserrat', sans-serif;
             font-weight: 800;
@@ -85,18 +101,22 @@
             padding-bottom: 12px;
             border-bottom: 2px solid rgba(79, 184, 177, 0.3);
         }
+
         .person-response {
             background: white;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         }
+
         .toni-accent {
             border-left: 4px solid var(--toni-red);
         }
+
         .chris-accent {
             border-left: 4px solid var(--chris-teal);
         }
+
         .rating-bar {
             height: 8px;
             background: linear-gradient(90deg, #cbd5e1 0%, #4FB8B1 100%);
@@ -104,6 +124,7 @@
             margin: 12px 0;
             position: relative;
         }
+
         .rating-indicator {
             position: absolute;
             width: 20px;
@@ -113,8 +134,9 @@
             border-radius: 50%;
             top: 50%;
             transform: translate(-50%, -50%);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
         }
+
         .profile-mini {
             width: 48px;
             height: 48px;
@@ -124,6 +146,7 @@
         }
     </style>
 </head>
+
 <body class="p-0 sm:p-4">
     <!-- Navigation Bar -->
     <div id="symbis-navigation"></div>
@@ -131,9 +154,13 @@
     <div class="report-container p-8 sm:p-14">
         <!-- Header with Navigation -->
         <div class="flex justify-between items-center mb-6">
-            <a href="page4" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">← Previous</a>
+            <a href="page4"
+                class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">←
+                Previous</a>
             <span class="text-gray-400 text-sm font-bold">Page 5</span>
-            <a href="page6" class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">Next →</a>
+            <a href="page6"
+                class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">Next
+                →</a>
         </div>
 
         <!-- Context Header -->
@@ -142,16 +169,20 @@
                 <div class="flex-shrink-0">
                     <div class="w-20 h-20 bg-[#5B8FB9] rounded-xl flex items-center justify-center">
                         <svg class="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
-                            <rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2"/>
-                            <path d="M8 6V4C8 3 9 2 10 2H14C15 2 16 3 16 4V6"/>
-                            <line x1="4" y1="10" x2="20" y2="10" stroke="currentColor" stroke-width="2"/>
+                            <rect x="4" y="6" width="16" height="12" rx="2" fill="none" stroke="currentColor"
+                                stroke-width="2" />
+                            <path d="M8 6V4C8 3 9 2 10 2H14C15 2 16 3 16 4V6" />
+                            <line x1="4" y1="10" x2="20" y2="10" stroke="currentColor" stroke-width="2" />
                         </svg>
                     </div>
                 </div>
                 <div class="flex-1">
-                    <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-2">CONTEXT: SOCIAL SUPPORT</h1>
+                    <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-2">
+                        CONTEXT: SOCIAL SUPPORT</h1>
                     <p class="text-gray-600 italic text-[15px] leading-relaxed">
-                        You're marrying a set of circumstances as well as each other. Being aware of how your two worlds combine on a practical level is essential to making sure they don't collide on an emotional level.
+                        You're marrying a set of circumstances as well as each other. Being aware of how your two worlds
+                        combine on a practical level is essential to making sure they don't collide on an emotional
+                        level.
                     </p>
                 </div>
             </div>
@@ -161,39 +192,51 @@
         <!-- Support of Friends and Family -->
         <div class="support-section">
             <h2 class="section-title">Support of Friends and Family for Our Relationship</h2>
-            
+
             <div class="grid md:grid-cols-2 gap-6 mb-4">
                 <div class="flex items-center gap-4">
-                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1" class="profile-mini" style="border-color: #E88B88;">
+                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1"
+                        class="profile-mini" style="border-color: #E88B88;">
                     <div class="flex-1">
                         <div class="rating-bar">
-                            <div class="rating-indicator" style="left: 90%; border-color: #E88B88;"></div>
+                            <div class="rating-indicator" data-field="person1_friends_family_position"
+                                style="left: 90%; border-color: #E88B88;"></div>
                         </div>
-                        <span class="text-xs text-gray-500 font-semibold uppercase">Strong Support</span>
+                        <span class="text-xs text-gray-500 font-semibold uppercase"
+                            data-field="person1_friends_family_level">Strong Support</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2" class="profile-mini" style="border-color: #4FB8B1;">
+                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2"
+                        class="profile-mini" style="border-color: #4FB8B1;">
                     <div class="flex-1">
                         <div class="rating-bar">
-                            <div class="rating-indicator" style="left: 90%; border-color: #4FB8B1;"></div>
+                            <div class="rating-indicator" data-field="person2_friends_family_position"
+                                style="left: 90%; border-color: #4FB8B1;"></div>
                         </div>
-                        <span class="text-xs text-gray-500 font-semibold uppercase">Strong Support</span>
+                        <span class="text-xs text-gray-500 font-semibold uppercase"
+                            data-field="person2_friends_family_level">Strong Support</span>
                     </div>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="person-response toni-accent">
-                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide" data-person="person1">Toni</div>
+                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide"
+                        data-field="person1_name">Person 1</div>
                     <p class="text-[14px] text-gray-700 leading-relaxed" data-field="person1_friends_family_desc">
-                        You have a great deal of social support from your friends and family as it relates to your relationship. Having their blessing is a tremendous advantage for having a great start in your marriage.
+                        You have a great deal of social support from your friends and family as it relates to your
+                        relationship. Having their blessing is a tremendous advantage for having a great start in your
+                        marriage.
                     </p>
                 </div>
                 <div class="person-response chris-accent">
-                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide" data-person="person2">Chris</div>
+                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide"
+                        data-field="person2_name">Person 2</div>
                     <p class="text-[14px] text-gray-700 leading-relaxed" data-field="person2_friends_family_desc">
-                        You have a great deal of social support from your friends and family as it relates to your relationship. Having their blessing is a tremendous advantage for having a great start in your marriage.
+                        You have a great deal of social support from your friends and family as it relates to your
+                        relationship. Having their blessing is a tremendous advantage for having a great start in your
+                        marriage.
                     </p>
                 </div>
             </div>
@@ -202,38 +245,46 @@
         <!-- My Relationship with My In-Laws -->
         <div class="support-section">
             <h2 class="section-title">My Relationship with My In-Laws</h2>
-            
+
             <div class="grid md:grid-cols-2 gap-6 mb-4">
                 <div class="flex items-center gap-4">
-                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1" class="profile-mini" style="border-color: #E88B88;">
+                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1"
+                        class="profile-mini" style="border-color: #E88B88;">
                     <div class="flex-1">
                         <div class="rating-bar">
-                            <div class="rating-indicator" style="left: 65%; border-color: #E88B88;"></div>
+                            <div class="rating-indicator" data-field="person1_in_laws_position"
+                                style="left: 65%; border-color: #E88B88;"></div>
                         </div>
-                        <span class="text-xs text-gray-500 font-semibold uppercase">Optimistic</span>
+                        <span class="text-xs text-gray-500 font-semibold uppercase"
+                            data-field="person1_in_laws_level">Optimistic</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2" class="profile-mini" style="border-color: #4FB8B1;">
+                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2"
+                        class="profile-mini" style="border-color: #4FB8B1;">
                     <div class="flex-1">
                         <div class="rating-bar">
-                            <div class="rating-indicator" style="left: 75%; border-color: #4FB8B1;"></div>
+                            <div class="rating-indicator" data-field="person2_in_laws_position"
+                                style="left: 75%; border-color: #4FB8B1;"></div>
                         </div>
-                        <span class="text-xs text-gray-500 font-semibold uppercase">Optimistic</span>
+                        <span class="text-xs text-gray-500 font-semibold uppercase"
+                            data-field="person2_in_laws_level">Optimistic</span>
                     </div>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="person-response toni-accent">
-                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide">Toni</div>
-                    <p class="text-[14px] text-gray-700 leading-relaxed">
+                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide"
+                        data-field="person1_name">Person 1</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed" data-field="person1_in_laws_desc">
                         The relationship you have with your partner's parents seems optimistic and supportive.
                     </p>
                 </div>
                 <div class="person-response chris-accent">
-                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide">Chris</div>
-                    <p class="text-[14px] text-gray-700 leading-relaxed">
+                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide"
+                        data-field="person2_name">Person 2</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed" data-field="person2_in_laws_desc">
                         The relationship you have with your partner's parents seems optimistic and supportive.
                     </p>
                 </div>
@@ -243,39 +294,49 @@
         <!-- Network of Mutual Friends -->
         <div class="support-section">
             <h2 class="section-title">Network of Mutual Friends We Both Enjoy</h2>
-            
+
             <div class="grid md:grid-cols-2 gap-6 mb-4">
                 <div class="flex items-center gap-4">
-                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1" class="profile-mini" style="border-color: #E88B88;">
+                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1"
+                        class="profile-mini" style="border-color: #E88B88;">
                     <div class="flex-1">
                         <div class="rating-bar">
-                            <div class="rating-indicator" style="left: 60%; border-color: #E88B88;"></div>
+                            <div class="rating-indicator" data-field="person1_mutual_friends_position"
+                                style="left: 60%; border-color: #E88B88;"></div>
                         </div>
-                        <span class="text-xs text-gray-500 font-semibold uppercase">Very Good</span>
+                        <span class="text-xs text-gray-500 font-semibold uppercase"
+                            data-field="person1_mutual_friends_level">Very Good</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2" class="profile-mini" style="border-color: #4FB8B1;">
+                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2"
+                        class="profile-mini" style="border-color: #4FB8B1;">
                     <div class="flex-1">
                         <div class="rating-bar">
-                            <div class="rating-indicator" style="left: 70%; border-color: #4FB8B1;"></div>
+                            <div class="rating-indicator" data-field="person2_mutual_friends_position"
+                                style="left: 70%; border-color: #4FB8B1;"></div>
                         </div>
-                        <span class="text-xs text-gray-500 font-semibold uppercase">Very Good</span>
+                        <span class="text-xs text-gray-500 font-semibold uppercase"
+                            data-field="person2_mutual_friends_level">Very Good</span>
                     </div>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="person-response toni-accent">
-                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide">Toni</div>
-                    <p class="text-[14px] text-gray-700 leading-relaxed">
-                        You feel very good about how your individual networks of social relationships are melding. You feel good about your partner's investment in your friends and vise versa.
+                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide"
+                        data-field="person1_name">Person 1</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed" data-field="person1_mutual_friends_desc">
+                        You feel very good about how your individual networks of social relationships are melding. You
+                        feel good about your partner's investment in your friends and vise versa.
                     </p>
                 </div>
                 <div class="person-response chris-accent">
-                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide">Chris</div>
-                    <p class="text-[14px] text-gray-700 leading-relaxed">
-                        You feel very good about how your individual networks of social relationships are melding. You feel good about your partner's investment in your friends and vise versa.
+                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide"
+                        data-field="person2_name">Person 2</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed" data-field="person2_mutual_friends_desc">
+                        You feel very good about how your individual networks of social relationships are melding. You
+                        feel good about your partner's investment in your friends and vise versa.
                     </p>
                 </div>
             </div>
@@ -284,39 +345,49 @@
         <!-- Social Support from Faith Community -->
         <div class="support-section">
             <h2 class="section-title">Social Support from My Faith Community</h2>
-            
+
             <div class="grid md:grid-cols-2 gap-6 mb-4">
                 <div class="flex items-center gap-4">
-                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1" class="profile-mini" style="border-color: #E88B88;">
+                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni3" alt="Person 1"
+                        class="profile-mini" style="border-color: #E88B88;">
                     <div class="flex-1">
                         <div class="rating-bar">
-                            <div class="rating-indicator" style="left: 75%; border-color: #E88B88;"></div>
+                            <div class="rating-indicator" data-field="person1_faith_position"
+                                style="left: 75%; border-color: #E88B88;"></div>
                         </div>
-                        <span class="text-xs text-gray-500 font-semibold uppercase">Significant</span>
+                        <span class="text-xs text-gray-500 font-semibold uppercase"
+                            data-field="person1_faith_level">Significant</span>
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2" class="profile-mini" style="border-color: #4FB8B1;">
+                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris3" alt="Person 2"
+                        class="profile-mini" style="border-color: #4FB8B1;">
                     <div class="flex-1">
                         <div class="rating-bar">
-                            <div class="rating-indicator" style="left: 85%; border-color: #4FB8B1;"></div>
+                            <div class="rating-indicator" data-field="person2_faith_position"
+                                style="left: 85%; border-color: #4FB8B1;"></div>
                         </div>
-                        <span class="text-xs text-gray-500 font-semibold uppercase">Significant</span>
+                        <span class="text-xs text-gray-500 font-semibold uppercase"
+                            data-field="person2_faith_level">Significant</span>
                     </div>
                 </div>
             </div>
 
             <div class="grid md:grid-cols-2 gap-6">
                 <div class="person-response toni-accent">
-                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide">Toni</div>
-                    <p class="text-[14px] text-gray-700 leading-relaxed">
-                        You view your religious faith and the people you worship with to be a significant part of your social support system.
+                    <div class="text-[#E88B88] font-bold text-sm mb-2 uppercase tracking-wide"
+                        data-field="person1_name">Person 1</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed" data-field="person1_faith_desc">
+                        You view your religious faith and the people you worship with to be a significant part of your
+                        social support system.
                     </p>
                 </div>
                 <div class="person-response chris-accent">
-                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide">Chris</div>
-                    <p class="text-[14px] text-gray-700 leading-relaxed">
-                        You view your religious faith and the people you worship with to be a significant part of your social support system.
+                    <div class="text-[#4FB8B1] font-bold text-sm mb-2 uppercase tracking-wide"
+                        data-field="person2_name">Person 2</div>
+                    <p class="text-[14px] text-gray-700 leading-relaxed" data-field="person2_faith_desc">
+                        You view your religious faith and the people you worship with to be a significant part of your
+                        social support system.
                     </p>
                 </div>
             </div>
@@ -327,13 +398,14 @@
             <div class="flex-shrink-0">
                 <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z"/>
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z" />
                     </svg>
                 </div>
             </div>
             <div class="flex-1">
                 <p class="text-gray-600 italic text-[14px] leading-relaxed">
-                    Are you each satisfied with your current level of social support? What do you wish were different and why? What can you do to improve your social support as a couple?
+                    Are you each satisfied with your current level of social support? What do you wish were different
+                    and why? What can you do to improve your social support as a couple?
                 </p>
             </div>
         </div>
@@ -354,16 +426,17 @@
         </footer>
     </div>
 
-  <script src="/report-renderer.js"></script>
-  <!-- Report Navigation -->
-  <div id="report-navigation"></div>
+    <script src="/report-renderer.js"></script>
+    <!-- Report Navigation -->
+    <div id="report-navigation"></div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof SymbisNav !== 'undefined') {
-        SymbisNav.init('report', 5);
-      }
-    });
-  </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof SymbisNav !== 'undefined') {
+                SymbisNav.init('report', 5);
+            }
+        });
+    </script>
 </body>
+
 </html>

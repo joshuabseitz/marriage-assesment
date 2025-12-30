@@ -332,15 +332,16 @@ export default async function handler(req, res) {
         );
 
         // Deep merge all results
-        // IMPORTANT: wellbeing is deterministic from baseReport, NOT from AI passes
+        // IMPORTANT: wellbeing and social_support are deterministic from baseReport, NOT from AI passes
         finalReport = {
           ...baseReport,
           ...pass1Results,
           ...pass2Results,
           ...pass3Results,
           ...synthesisResults,
-          // Preserve deterministic wellbeing from baseReport (do NOT use AI-generated wellbeing)
+          // Preserve deterministic data from baseReport (do NOT use AI-generated versions)
           wellbeing: baseReport.wellbeing,
+          social_support: baseReport.social_support,
           momentum: {
             ...baseReport.momentum,
             ...pass1Results.momentum,
@@ -362,14 +363,15 @@ export default async function handler(req, res) {
         console.log('⚠️ Synthesis prompt not found, skipping Pass 4');
 
         // Merge without synthesis
-        // IMPORTANT: wellbeing is deterministic from baseReport, NOT from AI passes
+        // IMPORTANT: wellbeing and social_support are deterministic from baseReport, NOT from AI passes
         finalReport = {
           ...baseReport,
           ...pass1Results,
           ...pass2Results,
           ...pass3Results,
-          // Preserve deterministic wellbeing from baseReport (do NOT use AI-generated wellbeing)
+          // Preserve deterministic data from baseReport (do NOT use AI-generated versions)
           wellbeing: baseReport.wellbeing,
+          social_support: baseReport.social_support,
           momentum: {
             ...baseReport.momentum,
             ...pass1Results.momentum,

@@ -27,6 +27,8 @@ function extractBaseReport(person1Responses, person2Responses, user1Profile = nu
     relationship: extractRelationship(person1Responses, person2Responses, user1Profile, user2Profile),
     // DETERMINISTIC WELLBEING - calculated from survey, not AI-generated
     wellbeing: extractWellbeing(person1Responses, person2Responses, user1Profile, user2Profile),
+    // DETERMINISTIC SOCIAL SUPPORT - calculated from survey, not AI-generated
+    social_support: extractSocialSupport(person1Responses, person2Responses),
     finances: extractFinances(person1Responses, person2Responses),
     love: {
       sexuality: extractSexuality(person1Responses, person2Responses)
@@ -708,6 +710,73 @@ const WELLBEING_TEMPLATES = {
   }
 };
 
+// ============================================================================
+// SOCIAL SUPPORT TEMPLATES (PAGE 5) - DETERMINISTIC
+// ============================================================================
+
+/**
+ * SYMBIS Social Support Templates
+ * All templates are verbatim from SYMBIS specification
+ */
+const SOCIAL_SUPPORT_TEMPLATES = {
+  friends_family: {
+    strong: {
+      level: "Strong Support",
+      description: "You have a great deal of social support from your friends and family as it relates to your relationship. Having their blessing is a tremendous advantage for having a great start in your marriage."
+    },
+    good: {
+      level: "Good Support",
+      description: "You feel good about the support you're receiving from friends and family. Continue nurturing these relationships as they'll be crucial in hard seasons."
+    },
+    limited: {
+      level: "Limited Support",
+      description: "Your responses indicate limited social support for your relationship. This isn't a dealbreaker, but be aware you'll need to be extra intentional about building support networks."
+    }
+  },
+  in_laws: {
+    optimistic: {
+      level: "Optimistic",
+      description: "The relationship you have with your partner's parents seems optimistic and supportive. You feel welcomed into their family and see them as an asset to your future marriage."
+    },
+    neutral: {
+      level: "Neutral",
+      description: "Your relationship with your future in-laws is neutral—neither particularly warm nor problematic. This is common and workable. Be proactive about building connection."
+    },
+    challenging: {
+      level: "Challenging",
+      description: "Your responses indicate tension or distance with your partner's parents. While you're marrying your partner, not their family, this can create stress. Discuss boundaries and expectations with your partner now."
+    }
+  },
+  mutual_friends: {
+    very_good: {
+      level: "Very Good",
+      description: "You feel very good about how your individual networks of social relationships are melding. You feel good about your partner's investment in your friends and vice versa."
+    },
+    good: {
+      level: "Good",
+      description: "Your social circles are blending reasonably well. This is an area to continue investing in, as shared friendships strengthen marriages."
+    },
+    needs_work: {
+      level: "Needs Work",
+      description: "There's tension around how your friend groups are blending. This can indicate underlying issues about independence or incompatible social styles. Address this before marriage."
+    }
+  },
+  faith_community: {
+    significant: {
+      level: "Significant",
+      description: "You view your religious faith and the people you worship with to be a significant part of your social support system."
+    },
+    moderate: {
+      level: "Moderate",
+      description: "Faith community plays a moderate role in your support system. Consider how you want faith to shape your marriage."
+    },
+    minimal: {
+      level: "Minimal",
+      description: "Faith community is not currently a significant source of support for you. This is neither good nor bad, but be aware of how this aligns with your partner's views on spiritual community."
+    }
+  }
+};
+
 /**
  * Caution flag definitions from Q67-76
  */
@@ -993,6 +1062,135 @@ function calculateWellbeingQuestionAverage(responses, questionIds) {
 
   if (values.length === 0) return 3; // Default to middle
   return values.reduce((sum, val) => sum + val, 0) / values.length;
+}
+
+// ============================================================================
+// SOCIAL SUPPORT EXTRACTION (PAGE 5) - DETERMINISTIC
+// ============================================================================
+
+/**
+ * Extract complete social support data deterministically
+ * Calculates scores and selects templates for all 4 categories
+ */
+function extractSocialSupport(person1Responses, person2Responses) {
+  return {
+    person_1: extractPersonSocialSupport(person1Responses),
+    person_2: extractPersonSocialSupport(person2Responses)
+  };
+}
+
+/**
+ * Extract social support for a single person
+ */
+function extractPersonSocialSupport(responses) {
+  // Friends/Family Support - Q151-155
+  const friendsFamilyScore = calculateSocialSupportScore(responses, [151, 152, 153, 154, 155], 20);
+  const friendsFamily = getFriendsFamilyTemplate(friendsFamilyScore);
+
+  // In-Laws Relationship - Q156-160
+  const inLawsScore = calculateSocialSupportScore(responses, [156, 157, 158, 159, 160], 20);
+  const inLaws = getInLawsTemplate(inLawsScore);
+
+  // Mutual Friends - Q161-166
+  const mutualFriendsScore = calculateSocialSupportScore(responses, [161, 162, 163, 164, 165, 166], 16.67);
+  const mutualFriends = getMutualFriendsTemplate(mutualFriendsScore);
+
+  // Faith Community - Q167-170
+  const faithScore = calculateSocialSupportScore(responses, [167, 168, 169, 170], 25);
+  const faithCommunity = getFaithCommunityTemplate(faithScore);
+
+  return {
+    friends_family: {
+      score: Math.round(friendsFamilyScore),
+      level: friendsFamily.level,
+      description: friendsFamily.description
+    },
+    in_laws: {
+      score: Math.round(inLawsScore),
+      level: inLaws.level,
+      description: inLaws.description
+    },
+    mutual_friends: {
+      score: Math.round(mutualFriendsScore),
+      level: mutualFriends.level,
+      description: mutualFriends.description
+    },
+    faith_community: {
+      score: Math.round(faithScore),
+      level: faithCommunity.level,
+      description: faithCommunity.description
+    }
+  };
+}
+
+/**
+ * Calculate social support score from question responses
+ * Formula: (average of questions) * multiplier
+ */
+function calculateSocialSupportScore(responses, questionIds, multiplier) {
+  const values = questionIds
+    .map(id => parseFloat(responses[id]))
+    .filter(val => !isNaN(val));
+
+  if (values.length === 0) return 50; // Default to middle
+  const avg = values.reduce((sum, val) => sum + val, 0) / values.length;
+  return Math.min(100, avg * multiplier);
+}
+
+/**
+ * Get Friends/Family template based on score
+ * Levels: Strong (80-100), Good (60-79), Limited (0-59)
+ */
+function getFriendsFamilyTemplate(score) {
+  if (score >= 80) {
+    return SOCIAL_SUPPORT_TEMPLATES.friends_family.strong;
+  }
+  if (score >= 60) {
+    return SOCIAL_SUPPORT_TEMPLATES.friends_family.good;
+  }
+  return SOCIAL_SUPPORT_TEMPLATES.friends_family.limited;
+}
+
+/**
+ * Get In-Laws template based on score
+ * Levels: Optimistic (75-100), Neutral (50-74), Challenging (0-49)
+ */
+function getInLawsTemplate(score) {
+  if (score >= 75) {
+    return SOCIAL_SUPPORT_TEMPLATES.in_laws.optimistic;
+  }
+  if (score >= 50) {
+    return SOCIAL_SUPPORT_TEMPLATES.in_laws.neutral;
+  }
+  return SOCIAL_SUPPORT_TEMPLATES.in_laws.challenging;
+}
+
+/**
+ * Get Mutual Friends template based on score
+ * Levels: Very Good (75-100), Good (50-74), Needs Work (0-49)
+ */
+function getMutualFriendsTemplate(score) {
+  if (score >= 75) {
+    return SOCIAL_SUPPORT_TEMPLATES.mutual_friends.very_good;
+  }
+  if (score >= 50) {
+    return SOCIAL_SUPPORT_TEMPLATES.mutual_friends.good;
+  }
+  return SOCIAL_SUPPORT_TEMPLATES.mutual_friends.needs_work;
+}
+
+/**
+ * Get Faith Community template based on score
+ * Levels: Significant (80-100), Moderate (50-79), Minimal (0-49)
+ */
+function getFaithCommunityTemplate(score) {
+  if (score >= 80) {
+    return SOCIAL_SUPPORT_TEMPLATES.faith_community.significant;
+  }
+  if (score >= 50) {
+    return SOCIAL_SUPPORT_TEMPLATES.faith_community.moderate;
+  }
+  return SOCIAL_SUPPORT_TEMPLATES.faith_community.minimal;
 }
 
 // ============================================================================
