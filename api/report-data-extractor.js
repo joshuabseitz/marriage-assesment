@@ -215,7 +215,7 @@ function extractPersonFinances(responses) {
     budget_icon: getBudgetIcon(budgetApproach),
     debt: {
       amount: debtAmount,
-      has_debt: debtAmount !== "None" && debtAmount !== "No debt" && debtAmount.toLowerCase() !== "none",
+      has_debt: debtAmount !== "None" && debtAmount !== "No debt" && String(debtAmount || "").toLowerCase() !== "none",
       comfort_own: comfortWithOwnDebt,
       comfort_partner: comfortWithPartnerDebt
     },
@@ -234,7 +234,7 @@ function extractPersonFinances(responses) {
 
 function getBudgetIcon(budgetApproach) {
   if (!budgetApproach) return "none";
-  const approach = budgetApproach.toLowerCase();
+  const approach = String(budgetApproach).toLowerCase();
   if (approach.includes("religiously") || approach.includes("strict")) return "bars";
   if (approach.includes("track") || approach.includes("generally")) return "clipboard";
   return "warning";

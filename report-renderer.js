@@ -899,7 +899,7 @@ function renderFinancialFears(selector, fears) {
     if (isObject) {
       isActive = fears[fear.key] === true;
     } else if (Array.isArray(fears)) {
-      isActive = fears.some(f => f.toLowerCase().includes(fear.label.toLowerCase().replace('lack of ', '')));
+      isActive = fears.some(f => String(f || "").toLowerCase().includes(fear.label.toLowerCase().replace('lack of ', '')));
     }
 
     const badgeClass = isActive ? 'active-badge' : 'inactive-badge';

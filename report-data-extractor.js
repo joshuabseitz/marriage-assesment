@@ -62,7 +62,7 @@ function extractPersonDemographics(responses, userProfile) {
   // Photo comes from profile picture uploaded during signup
   // Colors are assigned based on gender (blue for men, red/pink for women)
 
-  const gender = userProfile?.gender ? userProfile.gender.toLowerCase() : "male";
+  const gender = userProfile?.gender ? String(userProfile.gender).toLowerCase() : "male";
 
   // Auto-assign colors based on gender
   const isMale = gender === "male" || gender === "m";
@@ -197,7 +197,7 @@ function extractPersonFinances(responses) {
     budget_icon: getBudgetIcon(budgetApproach),
     debt: {
       amount: debtAmount,
-      has_debt: debtAmount !== "None" && debtAmount !== "No debt" && debtAmount.toLowerCase() !== "none",
+      has_debt: debtAmount !== "None" && debtAmount !== "No debt" && String(debtAmount || "").toLowerCase() !== "none",
       comfort_own: comfortWithOwnDebt,
       comfort_partner: comfortWithPartnerDebt
     },
@@ -216,7 +216,7 @@ function extractPersonFinances(responses) {
 
 function getBudgetIcon(budgetApproach) {
   if (!budgetApproach) return "none";
-  const approach = budgetApproach.toLowerCase();
+  const approach = String(budgetApproach).toLowerCase();
   if (approach.includes("religiously") || approach.includes("strict")) return "bars";
   if (approach.includes("track") || approach.includes("generally")) return "clipboard";
   return "warning";
@@ -683,7 +683,7 @@ function extractRelationshipWellbeing(datingLength, stabilityRating, person1SimA
  * - 0-12 months → concern
  */
 function getLongevityTemplate(datingLength) {
-  const length = (datingLength || '').toLowerCase().trim();
+  const length = String(datingLength || '').toLowerCase().trim();
 
   // Check in order from shortest to longest durations to avoid false matches
 
