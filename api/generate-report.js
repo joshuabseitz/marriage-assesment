@@ -120,25 +120,35 @@ function loadDataExtractor() {
     const extractorPath = join(__dirname, 'report-data-extractor.js');
     const extractorCode = readFileSync(extractorPath, 'utf-8');
 
-    // Execute templates first to make it available
-    // Create a mock module object to capture exports
-    const templatesFunc = new Function(`
-      const module = { exports: {} };
+    // Execute both files together in a single scope
+    const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', `
+      // Inject templates code
       ${templatesCode}
-      return module.exports;
-    `);
-    const DynamicsTemplates = templatesFunc();
-    
-    console.log('✅ Dynamics templates loaded:', Object.keys(DynamicsTemplates).length, 'exports');
-
-    // Execute extractor with templates injected
-    const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', 'DynamicsTemplates', `
+      
+      // Now DynamicsTemplates functions are available in scope
+      const DynamicsTemplates = {
+        TYPE_COMBINATION_TEMPLATES,
+        STRENGTH_STATEMENTS,
+        GENERIC_TYPE_STRENGTHS,
+        STYLE_GAP_TEMPLATES,
+        getDynamicsDescription,
+        getStrengthsList,
+        calculateDynamicsCompatibility,
+        getStyleGapAnalysis,
+        getOverallType,
+        getTypeCombinationKey,
+        personalizeDescription,
+        getStylePositions
+      };
+      
+      // Inject extractor code
       ${extractorCode}
+      
       return extractBaseReport(person1Responses, person2Responses, user1Profile, user2Profile);
     `);
 
-    // Return wrapped function that injects templates
-    return (p1, p2, u1, u2) => extractBaseReport(p1, p2, u1, u2, DynamicsTemplates);
+    console.log('✅ Data extractor with dynamics templates loaded');
+    return extractBaseReport;
   } catch (error) {
     console.error('Error loading data extractor:', error);
     throw new Error(`Failed to load data extractor: ${error.message}`);
