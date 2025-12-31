@@ -256,13 +256,13 @@ function extractSexuality(person1Responses, person2Responses) {
 
 function extractPersonSexuality(responses) {
   const abstaining = responses[188] || "Not specified";
-  const desireRating = parseInt(responses[193]) || 5;
+  const desireRating = parseInt(responses[189]) || 5;
 
   return {
     abstaining: abstaining,
     desire_rating: desireRating,
-    initiate_expectation: responses[197] || "Both",
-    frequency_expectation: responses[200] || "Not specified"
+    initiate_expectation: responses[190] || "Both",
+    frequency_expectation: responses[191] || "Not specified"
   };
 }
 
@@ -574,16 +574,15 @@ function calculateDimensionScore(responses, questionIds) {
  * Returns: 'Cooperating Spouse' | 'Affirming Spouse' | 'Directing Spouse' | 'Analyzing Spouse'
  */
 function determinePersonalityType(responses) {
-  // Simplified type determination based on key questions
-  // Q53-55: High = Cooperating (patient, diplomatic, steady)
-  // Q73-82: Low = Cooperating (not aggressive)
-  // Q83-92: High = Affirming (feelings over facts)
-  // Q103-112: High = Analyzing (cautious, methodical)
+  // Q137, 141, 143, 159, 161: High = Cooperating (listener, steady, peace-maker, patient, cooperative)
+  // Q162, 170, 160, 144: High = Directing (competitive, dominate, intense, persuasive)
+  // Q138, 142, 154, 186: High = Affirming (talkative, fun-loving, entertaining, extrovert)
+  // Q139, 145, 155, 183: High = Analyzing (cautious, facts-needed, detail-oriented, accurate)
 
-  const steadiness = calculateAverage(responses, [53, 54, 55]); // Cooperating indicators
-  const aggressiveness = calculateAverage(responses, [73, 74, 75, 76, 77]); // Directing indicators
-  const expressiveness = calculateAverage(responses, [83, 84, 85, 86, 87]); // Affirming indicators
-  const cautiousness = calculateAverage(responses, [103, 104, 105, 106, 107]); // Analyzing indicators
+  const steadiness = calculateAverage(responses, [137, 141, 143, 159, 161]);
+  const aggressiveness = calculateAverage(responses, [162, 170, 160, 144]);
+  const expressiveness = calculateAverage(responses, [138, 142, 154, 186]);
+  const cautiousness = calculateAverage(responses, [139, 145, 155, 183]);
 
   // Find dominant trait
   const scores = {
@@ -1168,8 +1167,8 @@ function extractPersonSocialSupport(responses) {
   const inLawsScore = calculateSocialSupportScore(responses, [79, 80, 81], 20);
   const inLaws = getInLawsTemplate(inLawsScore);
 
-  // Mutual Friends - Q82-84
-  const mutualFriendsScore = calculateSocialSupportScore(responses, [82, 83, 84], 16.67);
+  // Mutual Friends - Q82-85
+  const mutualFriendsScore = calculateSocialSupportScore(responses, [82, 83, 84, 85], 12.5);
   const mutualFriends = getMutualFriendsTemplate(mutualFriendsScore);
 
   // Faith Community - Q86-88

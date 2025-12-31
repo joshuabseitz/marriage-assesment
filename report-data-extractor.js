@@ -230,14 +230,14 @@ function extractSexuality(person1Responses, person2Responses) {
 }
 
 function extractPersonSexuality(responses) {
-  const abstaining = responses[202] || "Not specified";
-  const desireRating = parseInt(responses[203]) || 5;
+  const abstaining = responses[188] || "Not specified";
+  const desireRating = parseInt(responses[189]) || 5;
 
   return {
     abstaining: abstaining,
     desire_rating: desireRating,
-    initiate_expectation: responses[204] || "Both",
-    frequency_expectation: responses[205] || "Not specified"
+    initiate_expectation: responses[190] || "Both",
+    frequency_expectation: responses[191] || "Not specified"
   };
 }
 
@@ -273,18 +273,18 @@ function extractSpirituality(person1Responses, person2Responses) {
 
 function extractPersonSpirituality(responses) {
   return {
-    feels_closest_to_god_through: responses[261] || "Not specified",
+    feels_closest_to_god_through: responses[247] || "Not specified",
     spiritual_practices: {
-      attend_church_weekly: (parseInt(responses[262]) || 0) >= 4,
-      go_to_same_church: (parseInt(responses[263]) || 0) >= 4,
-      discuss_spiritual_issues: (parseInt(responses[264]) || 0) >= 4,
-      receive_communion_regularly: (parseInt(responses[265]) || 0) >= 4,
-      agree_on_theology: (parseInt(responses[266]) || 0) >= 4,
-      give_financial_tithe: (parseInt(responses[267]) || 0) >= 4,
-      pray_for_each_other: (parseInt(responses[268]) || 0) >= 4,
-      pray_together_daily: (parseInt(responses[269]) || 0) >= 4,
-      serve_others_together: (parseInt(responses[270]) || 0) >= 4,
-      study_bible_together: (parseInt(responses[271]) || 0) >= 4
+      attend_church_weekly: (parseInt(responses[248]) || 0) >= 4,
+      go_to_same_church: (parseInt(responses[249]) || 0) >= 4,
+      discuss_spiritual_issues: (parseInt(responses[250]) || 0) >= 4,
+      receive_communion_regularly: (parseInt(responses[251]) || 0) >= 4,
+      agree_on_theology: (parseInt(responses[252]) || 0) >= 4,
+      give_financial_tithe: (parseInt(responses[253]) || 0) >= 4,
+      pray_for_each_other: (parseInt(responses[254]) || 0) >= 4,
+      pray_together_daily: (parseInt(responses[255]) || 0) >= 4,
+      serve_others_together: (parseInt(responses[256]) || 0) >= 4,
+      study_bible_together: (parseInt(responses[257]) || 0) >= 4
     }
   };
 }
@@ -326,13 +326,23 @@ function extractExpectations(person1Responses, person2Responses) {
   // Helper to map choice indices to labels if needed
   const getChoiceLabel = (val) => {
     if (!val && val !== 0) return "Not specified";
-    if (typeof val === 'string') return val;
+
+    // Check if it's already a known label
     const options = ["Me", "You", "Both", "Neither"];
+    if (typeof val === 'string' && options.includes(val)) return val;
+
+    // Parse numeric value (handles both number type and string '1', '2' etc)
     const idx = parseInt(val);
-    if (isNaN(idx)) return "Not specified";
-    // Many surveys export 1-based indices
+    if (isNaN(idx)) {
+      // If not a number, but is a string, return as is (last resort)
+      if (typeof val === 'string') return val;
+      return "Not specified";
+    }
+
+    // Many surveys export 1-based indices (1:Me, 2:You, 3:Both, 4:Neither)
     if (options[idx - 1]) return options[idx - 1];
     if (options[idx]) return options[idx];
+
     return "Not specified";
   };
 
