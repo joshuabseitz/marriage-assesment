@@ -965,7 +965,7 @@ function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
 
     badgeHtml = `<span class="role-badge ${badgeClass}">${assigned}</span>`;
   } else {
-    badgeHtml = `<span class="role-badge assigned-neither">Pending</span>`;
+    badgeHtml = `<span class="role-badge assigned-neither">Discuss</span>`;
   }
 
   // Perspective Icons/Pills

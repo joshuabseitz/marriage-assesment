@@ -362,17 +362,24 @@ function extractExpectations(person1Responses, person2Responses, user1Profile, u
     if (!val && val !== 0) return "Not specified";
 
     const options = ["Me", "You", "Both", "Neither"];
+    
+    // Handle string values directly
     if (typeof val === 'string' && options.includes(val)) return val;
 
+    // Handle numeric indices
     const idx = parseInt(val);
     if (isNaN(idx)) {
       if (typeof val === 'string') return normalizeWho(val);
       return "Not specified";
     }
 
-    // Try 1-based then 0-based
-    if (options[idx - 1]) return options[idx - 1];
-    if (options[idx]) return options[idx];
+    // Role questions use 1-based indexing: 1=Me, 2=You, 3=Both, 4=Neither
+    // But also handle 0-based for compatibility
+    if (idx >= 1 && idx <= 4) {
+      return options[idx - 1];
+    } else if (idx === 0) {
+      return options[0];
+    }
 
     return "Not specified";
   };

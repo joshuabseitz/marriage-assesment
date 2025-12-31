@@ -122,9 +122,9 @@
         103: 1, 104: 1, 105: 5,  // Growing up money stress, anxiety, trust
         106: 4, 107: 2, 108: 4, 109: 4, 110: 4, 111: 4, 112: 4,
         113: 5, 114: 5, 115: 5, 116: 5,
-        // Role Expectations (Q117-136) - Mostly agreements
-        117: 3, 118: 3, 119: 3, 120: 3, 121: 1, 122: 3, 123: 1, 124: 3, 125: 3, 126: 3,
-        127: 3, 128: 3, 129: 3, 130: 3, 131: 3, 132: 3, 133: 3, 134: 3, 135: 3, 136: 3,
+        // Role Expectations (Q117-136) - Mostly agreements (use strings: "Me", "You", "Both", "Neither")
+        117: "Both", 118: "Both", 119: "Both", 120: "Both", 121: "Me", 122: "Both", 123: "Me", 124: "Both", 125: "Both", 126: "Both",
+        127: "Both", 128: "Both", 129: "Both", 130: "Both", 131: "Both", 132: "Both", 133: "Both", 134: "Both", 135: "Both", 136: "Both",
         137: 3, 138: 3, 139: 3, 140: 3, 141: 3, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3, 148: 3, 149: 3, 150: 3,
 
         // Personality (Q151-200) - COOPERATING SPOUSE: Collaborative, flexible, consensus-seeking
@@ -213,11 +213,9 @@
         99: false, 100: false, 101: true, 102: false,  // One fear: lack of respect
         103: 3, 104: 3, 105: 4, 106: 3, 107: 3, 108: 3, 109: 3, 110: 3, 111: 3, 112: 3,
         113: 3, 114: 3, 115: 3, 116: 3,
-        // Role Expectations (Q117-136) - Some mixed patterns
-        117: 1, 118: 3, 119: 1, 120: 3, 121: 3, 122: 1, 123: 3, 124: 3, 125: 1, 126: 3,
-        127: 3, 128: 3, 129: 3, 130: 1, 131: 3, 132: 3, 133: 3, 134: 3, 135: 3, 136: 3,
-        131: "Both", 132: "Both", 133: "You", 134: "Both", 135: "Me", 136: "Both", 137: "Both", 138: "You", 139: "Both", 140: "Both",
-        141: "Both", 142: "Me", 143: "Both", 144: "You", 145: "Both", 146: "Both", 147: "Both", 148: "Me", 149: "Both", 150: "You",
+        // Role Expectations (Q117-136) - Some mixed patterns (use strings: "Me", "You", "Both", "Neither")
+        117: "Me", 118: "Both", 119: "Me", 120: "Both", 121: "Both", 122: "Me", 123: "Both", 124: "Both", 125: "Me", 126: "Both",
+        127: "Both", 128: "Both", 129: "Both", 130: "Me", 131: "Both", 132: "Both", 133: "You", 134: "Both", 135: "Me", 136: "Both",
         // AFFIRMING SPOUSE: Supportive, encouraging, emotionally responsive
         151: 3, 152: 5, 153: 3, 154: 4, 155: 3, 156: 5, 157: 5, 158: 5, 159: 5, 160: 5, // High support
         161: 5, 162: 5, 163: 3, 164: 5, 165: 5, 166: 5, 167: 3, 168: 5, 169: 5, 170: 5, // Encouraging
@@ -275,11 +273,9 @@
         94: "More than $50,000",  // High debt
         95: 2, 96: 2, 97: 3, 98: 2,
         99: true, 100: true, 101: true, 102: true,  // All 4 fears active
-        103: 5, 104: 5, 105: 3,        // Role Expectations (Q117-136) - Disagreements
-        117: 1, 118: 1, 119: 1, 120: 2, 121: 1, 122: 1, 123: 1, 124: 1, 125: 1, 126: 1,
-        127: 1, 128: 1, 129: 1, 130: 1, 131: 1, 132: 1, 133: 1, 134: 1, 135: 1, 136: 1,
-        131: "Me", 132: "Me", 133: "Me", 134: "You", 135: "You", 136: "Me", 137: "Me", 138: "You", 139: "Me", 140: "You",
-        141: "Me", 142: 5, 143: 5, 144: 5, 145: 5, 146: 5, 147: 5, 148: 5, 149: 5, 150: 5, // Q142-150 HIGH for Analyzing
+        103: 5, 104: 5, 105: 3,        // Role Expectations (Q117-136) - Disagreements (use strings: "Me", "You", "Both", "Neither")
+        117: "Me", 118: "Me", 119: "Me", 120: "You", 121: "Me", 122: "Me", 123: "Me", 124: "Me", 125: "Me", 126: "Me",
+        127: "Me", 128: "Me", 129: "Me", 130: "Me", 131: "Me", 132: "Me", 133: "Me", 134: "You", 135: "You", 136: "Me",
         // ANALYZING SPOUSE: Thoughtful, processes deeply, problem-solving focused
         151: 2, 152: 2, 153: 5, 154: 5, 155: 2, 156: 2, 157: 2, 158: 5, 159: 5, 160: 5, // Deep thinking
         161: 2, 162: 2, 163: 5, 164: 5, 165: 5, 166: 2, 167: 5, 168: 5, 169: 5, 170: 2, // Analytical
@@ -337,10 +333,9 @@
         94: "Less than $10,000",  // Low debt
         95: 4, 96: 4, 97: 4, 98: 4,
         99: false, 100: true, 101: false, 102: false,  // One fear: lack of security
-        103: 3, 104: 3, 105: 4,        // Role Expectations (Q117-136) - Directing patterns
-        117: 2, 118: 1, 119: 1, 120: 1, 121: 1, 122: 2, 123: 2, 124: 2, 125: 2, 126: 2,
-        127: 2, 128: 1, 129: 2, 130: 1, 131: 2, 132: 1, 133: 3, 134: 3, 135: 1, 136: 1,
-        131: "Me", 132: 5, 133: 5, 134: 5, 135: 5, 136: 5, 137: 5, 138: 5, 139: 5, 140: 5, // Q132-141 HIGH for Directing
+        103: 3, 104: 3, 105: 4,        // Role Expectations (Q117-136) - Directing patterns (use strings: "Me", "You", "Both", "Neither")
+        117: "You", 118: "Me", 119: "Me", 120: "Me", 121: "Me", 122: "You", 123: "You", 124: "You", 125: "You", 126: "You",
+        127: "You", 128: "Me", 129: "You", 130: "Me", 131: "You", 132: "Me", 133: "Both", 134: "Both", 135: "Me", 136: "Me",
         141: 5, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3, 148: 3, 149: 3, 150: 3,
         // DIRECTING SPOUSE: Decisive, takes charge, goal-oriented
         151: 2, 152: 2, 153: 2, 154: 5, 155: 5, 156: 2, 157: 2, 158: 2, 159: 2, 160: 2, // Takes initiative
