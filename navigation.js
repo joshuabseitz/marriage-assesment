@@ -85,10 +85,6 @@ function createNavBar(currentPage = '') {
           
           <!-- Right Side Actions -->
           <div class="hidden md:flex items-center space-x-4">
-            <a href="index" 
-               class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">
-              Sample Report
-            </a>
             <a href="partner-connect" 
                class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">
               Find Partner
@@ -134,10 +130,6 @@ function createNavBar(currentPage = '') {
             View Report
           </a>
           <hr class="my-2">
-          <a href="index" 
-             class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50">
-            Sample Report
-          </a>
           <a href="partner-connect" 
              class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50">
             Find Partner
