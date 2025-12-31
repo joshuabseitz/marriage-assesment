@@ -170,19 +170,8 @@
         272: 5, 273: 5, 274: 5, 275: 5, 276: 5,
         277: 5, 278: 1, 279: 1, 280: 5,
 
-        // Reflections (Q281-300)
-        281: "comfortable and stable",
-        282: "I feel confident and prepared",
-        283: "I'm better at compromising than I thought",
-        284: "your willingness to work together",
-        285: "building a strong partnership",
-        286: "work as a team on all major decisions",
-        287: "growing stronger every day",
-        288: "we truly partner well together",
-        289: "you genuinely seek my input",
-        290: "forgetting to prioritize our relationship",
-        291: 5, 292: 5, 293: 5, 294: 5, 295: 5,
-        296: 5, 297: 5, 298: 5, 299: 5, 300: 5
+        // Reflections (Q278-283) - Removed Q281-300 to avoid overwriting Family of Origin (Q284-303)
+        278: 5, 279: 5, 280: 5, 281: 5, 282: 5, 283: 5
       }
     },
 
@@ -239,12 +228,7 @@
         257: 4, 258: 4, 259: 4, 260: 4,
         261: "Helping/supporting my partner", 262: 4, 263: 4, 264: 4, 265: 4, 266: 4,
         267: 4, 268: 4, 269: 4, 270: 4, 271: 4, 272: 4, 273: 4, 274: 4, 275: 4, 276: 4,
-        277: 4, 278: 3, 279: 3, 280: 4,
-        281: "manageable with some stress", 282: "I feel hopeful but cautious", 283: "I'm more supportive than I realized",
-        284: "your emotional openness", 285: "growing together through challenges", 286: "support each other daily",
-        287: "building trust and understanding", 288: "we support each other well", 289: "you really listen to me",
-        290: "not being emotionally present enough", 291: 4, 292: 4, 293: 4, 294: 4, 295: 4,
-        296: 4, 297: 4, 298: 4, 299: 4, 300: 4
+        277: 4, 278: 3, 279: 3, 280: 4, 281: 4, 282: 4, 283: 4
       }
     },
 
@@ -302,12 +286,7 @@
         257: 3, 258: 3, 259: 3, 260: 3,
         261: "Finding meaning and purpose", 262: 3, 263: 3, 264: 3, 265: 3, 266: 3,
         267: 3, 268: 3, 269: 3, 270: 3, 271: 3, 272: 3, 273: 3, 274: 3, 275: 3, 276: 3,
-        277: 3, 278: 4, 279: 4, 280: 3,
-        281: "very stressful with debt", 282: "I feel anxious but hopeful", 283: "I think too much about everything",
-        284: "your patience with my processing", 285: "understanding my past", 286: "analyze our issues together",
-        287: "complicated but meaningful", 288: "we think through things well", 289: "you let me process fully",
-        290: "repeating past relationship mistakes", 291: 3, 292: 3, 293: 3, 294: 3, 295: 3,
-        296: 3, 297: 3, 298: 3, 299: 3, 300: 3
+        277: 3, 278: 4, 279: 4, 280: 3, 281: 3, 282: 3, 283: 3
       }
     },
 
@@ -366,12 +345,7 @@
         257: 5, 258: 4, 259: 4, 260: 4,
         261: "Achieving goals together", 262: 4, 263: 4, 264: 4, 265: 4, 266: 4,
         267: 4, 268: 4, 269: 4, 270: 4, 271: 4, 272: 4, 273: 4, 274: 4, 275: 4, 276: 4,
-        277: 4, 278: 2, 279: 2, 280: 4,
-        281: "challenging but under control", 282: "I feel determined and focused", 283: "I'm better at leading than following",
-        284: "your trust in my decisions", 285: "building toward our goals", 286: "set clear goals and achieve them",
-        287: "progressing toward our vision", 288: "we work well with clear direction", 289: "you respect my leadership",
-        290: "not including you in decisions enough", 291: 4, 292: 4, 293: 4, 294: 4, 295: 4,
-        296: 4, 297: 4, 298: 4, 299: 4, 300: 4
+        277: 4, 278: 2, 279: 2, 280: 4, 281: 4, 282: 4, 283: 4
       }
     }
   };
