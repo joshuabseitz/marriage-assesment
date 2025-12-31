@@ -123,7 +123,12 @@ function loadDataExtractor() {
     
     // Load extractor
     const extractorPath = join(__dirname, 'report-data-extractor.js');
-    const extractorCode = readFileSync(extractorPath, 'utf-8');
+    let extractorCode = readFileSync(extractorPath, 'utf-8');
+    
+    // Remove export blocks from extractor too
+    extractorCode = extractorCode
+      .replace(/if \(typeof module !== 'undefined' && module\.exports\) \{[\s\S]*?\}/g, '')
+      .replace(/if \(typeof window !== 'undefined'\) \{[\s\S]*?\}/g, '');
 
     // Execute both files together in a single scope
     const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', `
