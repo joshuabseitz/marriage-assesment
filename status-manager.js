@@ -82,7 +82,7 @@ class SymbisStatusManager {
     // Check partial completion
     const person1Count = this.getResponseCount(1);
     const person2Count = this.getResponseCount(2);
-    const totalExpected = 600; // 300 questions x 2 people
+    const totalExpected = 606; // 303 questions x 2 people
     const totalAnswered = person1Count + person2Count;
     
     return Math.min(Math.round((totalAnswered / totalExpected) * 100), 99);

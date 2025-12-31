@@ -31,14 +31,14 @@ export const pass1Questions = {
   // Caution Flags (Q67-72)
   caution_flags: [67, 68, 69, 70, 71, 72],
 
-  // Dynamics/Personality Styles (Q73-150)
+  // Dynamics/Personality Styles (Q73-147)
   // These questions determine Cooperating Spouse, Affirming Spouse, etc.
   dynamics_solving_problems: Array.from({ length: 10 }, (_, i) => 73 + i), // Q73-82: Problem solving approach
   dynamics_influencing: Array.from({ length: 10 }, (_, i) => 83 + i), // Q83-92: Facts vs feelings
-  dynamics_change: Array.from({ length: 10 }, (_, i) => 93 + i), // Q93-102: Accept vs resist change
-  dynamics_decisions: Array.from({ length: 10 }, (_, i) => 103 + i), // Q103-112: Spontaneous vs cautious
-  dynamics_interaction_style: Array.from({ length: 19 }, (_, i) => 113 + i), // Q113-131: Social/interaction
-  dynamics_work_style: Array.from({ length: 19 }, (_, i) => 132 + i), // Q132-150: Work approach
+  dynamics_change: Array.from({ length: 10 }, (_, i) => 93 + i), // Q93-102: Accept vs resist change (note: Q99 is now financial fears)
+  dynamics_decisions: Array.from({ length: 10 }, (_, i) => 100 + i), // Q100-109: Spontaneous vs cautious
+  dynamics_interaction_style: Array.from({ length: 19 }, (_, i) => 110 + i), // Q110-128: Social/interaction
+  dynamics_work_style: Array.from({ length: 19 }, (_, i) => 129 + i), // Q129-147: Work approach
 };
 
 /**
@@ -49,13 +49,13 @@ export const pass2Questions = {
   // Relationship Quality (Q11-16)
   relationship_stability: [11, 12, 13, 14, 15, 16],
 
-  // Social Support (Q151-180)
-  friends_family_support: [151, 152, 153, 154, 155], // Support from own circle
-  in_laws_relationship: [156, 157, 158, 159, 160], // Relationship with partner's parents
-  mutual_friends: [161, 162, 163, 164, 165, 166], // Blending social circles
-  faith_community: [167, 168, 169, 170], // Religious/spiritual support
-  isolation_concerns: [171, 172, 173, 174, 175], // Loneliness, isolation
-  social_integration: [176, 177, 178, 179, 180], // Overall social health
+  // Social Support (Q148-177)
+  friends_family_support: [148, 149, 150, 151, 152], // Support from own circle
+  in_laws_relationship: [153, 154, 155, 156, 157], // Relationship with partner's parents
+  mutual_friends: [158, 159, 160, 161, 162, 163], // Blending social circles
+  faith_community: [164, 165, 166, 167], // Religious/spiritual support
+  isolation_concerns: [168, 169, 170, 171, 172], // Loneliness, isolation
+  social_integration: [173, 174, 175, 176, 177], // Overall social health
 
   // Re-use from Pass 1 for scoring
   self_concept: [37, 38, 39, 40, 47],
@@ -70,51 +70,54 @@ export const pass2Questions = {
  * Generates: communication, conflict, gender, love, chapter_references, reflection_questions
  */
 export const pass3Questions = {
-  // Finances (Q92-116, Q267-272)
+  // Finances (Q92-113, Q261-266)
   money_style: [92], // Saver vs spender
   budget_approach: [93],
   debt_attitudes: [94, 95, 96],
-  financial_fears: [99, 100, 101, 102], // SYMBIS 4 fears
+  financial_fears: [99], // SYMBIS 4 fears - now rank-order
   financial_discussions: [97, 98],
-  financial_transparency: [106, 107],
-  spending_habits: [112, 113, 114, 115, 116],
-  financial_reflections: [267, 268, 269, 270, 271, 272],
+  financial_transparency: [103, 104],
+  spending_habits: [109, 110, 111, 112, 113],
+  financial_reflections: [261, 262, 263, 264, 265, 266],  // Q261-266 (shifted from Q264-269)
 
-  // Role Expectations (Q117-136)
-  household_roles: Array.from({ length: 20 }, (_, i) => 117 + i), // Q117-136: Who does what
+  // Role Expectations (Q114-133)
+  household_roles: Array.from({ length: 20 }, (_, i) => 114 + i), // Q114-133: Who does what
   decision_making: [], // Included in household roles for this version
   career_priorities: [], // Integrated into later sections
   children_expectations: [], // Integrated into later sections
 
-  // Love & Sexuality (Q187-200)
-  love_definitions: [187], // Ranked list of what love means
-  love_languages: [188, 189, 190, 191, 192], // Expressing/receiving love
-  intimacy_expectations: [193, 194, 195, 196, 197, 198, 199, 200],
+  // Family of Origin Roles (Q284-303)
+  family_origin_roles: Array.from({ length: 20 }, (_, i) => 284 + i), // Q284-303: Who handled what growing up
 
-  // Gender Needs (Q201-220)
-  emotional_needs: Array.from({ length: 10 }, (_, i) => 201 + i),
-  relational_priorities: Array.from({ length: 10 }, (_, i) => 211 + i),
+  // Love & Sexuality (Q184-197)
+  love_definitions: [184], // Ranked list of what love means
+  love_languages: [185, 186, 187, 188, 189], // Expressing/receiving love
+  intimacy_expectations: [190, 191, 192, 193, 194, 195, 196, 197],
 
-  // Communication Style (Q217-246)
-  communication_preferences: Array.from({ length: 8 }, (_, i) => 218 + i),
-  listening_style: [237, 238, 239],
-  conflict_triggers: [217], // Hot topics
+  // Gender Needs (Q198-217)
+  emotional_needs: Array.from({ length: 10 }, (_, i) => 198 + i),
+  relational_priorities: Array.from({ length: 10 }, (_, i) => 208 + i),
+
+  // Communication Style (Q214-243)
+  communication_preferences: Array.from({ length: 8 }, (_, i) => 215 + i),
+  listening_style: [234, 235, 236],
+  conflict_triggers: [214], // Hot topics
   apology_style: [],
-  feedback_reception: [241],
+  feedback_reception: [238],
 
-  // Conflict Management (Q217-246)
-  conflict_style: Array.from({ length: 10 }, (_, i) => 230 + i),
-  hot_topics: [217],
-  conflict_resolution: [235, 236],
+  // Conflict Management (Q214-243)
+  conflict_style: Array.from({ length: 10 }, (_, i) => 227 + i),
+  hot_topics: [214],
+  conflict_resolution: [232, 233],
   forgiveness: [],
   boundaries: [],
   conflict_history: [16], // Noted separately
 
-  // Spirituality (Q247-266)
-  spiritual_practices: Array.from({ length: 12 }, (_, i) => 248 + i),
-  spiritual_connection: [247],
-  theological_alignment: [252],
-  spiritual_expectations: [258, 259, 260],
+  // Spirituality (Q244-263)
+  spiritual_practices: Array.from({ length: 12 }, (_, i) => 245 + i),
+  spiritual_connection: [244],
+  theological_alignment: [249],
+  spiritual_expectations: [255, 256, 257],
 };
 
 /**
@@ -183,15 +186,17 @@ export function getQuestionContext(questionId) {
   if (questionId >= 7 && questionId <= 16) return 'Relationship History';
   if (questionId >= 17 && questionId <= 36) return 'Mindset';
   if (questionId >= 37 && questionId <= 72) return 'Individual Wellbeing';
-  if (questionId >= 73 && questionId <= 150) return 'Personality Dynamics';
-  if (questionId >= 151 && questionId <= 180) return 'Social Support';
-  if (questionId >= 181 && questionId <= 210) return 'Finances';
-  if (questionId >= 211 && questionId <= 240) return 'Role Expectations';
-  if (questionId >= 241 && questionId <= 260) return 'Love & Sexuality';
-  if (questionId >= 261 && questionId <= 280) return 'Gender Needs';
-  if (questionId >= 281 && questionId <= 310) return 'Communication';
-  if (questionId >= 311 && questionId <= 340) return 'Conflict';
-  if (questionId >= 341 && questionId <= 360) return 'Spirituality';
+  if (questionId >= 73 && questionId <= 147) return 'Personality Dynamics';
+  if (questionId >= 148 && questionId <= 177) return 'Social Support';
+  if (questionId >= 92 && questionId <= 113) return 'Finances';
+  if (questionId >= 114 && questionId <= 133) return 'Role Expectations';
+  if (questionId >= 134 && questionId <= 183) return 'Personality & Dynamics';
+  if (questionId >= 184 && questionId <= 197) return 'Love & Sexuality';
+  if (questionId >= 198 && questionId <= 217) return 'Gender Needs';
+  if (questionId >= 214 && questionId <= 243) return 'Communication & Conflict';
+  if (questionId >= 244 && questionId <= 263) return 'Spirituality';
+  if (questionId >= 264 && questionId <= 283) return 'Reflections';
+  if (questionId >= 284 && questionId <= 303) return 'Family of Origin Roles';
 
   return 'Unknown';
 }
@@ -216,13 +221,13 @@ export const scoringFormulas = {
     solving_problems: 'Position based on Q73-82 responses (0-100 scale)',
     influencing: 'Position based on Q83-92 responses (0-100 scale)',
     reacting_to_change: 'Position based on Q93-102 responses (0-100 scale)',
-    making_decisions: 'Position based on Q103-112 responses (0-100 scale)'
+    making_decisions: 'Position based on Q100-109 responses (0-100 scale)'
   },
   social_support: {
-    friends_family: 'Average(Q151-155) * 20',
-    in_laws: 'Average(Q156-160) * 20',
-    mutual_friends: 'Average(Q161-166) * 16.67',
-    faith: 'Average(Q167-170) * 25'
+    friends_family: 'Average(Q148-152) * 20',
+    in_laws: 'Average(Q153-157) * 20',
+    mutual_friends: 'Average(Q158-163) * 16.67',
+    faith: 'Average(Q164-167) * 25'
   }
 };
 

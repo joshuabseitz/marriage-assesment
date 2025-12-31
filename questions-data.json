@@ -4,7 +4,7 @@
     "version": "1.0",
     "target_audience": "Couples",
     "completion_time_estimate": "30-45 minutes",
-    "total_questions": 286,
+    "total_questions": 303,
     "instructions": "Answer individually and honestly. There are no wrong answers."
   },
   "sections": [
@@ -679,95 +679,83 @@
         },
         {
           "id": 99,
-          "text": "I fear a Lack of Influence regarding money.",
-          "type": "boolean",
+          "text": "Rank your financial fears from most to least concerning:",
+          "type": "rank_order",
+          "options": [
+            "Lack of Influence (not having a say in financial decisions)",
+            "Lack of Security (financial instability or not having enough)",
+            "Lack of Respect (not being valued for contributions)",
+            "Not Realizing Dreams (finances preventing life goals)"
+          ],
           "mapping": "finances.person.financial_fears"
         },
         {
           "id": 100,
-          "text": "I fear a Lack of Security regarding money.",
-          "type": "boolean",
-          "mapping": "finances.person.financial_fears"
-        },
-        {
-          "id": 101,
-          "text": "I fear a Lack of Respect regarding money.",
-          "type": "boolean",
-          "mapping": "finances.person.financial_fears"
-        },
-        {
-          "id": 102,
-          "text": "I fear Not Realizing Dreams regarding money.",
-          "type": "boolean",
-          "mapping": "finances.person.financial_fears"
-        },
-        {
-          "id": 103,
           "text": "Growing up, money was a source of stress.",
           "type": "scale_1_5"
         },
         {
-          "id": 104,
+          "id": 101,
           "text": "I am anxious about our financial future.",
           "type": "scale_1_5"
         },
         {
-          "id": 105,
+          "id": 102,
           "text": "I trust my partner with money.",
           "type": "scale_1_5"
         },
         {
-          "id": 106,
+          "id": 103,
           "text": "I want to combine all our finances (joint accounts).",
           "type": "scale_1_5"
         },
         {
-          "id": 107,
+          "id": 104,
           "text": "I want to keep our finances separate.",
           "type": "scale_1_5"
         },
         {
-          "id": 108,
+          "id": 105,
           "text": "I expect to be the primary breadwinner.",
           "type": "scale_1_5"
         },
         {
-          "id": 109,
+          "id": 106,
           "text": "I expect my partner to be the primary breadwinner.",
           "type": "scale_1_5"
         },
         {
-          "id": 110,
+          "id": 107,
           "text": "We should tithe/donate a portion of our income.",
           "type": "scale_1_5"
         },
         {
-          "id": 111,
+          "id": 108,
           "text": "We have an emergency fund.",
           "type": "scale_1_5"
         },
         {
-          "id": 112,
+          "id": 109,
           "text": "Spending money makes me feel good.",
           "type": "scale_1_5"
         },
         {
-          "id": 113,
+          "id": 110,
           "text": "Saving money makes me feel safe.",
           "type": "scale_1_5"
         },
         {
-          "id": 114,
+          "id": 111,
           "text": "I hide purchases from my partner.",
           "type": "scale_1_5"
         },
         {
-          "id": 115,
+          "id": 112,
           "text": "My partner is too stingy.",
           "type": "scale_1_5"
         },
         {
-          "id": 116,
+          "id": 113,
           "text": "My partner spends too frivolously.",
           "type": "scale_1_5"
         }
@@ -779,7 +767,7 @@
       "description": "Who will do what? Select: Me, You, Both, or Neither.",
       "questions": [
         {
-          "id": 117,
+          "id": 114,
           "text": "Staying home with children",
           "type": "role_selection",
           "options": [
@@ -791,7 +779,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 118,
+          "id": 115,
           "text": "Paying bills and handling finances",
           "type": "role_selection",
           "options": [
@@ -803,7 +791,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 119,
+          "id": 116,
           "text": "Yard work",
           "type": "role_selection",
           "options": [
@@ -815,7 +803,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 120,
+          "id": 117,
           "text": "Gassing up the car",
           "type": "role_selection",
           "options": [
@@ -827,7 +815,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 121,
+          "id": 118,
           "text": "Fixing things around the house",
           "type": "role_selection",
           "options": [
@@ -839,7 +827,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 122,
+          "id": 119,
           "text": "Laundry",
           "type": "role_selection",
           "options": [
@@ -851,7 +839,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 123,
+          "id": 120,
           "text": "Making the bed",
           "type": "role_selection",
           "options": [
@@ -863,7 +851,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 124,
+          "id": 121,
           "text": "Cooking meals",
           "type": "role_selection",
           "options": [
@@ -875,7 +863,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 125,
+          "id": 122,
           "text": "Grocery shopping",
           "type": "role_selection",
           "options": [
@@ -887,7 +875,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 126,
+          "id": 123,
           "text": "Caring for a pet",
           "type": "role_selection",
           "options": [
@@ -899,7 +887,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 127,
+          "id": 124,
           "text": "Decorating the house",
           "type": "role_selection",
           "options": [
@@ -911,7 +899,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 128,
+          "id": 125,
           "text": "Disciplining the children",
           "type": "role_selection",
           "options": [
@@ -923,7 +911,7 @@
           "mapping": "expectations.agreed_roles"
         },
         {
-          "id": 129,
+          "id": 126,
           "text": "Doing the dishes",
           "type": "role_selection",
           "options": [
@@ -935,7 +923,7 @@
           "mapping": "expectations.needs_discussion"
         },
         {
-          "id": 130,
+          "id": 127,
           "text": "Taking out the trash",
           "type": "role_selection",
           "options": [
@@ -947,7 +935,7 @@
           "mapping": "expectations.needs_discussion"
         },
         {
-          "id": 131,
+          "id": 128,
           "text": "Cleaning the house",
           "type": "role_selection",
           "options": [
@@ -959,7 +947,7 @@
           "mapping": "expectations.needs_discussion"
         },
         {
-          "id": 132,
+          "id": 129,
           "text": "Providing income",
           "type": "role_selection",
           "options": [
@@ -971,7 +959,7 @@
           "mapping": "expectations.needs_discussion"
         },
         {
-          "id": 133,
+          "id": 130,
           "text": "Planning vacations & holidays",
           "type": "role_selection",
           "options": [
@@ -983,7 +971,7 @@
           "mapping": "expectations.needs_discussion"
         },
         {
-          "id": 134,
+          "id": 131,
           "text": "Talking about spiritual matters",
           "type": "role_selection",
           "options": [
@@ -995,7 +983,7 @@
           "mapping": "expectations.needs_discussion"
         },
         {
-          "id": 135,
+          "id": 132,
           "text": "Auto maintenance",
           "type": "role_selection",
           "options": [
@@ -1007,7 +995,7 @@
           "mapping": "expectations.needs_discussion"
         },
         {
-          "id": 136,
+          "id": 133,
           "text": "Scheduling social events",
           "type": "role_selection",
           "options": [
@@ -1026,294 +1014,294 @@
       "description": "Rate how accurately this describes you: 1 (Does not describe me) to 5 (Describes me perfectly).",
       "questions": [
         {
-          "id": 137,
+          "id": 134,
           "text": "Good listener",
           "type": "scale_1_5",
           "mapping": "dynamics.person.strengths"
         },
         {
-          "id": 138,
+          "id": 135,
           "text": "Talkative",
           "type": "scale_1_5",
           "mapping": "dynamics.person.full_description"
         },
         {
-          "id": 139,
+          "id": 136,
           "text": "Cautious decision maker",
           "type": "scale_1_5",
           "mapping": "dynamics.styles.making_decisions"
         },
         {
-          "id": 140,
+          "id": 137,
           "text": "Spontaneous decision maker",
           "type": "scale_1_5",
           "mapping": "dynamics.styles.making_decisions"
         },
         {
-          "id": 141,
+          "id": 138,
           "text": "Steady and reliable",
           "type": "scale_1_5",
           "mapping": "dynamics.person.strengths"
         },
         {
-          "id": 142,
+          "id": 139,
           "text": "Fun-loving and energetic",
           "type": "scale_1_5",
           "mapping": "dynamics.person.strengths"
         },
         {
-          "id": 143,
+          "id": 140,
           "text": "Avoids conflict",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 144,
+          "id": 141,
           "text": "Persuasive",
           "type": "scale_1_5",
           "mapping": "dynamics.person.strengths"
         },
         {
-          "id": 145,
+          "id": 142,
           "text": "Needs facts to decide",
           "type": "scale_1_5",
           "mapping": "dynamics.styles.influencing_each_other"
         },
         {
-          "id": 146,
+          "id": 143,
           "text": "Follows gut feelings",
           "type": "scale_1_5",
           "mapping": "dynamics.styles.influencing_each_other"
         },
         {
-          "id": 147,
+          "id": 144,
           "text": "Resist change",
           "type": "scale_1_5",
           "mapping": "dynamics.styles.reacting_to_change"
         },
         {
-          "id": 148,
+          "id": 145,
           "text": "Embrace change",
           "type": "scale_1_5",
           "mapping": "dynamics.styles.reacting_to_change"
         },
         {
-          "id": 149,
+          "id": 146,
           "text": "Modest / Quiet",
           "type": "scale_1_5",
           "mapping": "dynamics.person.full_description"
         },
         {
-          "id": 150,
+          "id": 147,
           "text": "Likes the spotlight",
           "type": "scale_1_5",
           "mapping": "dynamics.person.full_description"
         },
         {
-          "id": 151,
+          "id": 148,
           "text": "Passive resistance",
           "type": "scale_1_5",
           "mapping": "dynamics.person.full_description"
         },
         {
-          "id": 152,
+          "id": 149,
           "text": "Impulsive",
           "type": "scale_1_5",
           "mapping": "dynamics.person.full_description"
         },
         {
-          "id": 153,
+          "id": 150,
           "text": "Diplomatic",
           "type": "scale_1_5",
           "mapping": "dynamics.person.strengths"
         },
         {
-          "id": 154,
+          "id": 151,
           "text": "Entertaining",
           "type": "scale_1_5",
           "mapping": "dynamics.person.strengths"
         },
         {
-          "id": 155,
+          "id": 152,
           "text": "Detail-oriented",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 156,
+          "id": 153,
           "text": "Big-picture thinker",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 157,
+          "id": 154,
           "text": "Systematic",
           "type": "scale_1_5",
           "mapping": "conflict.person.style_description"
         },
         {
-          "id": 158,
+          "id": 155,
           "text": "Creative",
           "type": "scale_1_5",
           "mapping": "conflict.person.style_description"
         },
         {
-          "id": 159,
+          "id": 156,
           "text": "Patient",
           "type": "scale_1_5",
           "mapping": "communication.person.description"
         },
         {
-          "id": 160,
+          "id": 157,
           "text": "Intense",
           "type": "scale_1_5",
           "mapping": "conflict.person.style_description"
         },
         {
-          "id": 161,
+          "id": 158,
           "text": "Cooperative",
           "type": "scale_1_5",
           "mapping": "dynamics.overall_type"
         },
         {
-          "id": 162,
+          "id": 159,
           "text": "Competitive",
           "type": "scale_1_5"
         },
         {
-          "id": 163,
+          "id": 160,
           "text": "Need to process before talking",
           "type": "scale_1_5",
           "mapping": "communication.person.style"
         },
         {
-          "id": 164,
+          "id": 161,
           "text": "Need to talk to process",
           "type": "scale_1_5",
           "mapping": "communication.person.style"
         },
         {
-          "id": 165,
+          "id": 162,
           "text": "Prefer routine",
           "type": "scale_1_5"
         },
         {
-          "id": 166,
+          "id": 163,
           "text": "Prefer variety",
           "type": "scale_1_5"
         },
         {
-          "id": 167,
+          "id": 164,
           "text": "I am a 'Win-win' negotiator",
           "type": "scale_1_5",
           "mapping": "dynamics.person.strengths"
         },
         {
-          "id": 168,
+          "id": 165,
           "text": "I like to motivate others",
           "type": "scale_1_5",
           "mapping": "dynamics.person.strengths"
         },
         {
-          "id": 169,
+          "id": 166,
           "text": "I tend to give in to keep peace",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 170,
+          "id": 167,
           "text": "I tend to dominate conversations",
           "type": "scale_1_5",
           "mapping": "communication.person.improvement_areas"
         },
         {
-          "id": 171,
+          "id": 168,
           "text": "I am often late",
           "type": "scale_1_5",
           "mapping": "dynamics.person.full_description"
         },
         {
-          "id": 172,
+          "id": 169,
           "text": "I am always on time",
           "type": "scale_1_5",
           "mapping": "dynamics.person.full_description"
         },
         {
-          "id": 173,
+          "id": 170,
           "text": "I struggle to finish things I start",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 174,
+          "id": 171,
           "text": "I am very organized",
           "type": "scale_1_5",
           "mapping": "conflict.person.style_description"
         },
         {
-          "id": 175,
+          "id": 172,
           "text": "I perceive the glass as half-empty",
           "type": "scale_1_5",
           "mapping": "dynamics.person.full_description"
         },
         {
-          "id": 176,
+          "id": 173,
           "text": "I perceive the glass as half-full",
           "type": "scale_1_5",
           "mapping": "dynamics.person.full_description"
         },
         {
-          "id": 177,
+          "id": 174,
           "text": "I express feelings easily",
           "type": "scale_1_5",
           "mapping": "dynamics.styles.influencing_each_other"
         },
         {
-          "id": 178,
+          "id": 175,
           "text": "I keep feelings inside",
           "type": "scale_1_5",
           "mapping": "dynamics.styles.influencing_each_other"
         },
         {
-          "id": 179,
+          "id": 176,
           "text": "I prioritize tasks over people",
           "type": "scale_1_5"
         },
         {
-          "id": 180,
+          "id": 177,
           "text": "I prioritize people over tasks",
           "type": "scale_1_5"
         },
         {
-          "id": 181,
+          "id": 178,
           "text": "I apologize easily",
           "type": "scale_1_5",
           "mapping": "communication.person.improvement_areas"
         },
         {
-          "id": 182,
+          "id": 179,
           "text": "I struggle to admit I'm wrong",
           "type": "scale_1_5"
         },
         {
-          "id": 183,
+          "id": 180,
           "text": "I value accuracy",
           "type": "scale_1_5",
           "mapping": "dynamics.styles.solving_problems"
         },
         {
-          "id": 184,
+          "id": 181,
           "text": "I value popularity/recognition",
           "type": "scale_1_5",
           "mapping": "dynamics.person.full_description"
         },
         {
-          "id": 185,
+          "id": 182,
           "text": "I am an introvert",
           "type": "scale_1_5"
         },
         {
-          "id": 186,
+          "id": 183,
           "text": "I am an extrovert",
           "type": "scale_1_5"
         }
@@ -1325,7 +1313,7 @@
       "description": "Preferences and expectations for intimacy.",
       "questions": [
         {
-          "id": 187,
+          "id": 184,
           "text": "Rank these definitions of love in order of importance to you.",
           "type": "rank_order",
           "options": [
@@ -1341,7 +1329,7 @@
           "mapping": "love.person.top_5_definitions"
         },
         {
-          "id": 188,
+          "id": 185,
           "text": "Are you currently abstaining from sex?",
           "type": "choice",
           "options": [
@@ -1351,7 +1339,7 @@
           "mapping": "love.sexuality.person.abstaining"
         },
         {
-          "id": 189,
+          "id": 186,
           "text": "How would you rate your sexual desire?",
           "type": "scale_1_10",
           "labels": {
@@ -1361,7 +1349,7 @@
           "mapping": "love.sexuality.person.desire_rating"
         },
         {
-          "id": 190,
+          "id": 187,
           "text": "Who do you expect to initiate sex in marriage?",
           "type": "choice",
           "options": [
@@ -1372,7 +1360,7 @@
           "mapping": "love.sexuality.person.initiate_expectation"
         },
         {
-          "id": 191,
+          "id": 188,
           "text": "What is your expected frequency of sex?",
           "type": "choice",
           "options": [
@@ -1384,146 +1372,146 @@
           "mapping": "love.sexuality.person.frequency_expectation"
         },
         {
-          "id": 192,
+          "id": 189,
           "text": "I am comfortable talking about sex.",
           "type": "scale_1_5"
         },
         {
-          "id": 193,
+          "id": 190,
           "text": "I have anxiety about our sexual compatibility.",
           "type": "scale_1_5"
         },
         {
-          "id": 194,
+          "id": 191,
           "text": "I feel cherished by my partner.",
           "type": "scale_1_5",
           "mapping": "gender.person.needs_to_know"
         },
         {
-          "id": 195,
+          "id": 192,
           "text": "I feel respected by my partner.",
           "type": "scale_1_5",
           "mapping": "gender.person.needs_to_know"
         },
         {
-          "id": 196,
+          "id": 193,
           "text": "We connect emotionally by doing things together.",
           "type": "scale_1_5",
           "mapping": "gender.person.needs_to_know"
         },
         {
-          "id": 197,
+          "id": 194,
           "text": "We connect emotionally through conversation.",
           "type": "scale_1_5",
           "mapping": "gender.person.needs_to_know"
         },
         {
-          "id": 198,
+          "id": 195,
           "text": "Rate the importance of Sex to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 199,
+          "id": 196,
           "text": "Rate the importance of Affection to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 200,
+          "id": 197,
           "text": "Rate the importance of Companionship to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 201,
+          "id": 198,
           "text": "Rate the importance of Respect to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 202,
+          "id": 199,
           "text": "Rate the importance of Rootedness/Security to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 203,
+          "id": 200,
           "text": "Rate the importance of Intimacy to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 204,
+          "id": 201,
           "text": "Rate the importance of Conversation to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 205,
+          "id": 202,
           "text": "Rate the importance of Commitment to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 206,
+          "id": 203,
           "text": "Rate the importance of Recreational Companionship to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 207,
+          "id": 204,
           "text": "Rate the importance of Domestic Support to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 208,
+          "id": 205,
           "text": "Rate the importance of Admiration to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 209,
+          "id": 206,
           "text": "Rate the importance of Honesty to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 210,
+          "id": 207,
           "text": "Rate the importance of Physical Attractiveness to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 211,
+          "id": 208,
           "text": "Rate the importance of Financial Support to you.",
           "type": "scale_1_5",
           "mapping": "gender.person.top_5_needs"
         },
         {
-          "id": 212,
+          "id": 209,
           "text": "I understand how men/women generally differ in communication.",
           "type": "scale_1_5",
           "mapping": "gender.person.needs_to_know"
         },
         {
-          "id": 213,
+          "id": 210,
           "text": "I expect my partner to meet all my emotional needs.",
           "type": "scale_1_5"
         },
         {
-          "id": 214,
+          "id": 211,
           "text": "I am willing to learn what makes my partner feel loved.",
           "type": "scale_1_5"
         },
         {
-          "id": 215,
+          "id": 212,
           "text": "I feel my partner understands my unique needs as a man/woman.",
           "type": "scale_1_5"
         },
         {
-          "id": 216,
+          "id": 213,
           "text": "We have discussed our expectations for romance after marriage.",
           "type": "scale_1_5"
         }
@@ -1535,7 +1523,7 @@
       "description": "How you navigate differences.",
       "questions": [
         {
-          "id": 217,
+          "id": 214,
           "text": "Rank the topics that cause the most tension in your relationship.",
           "type": "rank_order",
           "options": [
@@ -1553,169 +1541,169 @@
           "mapping": "conflict.person.hot_topics"
         },
         {
-          "id": 218,
+          "id": 215,
           "text": "I prefer to plan sufficient time to talk and listen.",
           "type": "boolean",
           "mapping": "communication.person.partner_communication_preferences"
         },
         {
-          "id": 219,
+          "id": 216,
           "text": "I prefer immediate rewards for accomplishments.",
           "type": "boolean",
           "mapping": "communication.person.partner_communication_preferences"
         },
         {
-          "id": 220,
+          "id": 217,
           "text": "I prefer to talk about expectations explicitly.",
           "type": "boolean",
           "mapping": "communication.person.partner_communication_preferences"
         },
         {
-          "id": 221,
+          "id": 218,
           "text": "I prefer conversations to be stimulating and fun-loving.",
           "type": "boolean",
           "mapping": "communication.person.partner_communication_preferences"
         },
         {
-          "id": 222,
+          "id": 219,
           "text": "I prefer being asked for my opinions and ideas.",
           "type": "boolean",
           "mapping": "communication.person.partner_communication_preferences"
         },
         {
-          "id": 223,
+          "id": 220,
           "text": "I prefer taking time to reach an agreement.",
           "type": "boolean",
           "mapping": "communication.person.partner_communication_preferences"
         },
         {
-          "id": 224,
+          "id": 221,
           "text": "I prefer to be isolated from interruptions when talking.",
           "type": "boolean",
           "mapping": "communication.person.partner_communication_preferences"
         },
         {
-          "id": 225,
+          "id": 222,
           "text": "I hesitate to act unless the solution is clear.",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 226,
+          "id": 223,
           "text": "I become evasive when I am unsure.",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 227,
+          "id": 224,
           "text": "I yield my position to avoid controversy.",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 228,
+          "id": 225,
           "text": "I am not attentive to details.",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 229,
+          "id": 226,
           "text": "I spend money impulsively.",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 230,
+          "id": 227,
           "text": "I interrupt others often.",
           "type": "scale_1_5",
           "mapping": "communication.person.improvement_areas"
         },
         {
-          "id": 231,
+          "id": 228,
           "text": "I become too enthusiastic/impulsive.",
           "type": "scale_1_5",
           "mapping": "conflict.person.challenges"
         },
         {
-          "id": 232,
+          "id": 229,
           "text": "I withdraw and give the silent treatment.",
           "type": "scale_1_5"
         },
         {
-          "id": 233,
+          "id": 230,
           "text": "I criticize/blame in an argument.",
           "type": "scale_1_5"
         },
         {
-          "id": 234,
+          "id": 231,
           "text": "I get contemptuous (roll eyes, mock).",
           "type": "scale_1_5"
         },
         {
-          "id": 235,
+          "id": 232,
           "text": "I accept influence from my partner.",
           "type": "scale_1_5"
         },
         {
-          "id": 236,
+          "id": 233,
           "text": "We know how to take a 'timeout' when fighting.",
           "type": "scale_1_5"
         },
         {
-          "id": 237,
+          "id": 234,
           "text": "I am a good listener.",
           "type": "scale_1_5"
         },
         {
-          "id": 238,
+          "id": 235,
           "text": "I express genuine interest in what others say.",
           "type": "scale_1_5",
           "mapping": "communication.person.improvement_areas"
         },
         {
-          "id": 239,
+          "id": 236,
           "text": "I come across as personally warm.",
           "type": "scale_1_5",
           "mapping": "communication.person.improvement_areas"
         },
         {
-          "id": 240,
+          "id": 237,
           "text": "I struggle to identify my feelings.",
           "type": "scale_1_5",
           "mapping": "communication.person.improvement_areas"
         },
         {
-          "id": 241,
+          "id": 238,
           "text": "I invite and receive feedback well.",
           "type": "scale_1_5",
           "mapping": "communication.person.improvement_areas"
         },
         {
-          "id": 242,
+          "id": 239,
           "text": "I avoid confrontation.",
           "type": "scale_1_5",
           "mapping": "communication.person.description"
         },
         {
-          "id": 243,
+          "id": 240,
           "text": "I create a safe environment for conversation.",
           "type": "scale_1_5",
           "mapping": "communication.person.description"
         },
         {
-          "id": 244,
+          "id": 241,
           "text": "I love to talk.",
           "type": "scale_1_5",
           "mapping": "communication.person.description"
         },
         {
-          "id": 245,
+          "id": 242,
           "text": "I feel loved when I am listened to.",
           "type": "scale_1_5",
           "mapping": "communication.person.description"
         },
         {
-          "id": 246,
+          "id": 243,
           "text": "Communication is the primary way I feel love.",
           "type": "scale_1_5",
           "mapping": "communication.person.description"
@@ -1728,7 +1716,7 @@
       "description": "Shared faith and values.",
       "questions": [
         {
-          "id": 247,
+          "id": 244,
           "text": "I feel closest to God through...",
           "type": "choice",
           "options": [
@@ -1743,110 +1731,110 @@
           "mapping": "spirituality.person.feels_closest_to_god_through"
         },
         {
-          "id": 248,
+          "id": 245,
           "text": "We attend church weekly.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.spiritual_practices"
         },
         {
-          "id": 249,
+          "id": 246,
           "text": "We go to the same church.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.spiritual_practices"
         },
         {
-          "id": 250,
+          "id": 247,
           "text": "We discuss spiritual issues regularly.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.spiritual_practices"
         },
         {
-          "id": 251,
+          "id": 248,
           "text": "We receive communion regularly.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.spiritual_practices"
         },
         {
-          "id": 252,
+          "id": 249,
           "text": "We agree on theology.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.spiritual_practices"
         },
         {
-          "id": 253,
+          "id": 250,
           "text": "We give a financial tithe.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.spiritual_practices"
         },
         {
-          "id": 254,
+          "id": 251,
           "text": "We pray for each other.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.spiritual_practices"
         },
         {
-          "id": 255,
+          "id": 252,
           "text": "We pray together daily.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.spiritual_practices"
         },
         {
-          "id": 256,
+          "id": 253,
           "text": "We serve others together.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.spiritual_practices"
         },
         {
-          "id": 257,
+          "id": 254,
           "text": "We study the Bible together.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.spiritual_practices"
         },
         {
-          "id": 258,
+          "id": 255,
           "text": "My faith is the most important thing in my life.",
           "type": "scale_1_5"
         },
         {
-          "id": 259,
+          "id": 256,
           "text": "I am comfortable leading spiritual activities.",
           "type": "scale_1_5"
         },
         {
-          "id": 260,
+          "id": 257,
           "text": "We are spiritually 'in sync'.",
           "type": "scale_1_5",
           "mapping": "spirituality.spiritual_sync"
         },
         {
-          "id": 261,
+          "id": 258,
           "text": "I respect my partner's spiritual journey.",
           "type": "scale_1_5"
         },
         {
-          "id": 262,
+          "id": 259,
           "text": "I am energized by fellowship with other believers.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.feels_closest_to_god_through"
         },
         {
-          "id": 263,
+          "id": 260,
           "text": "I am energized by meeting the needs of others.",
           "type": "scale_1_5",
           "mapping": "spirituality.person.feels_closest_to_god_through"
         },
         {
-          "id": 264,
+          "id": 261,
           "text": "I struggle to pray on my own.",
           "type": "scale_1_5"
         },
         {
-          "id": 265,
+          "id": 262,
           "text": "I struggle to understand the Bible.",
           "type": "scale_1_5"
         },
         {
-          "id": 266,
+          "id": 263,
           "text": "Shared faith is essential for our marriage success.",
           "type": "scale_1_5"
         }
@@ -1858,112 +1846,259 @@
       "description": "Final thoughts to generate discussion prompts.",
       "questions": [
         {
-          "id": 267,
+          "id": 264,
           "text": "Complete the sentence: In my home growing up, money was...",
           "type": "text",
           "mapping": "finances.money_talks_prompts"
         },
         {
-          "id": 268,
+          "id": 265,
           "text": "Complete the sentence: When I think about our financial future...",
           "type": "text",
           "mapping": "finances.money_talks_prompts"
         },
         {
-          "id": 269,
+          "id": 266,
           "text": "Complete the sentence: What you may not know about money and me is...",
           "type": "text",
           "mapping": "finances.money_talks_prompts"
         },
         {
-          "id": 270,
+          "id": 267,
           "text": "Complete the sentence: The thing I appreciate about you in relationship to money is...",
           "type": "text",
           "mapping": "finances.money_talks_prompts"
         },
         {
-          "id": 271,
+          "id": 268,
           "text": "Complete the sentence: When it comes to money, I'd like to improve my...",
           "type": "text",
           "mapping": "finances.money_talks_prompts"
         },
         {
-          "id": 272,
+          "id": 269,
           "text": "Complete the sentence: One specific action we could take right now that would help me is...",
           "type": "text",
           "mapping": "finances.money_talks_prompts"
         },
         {
-          "id": 273,
+          "id": 270,
           "text": "Complete the sentence: My spiritual life has been...",
           "type": "text",
           "mapping": "reflection_questions"
         },
         {
-          "id": 274,
+          "id": 271,
           "text": "Complete the sentence: When it comes to our shared spiritual life...",
           "type": "text",
           "mapping": "reflection_questions"
         },
         {
-          "id": 275,
+          "id": 272,
           "text": "I feel most loved when you...",
           "type": "text"
         },
         {
-          "id": 276,
+          "id": 273,
           "text": "My biggest fear about marriage is...",
           "type": "text"
         },
         {
-          "id": 277,
+          "id": 274,
           "text": "I answered these questions honestly.",
           "type": "scale_1_5"
         },
         {
-          "id": 278,
+          "id": 275,
           "text": "I feel good about taking this assessment.",
           "type": "scale_1_5"
         },
         {
-          "id": 279,
+          "id": 276,
           "text": "I am willing to discuss the results with a facilitator.",
           "type": "scale_1_5"
         },
         {
-          "id": 280,
+          "id": 277,
           "text": "I am committed to working on our weak areas.",
           "type": "scale_1_5"
         },
         {
-          "id": 281,
+          "id": 278,
           "text": "I believe we have a high chance of success.",
           "type": "scale_1_5"
         },
         {
-          "id": 282,
+          "id": 279,
           "text": "I feel prepared for the wedding day.",
           "type": "scale_1_5"
         },
         {
-          "id": 283,
+          "id": 280,
           "text": "I feel prepared for married life.",
           "type": "scale_1_5"
         },
         {
-          "id": 284,
+          "id": 281,
           "text": "I have a support system outside the marriage.",
           "type": "scale_1_5"
         },
         {
-          "id": 285,
+          "id": 282,
           "text": "I understand that my partner is different from me.",
           "type": "scale_1_5"
         },
         {
-          "id": 286,
+          "id": 283,
           "text": "I choose to love my partner every day.",
           "type": "scale_1_5"
+        }
+      ]
+    },
+    {
+      "section_id": 13,
+      "title": "Family of Origin - Household Roles",
+      "description": "Think about your family growing up. Who primarily handled these tasks?",
+      "questions": [
+        {
+          "id": 284,
+          "text": "Growing up, who primarily handled STAYING HOME WITH CHILDREN in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 285,
+          "text": "Growing up, who primarily handled PAYING BILLS AND HANDLING FINANCES in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 286,
+          "text": "Growing up, who primarily handled YARD WORK in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 287,
+          "text": "Growing up, who primarily handled GASSING UP THE CAR in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 288,
+          "text": "Growing up, who primarily handled FIXING THINGS AROUND THE HOUSE in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 289,
+          "text": "Growing up, who primarily handled LAUNDRY in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 290,
+          "text": "Growing up, who primarily handled MAKING THE BED in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 291,
+          "text": "Growing up, who primarily handled COOKING MEALS in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 292,
+          "text": "Growing up, who primarily handled GROCERY SHOPPING in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 293,
+          "text": "Growing up, who primarily handled CARING FOR A PET in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 294,
+          "text": "Growing up, who primarily handled DECORATING THE HOUSE in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 295,
+          "text": "Growing up, who primarily handled DISCIPLINING THE CHILDREN in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 296,
+          "text": "Growing up, who primarily handled DOING THE DISHES in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 297,
+          "text": "Growing up, who primarily handled TAKING OUT THE TRASH in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 298,
+          "text": "Growing up, who primarily handled CLEANING THE HOUSE in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 299,
+          "text": "Growing up, who primarily handled PROVIDING INCOME in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 300,
+          "text": "Growing up, who primarily handled PLANNING VACATIONS & HOLIDAYS in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 301,
+          "text": "Growing up, who primarily handled TALKING ABOUT SPIRITUAL MATTERS in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 302,
+          "text": "Growing up, who primarily handled AUTO MAINTENANCE in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
+        },
+        {
+          "id": 303,
+          "text": "Growing up, who primarily handled SCHEDULING SOCIAL EVENTS in your household?",
+          "type": "choice",
+          "options": ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"],
+          "mapping": "expectations.family_origin_roles"
         }
       ]
     }

@@ -124,11 +124,41 @@ function extractFamilyOfOrigin(person1Responses, person2Responses) {
 }
 
 function extractPersonFamily(responses) {
+  const roleQuestions = [
+    { id: 284, task: "Staying home with children" },
+    { id: 285, task: "Paying bills and handling finances" },
+    { id: 286, task: "Yard work" },
+    { id: 287, task: "Gassing up the car" },
+    { id: 288, task: "Fixing things around the house" },
+    { id: 289, task: "Laundry" },
+    { id: 290, task: "Making the bed" },
+    { id: 291, task: "Cooking meals" },
+    { id: 292, task: "Grocery shopping" },
+    { id: 293, task: "Caring for a pet" },
+    { id: 294, task: "Decorating the house" },
+    { id: 295, task: "Disciplining the children" },
+    { id: 296, task: "Doing the dishes" },
+    { id: 297, task: "Taking out the trash" },
+    { id: 298, task: "Cleaning the house" },
+    { id: 299, task: "Providing income" },
+    { id: 300, task: "Planning vacations & holidays" },
+    { id: 301, task: "Talking about spiritual matters" },
+    { id: 302, task: "Auto maintenance" },
+    { id: 303, task: "Scheduling social events" }
+  ];
+
+  const familyRoles = {};
+  roleQuestions.forEach(role => {
+    const answer = responses[role.id];
+    familyRoles[role.task] = answer || "Not specified";
+  });
+
   return {
     parents_marital_status: responses[2] || "Not specified",  // Now Q2 (was Q5)
     how_raised: responses[3] || "Not specified",  // Now Q3 (was Q6)
     number_of_siblings: parseInt(responses[4]) || 0,  // Now Q4 (was Q7)
-    birth_order: responses[5] || "Not specified"  // Now Q5 (was Q8)
+    birth_order: responses[5] || "Not specified",  // Now Q5 (was Q8)
+    family_roles: familyRoles  // New: Q284-303 family of origin household roles
   };
 }
 
@@ -215,25 +245,87 @@ function extractPersonFinances(responses) {
   const budgetApproach = getChoiceLabel(responses[93], ["I live by a budget religiously", "I track generally", "I don't budget"]);
   const debtAmount = getChoiceLabel(responses[94], ["None", "Less than $10,000", "$10,000 - $50,000", "More than $50,000"]);
 
-  // SYMBIS Financial Fears - Q99-102 (structured as object for badge rendering)
-  const financialFears = {
-    lack_of_influence: responses[99] === true || responses[99] === "true" || responses[99] === 1 || responses[99] === "1",
-    lack_of_security: responses[100] === true || responses[100] === "true" || responses[100] === 1 || responses[100] === "1",
-    lack_of_respect: responses[101] === true || responses[101] === "true" || responses[101] === 1 || responses[101] === "1",
-    not_realizing_dreams: responses[102] === true || responses[102] === "true" || responses[102] === 1 || responses[102] === "1"
+  // SYMBIS Financial Fears - Q99 (rank-order) with backwards compatibility
+  const mapFearToKey = (fearText) => {
+    if (!fearText) return null;
+    const text = String(fearText).toLowerCase();
+    if (text.includes("influence")) return "lack_of_influence";
+    if (text.includes("security")) return "lack_of_security";
+    if (text.includes("respect")) return "lack_of_respect";
+    if (text.includes("dreams")) return "not_realizing_dreams";
+    return null;
   };
 
-  // Get list of active fears for backwards compatibility
-  const activeFears = [];
-  if (financialFears.lack_of_influence) activeFears.push("Lack of Influence");
-  if (financialFears.lack_of_security) activeFears.push("Lack of Security");
-  if (financialFears.lack_of_respect) activeFears.push("Lack of Respect");
-  if (financialFears.not_realizing_dreams) activeFears.push("Not Realizing Dreams");
+  let financialFears = {};
+  let activeFears = [];
 
-  // Context questions for deeper analysis
-  const growingUpMoneyStress = parseInt(responses[103]) || 3;
-  const financialFutureAnxiety = parseInt(responses[104]) || 3;
-  const trustPartnerWithMoney = parseInt(responses[105]) || 3;
+  // NEW FORMAT: Q99 is rank-order array
+  if (responses[99] && Array.isArray(responses[99])) {
+    const rankedArray = responses[99].map((fear, index) => ({
+      rank: index + 1,
+      fear: fear
+    }));
+    
+    const topFearKey = mapFearToKey(rankedArray[0]?.fear) || "lack_of_security";
+    
+    financialFears = {
+      ranked: rankedArray,
+      top_fear: topFearKey,
+      // Boolean flags for backwards compatibility
+      lack_of_influence: rankedArray.some(f => mapFearToKey(f.fear) === "lack_of_influence"),
+      lack_of_security: rankedArray.some(f => mapFearToKey(f.fear) === "lack_of_security"),
+      lack_of_respect: rankedArray.some(f => mapFearToKey(f.fear) === "lack_of_respect"),
+      not_realizing_dreams: rankedArray.some(f => mapFearToKey(f.fear) === "not_realizing_dreams")
+    };
+    
+    activeFears = rankedArray.map(f => f.fear);
+  }
+  // OLD FORMAT: Q99-102 were boolean (backwards compatibility)
+  else if (responses[99] !== undefined && typeof responses[99] === 'boolean') {
+    financialFears = {
+      lack_of_influence: responses[99] === true || responses[99] === "true" || responses[99] === 1 || responses[99] === "1",
+      lack_of_security: responses[100] === true || responses[100] === "true" || responses[100] === 1 || responses[100] === "1",
+      lack_of_respect: responses[101] === true || responses[101] === "true" || responses[101] === 1 || responses[101] === "1",
+      not_realizing_dreams: responses[102] === true || responses[102] === "true" || responses[102] === 1 || responses[102] === "1"
+    };
+    
+    if (financialFears.lack_of_influence) activeFears.push("Lack of Influence");
+    if (financialFears.lack_of_security) activeFears.push("Lack of Security");
+    if (financialFears.lack_of_respect) activeFears.push("Lack of Respect");
+    if (financialFears.not_realizing_dreams) activeFears.push("Not Realizing Dreams");
+    
+    // Create synthetic ranked array from old format
+    const fearOrder = ["lack_of_security", "lack_of_influence", "lack_of_respect", "not_realizing_dreams"];
+    const fearLabels = {
+      "lack_of_security": "Lack of Security",
+      "lack_of_influence": "Lack of Influence",
+      "lack_of_respect": "Lack of Respect",
+      "not_realizing_dreams": "Not Realizing Dreams"
+    };
+    
+    const trueFearsOrdered = fearOrder.filter(key => financialFears[key]).map(key => fearLabels[key]);
+    financialFears.ranked = trueFearsOrdered.map((fear, index) => ({
+      rank: index + 1,
+      fear: fear
+    }));
+    financialFears.top_fear = trueFearsOrdered.length > 0 ? fearOrder.find(key => financialFears[key]) : "lack_of_security";
+  }
+  // NO DATA: Default
+  else {
+    financialFears = {
+      ranked: [],
+      top_fear: "lack_of_security",
+      lack_of_influence: false,
+      lack_of_security: false,
+      lack_of_respect: false,
+      not_realizing_dreams: false
+    };
+  }
+
+  // Context questions for deeper analysis (shifted from Q103-105 to Q100-102)
+  const growingUpMoneyStress = parseInt(responses[100]) || 3;
+  const financialFutureAnxiety = parseInt(responses[101]) || 3;
+  const trustPartnerWithMoney = parseInt(responses[102]) || 3;
 
   // Debt comfort levels
   const comfortWithOwnDebt = parseInt(responses[95]) || 3;
@@ -321,48 +413,48 @@ function extractSpirituality(person1Responses, person2Responses) {
 
 function extractPersonSpirituality(responses) {
   return {
-    feels_closest_to_god_through: responses[247] || "Not specified",
+    feels_closest_to_god_through: responses[244] || "Not specified",  // Q244 (was Q247)
     spiritual_practices: {
-      attend_church_weekly: (parseInt(responses[248]) || 0) >= 4,
-      go_to_same_church: (parseInt(responses[249]) || 0) >= 4,
-      discuss_spiritual_issues: (parseInt(responses[250]) || 0) >= 4,
-      receive_communion_regularly: (parseInt(responses[251]) || 0) >= 4,
-      agree_on_theology: (parseInt(responses[252]) || 0) >= 4,
-      give_financial_tithe: (parseInt(responses[253]) || 0) >= 4,
-      pray_for_each_other: (parseInt(responses[254]) || 0) >= 4,
-      pray_together_daily: (parseInt(responses[255]) || 0) >= 4,
-      serve_others_together: (parseInt(responses[256]) || 0) >= 4,
-      study_bible_together: (parseInt(responses[257]) || 0) >= 4
+      attend_church_weekly: (parseInt(responses[245]) || 0) >= 4,  // Q245 (was Q248)
+      go_to_same_church: (parseInt(responses[246]) || 0) >= 4,  // Q246 (was Q249)
+      discuss_spiritual_issues: (parseInt(responses[247]) || 0) >= 4,  // Q247 (was Q250)
+      receive_communion_regularly: (parseInt(responses[248]) || 0) >= 4,  // Q248 (was Q251)
+      agree_on_theology: (parseInt(responses[249]) || 0) >= 4,  // Q249 (was Q252)
+      give_financial_tithe: (parseInt(responses[250]) || 0) >= 4,  // Q250 (was Q253)
+      pray_for_each_other: (parseInt(responses[251]) || 0) >= 4,  // Q251 (was Q254)
+      pray_together_daily: (parseInt(responses[252]) || 0) >= 4,  // Q252 (was Q255)
+      serve_others_together: (parseInt(responses[253]) || 0) >= 4,  // Q253 (was Q256)
+      study_bible_together: (parseInt(responses[254]) || 0) >= 4  // Q254 (was Q257)
     }
   };
 }
 
 /**
  * Extract role expectations and analyze agreement
- * Questions 117-136 in survey format
+ * Questions 114-133 in survey format
  */
 function extractExpectations(person1Responses, person2Responses, user1Profile, user2Profile) {
   const roleQuestions = [
-    { id: 117, task: "Staying home with children" },
-    { id: 118, task: "Paying bills and handling finances" },
-    { id: 119, task: "Yard work" },
-    { id: 120, task: "Gassing up the car" },
-    { id: 121, task: "Fixing things around the house" },
-    { id: 122, task: "Laundry" },
-    { id: 123, task: "Making the bed" },
-    { id: 124, task: "Cooking meals" },
-    { id: 125, task: "Grocery shopping" },
-    { id: 126, task: "Caring for a pet" },
-    { id: 127, task: "Decorating the house" },
-    { id: 128, task: "Disciplining the children" },
-    { id: 129, task: "Doing the dishes" },
-    { id: 130, task: "Taking out the trash" },
-    { id: 131, task: "Cleaning the house" },
-    { id: 132, task: "Providing income" },
-    { id: 133, task: "Planning vacations & holidays" },
-    { id: 134, task: "Talking about spiritual matters" },
-    { id: 135, task: "Auto maintenance" },
-    { id: 136, task: "Scheduling social events" }
+    { id: 114, task: "Staying home with children" },
+    { id: 115, task: "Paying bills and handling finances" },
+    { id: 116, task: "Yard work" },
+    { id: 117, task: "Gassing up the car" },
+    { id: 118, task: "Fixing things around the house" },
+    { id: 119, task: "Laundry" },
+    { id: 120, task: "Making the bed" },
+    { id: 121, task: "Cooking meals" },
+    { id: 122, task: "Grocery shopping" },
+    { id: 123, task: "Caring for a pet" },
+    { id: 124, task: "Decorating the house" },
+    { id: 125, task: "Disciplining the children" },
+    { id: 126, task: "Doing the dishes" },
+    { id: 127, task: "Taking out the trash" },
+    { id: 128, task: "Cleaning the house" },
+    { id: 129, task: "Providing income" },
+    { id: 130, task: "Planning vacations & holidays" },
+    { id: 131, task: "Talking about spiritual matters" },
+    { id: 132, task: "Auto maintenance" },
+    { id: 133, task: "Scheduling social events" }
   ];
 
   const agreedRoles = [];
@@ -409,13 +501,18 @@ function extractExpectations(person1Responses, person2Responses, user1Profile, u
     return "Not specified";
   }
 
-  roleQuestions.forEach(role => {
+  roleQuestions.forEach((role, index) => {
     const p1ViewRaw = person1Responses[role.id];
     const p2ViewRaw = person2Responses[role.id];
 
     // Normalize answers
     const p1Who = getChoiceLabel(p1ViewRaw);
     const p2Who = getChoiceLabel(p2ViewRaw);
+
+    // Extract family of origin data (Q284-303 map to the same 20 tasks)
+    const familyOriginQuestionId = 284 + index;
+    const p1FamilyOrigin = person1Responses[familyOriginQuestionId] || "Not captured";
+    const p2FamilyOrigin = person2Responses[familyOriginQuestionId] || "Not captured";
 
     // Analyze Agreement
     // Agreements happen when:
@@ -446,13 +543,11 @@ function extractExpectations(person1Responses, person2Responses, user1Profile, u
       task: role.task,
       person_1_view: {
         who: p1Who,
-        mom: false, // Placeholder for FOO data if we find it
-        dad: false
+        family_origin: p1FamilyOrigin
       },
       person_2_view: {
         who: p2Who,
-        mom: false,
-        dad: false
+        family_origin: p2FamilyOrigin
       },
       agreed: agreed,
       assigned_to: assignedTo

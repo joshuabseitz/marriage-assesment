@@ -44,7 +44,7 @@ function loadReportData() {
 
 // Show message when no data is available
 function showNoDataMessage() {
-  const container = document.querySelector('.container') || document.body;
+  const container = document.querySelector('.report-container') || document.body;
   const message = document.createElement('div');
   message.className = 'bg-yellow-50 border border-yellow-300 text-yellow-800 px-6 py-4 rounded-lg my-4';
   message.innerHTML = `
@@ -804,8 +804,37 @@ function renderPage6() {
     const templates = FinancesTemplates.FINANCIAL_FEAR_TEMPLATES;
     const fearKeys = Object.keys(templates);
 
-    // Find first true fear or default to security
-    const topFearKey = fearKeys.find(key => fears?.[key] === true) || 'lack_of_security';
+    // Helper to map fear text to key
+    const mapFearTextToKey = (fearText) => {
+      if (!fearText) return null;
+      const text = String(fearText).toLowerCase();
+      if (text.includes("influence")) return "lack_of_influence";
+      if (text.includes("security")) return "lack_of_security";
+      if (text.includes("respect")) return "lack_of_respect";
+      if (text.includes("dreams")) return "not_realizing_dreams";
+      return null;
+    };
+
+    let topFearKey;
+
+    // NEW FORMAT: Get top-ranked fear from ranked array or top_fear key
+    if (fears?.top_fear) {
+      topFearKey = fears.top_fear;
+    } else if (fears?.ranked && fears.ranked.length > 0) {
+      // Extract from ranked array (find rank === 1 or use first item)
+      const topRankedFear = fears.ranked.find(f => f.rank === 1) || fears.ranked[0];
+      topFearKey = mapFearTextToKey(topRankedFear.fear);
+    }
+    // OLD FORMAT: Find first true fear boolean
+    else if (fears) {
+      topFearKey = fearKeys.find(key => fears[key] === true);
+    }
+
+    // Default fallback
+    if (!topFearKey || !templates[topFearKey]) {
+      topFearKey = 'lack_of_security';
+    }
+
     const topFear = templates[topFearKey];
 
     const iconEl = document.querySelector(iconSel);
@@ -904,6 +933,28 @@ function renderPage7() {
 
   console.log('📝 Rendering Page 7 - Expectations (Web Dashboard)');
 
+  // Defensive check for missing expectations section
+  if (!expectations || !expectations.agreed_roles || !expectations.needs_discussion) {
+    console.warn('⚠️ Expectations data missing or incomplete');
+    // Show graceful empty state
+    updateText('[data-field="total_roles"]', '0');
+    updateText('[data-field="agreed_count"]', '0');
+    updateText('[data-field="discussion_count"]', '0');
+    updateText('[data-field="agreement_rate"]', '0%');
+    updateText('[data-field="agreed_sublabel"]', 'No data available');
+    updateText('[data-field="discussion_sublabel"]', 'No data available');
+    
+    const agreedContainer = document.getElementById('agreed-roles-container');
+    const discussionContainer = document.getElementById('discussion-roles-container');
+    if (agreedContainer) {
+      agreedContainer.innerHTML = '<div class="p-8 text-center text-gray-400 italic">No expectations data available.</div>';
+    }
+    if (discussionContainer) {
+      discussionContainer.innerHTML = '<div class="p-8 text-center text-gray-400 italic">No expectations data available.</div>';
+    }
+    return;
+  }
+
   // Update Photos
   const p1Photo = document.querySelector('[data-field="person1_photo"]');
   const p2Photo = document.querySelector('[data-field="person2_photo"]');
@@ -911,8 +962,8 @@ function renderPage7() {
   if (p2Photo && p2?.photo_url) p2Photo.src = p2.photo_url;
 
   // Summary Stats
-  const agreedRoles = expectations?.agreed_roles || [];
-  const needsDiscussion = expectations?.needs_discussion || [];
+  const agreedRoles = expectations.agreed_roles || [];
+  const needsDiscussion = expectations.needs_discussion || [];
   const totalCount = agreedRoles.length + needsDiscussion.length;
   const agreementRate = totalCount > 0 ? Math.round((agreedRoles.length / totalCount) * 100) : 0;
 
@@ -959,11 +1010,26 @@ function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
   if (isAgreed) {
     const assigned = role.assigned_to;
     let badgeClass = 'assigned-neither';
-    if (assigned === 'Both') badgeClass = 'assigned-both';
-    else if (assigned === p1Name) badgeClass = 'assigned-p1';
-    else if (assigned === p2Name) badgeClass = 'assigned-p2';
+    let statusText = '';
+    
+    if (assigned === 'Both') {
+      badgeClass = 'assigned-both';
+      statusText = 'Both agree: Both will share this';
+    } else if (assigned === 'Neither') {
+      badgeClass = 'assigned-neither';
+      statusText = 'Both agree: Neither will do this';
+    } else if (assigned === p1Name) {
+      badgeClass = 'assigned-p1';
+      statusText = `Both agree: ${assigned} will do this`;
+    } else if (assigned === p2Name) {
+      badgeClass = 'assigned-p2';
+      statusText = `Both agree: ${assigned} will do this`;
+    } else {
+      // Fallback for any unexpected value
+      statusText = assigned;
+    }
 
-    badgeHtml = `<span class="role-badge ${badgeClass}">${assigned}</span>`;
+    badgeHtml = `<span class="role-badge ${badgeClass}">${statusText}</span>`;
   } else {
     badgeHtml = `<span class="role-badge assigned-neither">Discuss</span>`;
   }
@@ -996,10 +1062,16 @@ function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
         <div>
           <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${p1Name}'s View</div>
           ${getPerspectivePill(role.person_1_view.who, 'red')}
+          <div class="text-[10px] text-gray-500 italic mt-1">
+            In ${p1Name.split(' ')[0]}'s home: ${role.person_1_view.family_origin || 'N/A'}
+          </div>
         </div>
         <div>
           <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${p2Name}'s View</div>
           ${getPerspectivePill(role.person_2_view.who, 'teal')}
+          <div class="text-[10px] text-gray-500 italic mt-1">
+            In ${p2Name.split(' ')[0]}'s home: ${role.person_2_view.family_origin || 'N/A'}
+          </div>
         </div>
       </div>
 

@@ -118,13 +118,16 @@
         93: "I live by a budget religiously",  // Budget approach
         94: "Less than $10,000",  // Debt amount - Low debt
         95: 5, 96: 5, 97: 5, 98: 5,  // Debt comfort
-        99: false, 100: false, 101: false, 102: false,  // Financial fears (all false = no fears)
+        99: ["Lack of Influence", "Lack of Respect", "Not Realizing Dreams", "Lack of Security"],  // Financial fears - ranked (least concerned about security)
         103: 1, 104: 1, 105: 5,  // Growing up money stress, anxiety, trust
         106: 4, 107: 2, 108: 4, 109: 4, 110: 4, 111: 4, 112: 4,
         113: 5, 114: 5, 115: 5, 116: 5,
         // Role Expectations (Q117-136) - Mostly agreements (use strings: "Me", "You", "Both", "Neither")
         117: "Both", 118: "Both", 119: "Both", 120: "Both", 121: "Me", 122: "Both", 123: "Me", 124: "Both", 125: "Both", 126: "Both",
         127: "Both", 128: "Both", 129: "Both", 130: "Both", 131: "Both", 132: "Both", 133: "Both", 134: "Both", 135: "Both", 136: "Both",
+        // Family of Origin Roles (Q284-303)
+        284: "Mom", 285: "Dad", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Mom", 290: "Both equally", 291: "Mom", 292: "Mom", 293: "Both equally",
+        294: "Mom", 295: "Both equally", 296: "Mom", 297: "Dad", 298: "Mom", 299: "Dad", 300: "Both equally", 301: "Mom", 302: "Dad", 303: "Both equally",
         137: 3, 138: 3, 139: 3, 140: 3, 141: 3, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3, 148: 3, 149: 3, 150: 3,
 
         // Personality (Q151-200) - COOPERATING SPOUSE: Collaborative, flexible, consensus-seeking
@@ -210,12 +213,15 @@
         93: "I track generally",  // Budget approach
         94: "$10,000 - $50,000",  // Moderate debt
         95: 3, 96: 3, 97: 4, 98: 3,
-        99: false, 100: false, 101: true, 102: false,  // One fear: lack of respect
+        99: ["Lack of Respect", "Lack of Security", "Lack of Influence", "Not Realizing Dreams"],  // Financial fears - ranked (top: respect)
         103: 3, 104: 3, 105: 4, 106: 3, 107: 3, 108: 3, 109: 3, 110: 3, 111: 3, 112: 3,
         113: 3, 114: 3, 115: 3, 116: 3,
         // Role Expectations (Q117-136) - Some mixed patterns (use strings: "Me", "You", "Both", "Neither")
         117: "Me", 118: "Both", 119: "Me", 120: "Both", 121: "Both", 122: "Me", 123: "Both", 124: "Both", 125: "Me", 126: "Both",
         127: "Both", 128: "Both", 129: "Both", 130: "Me", 131: "Both", 132: "Both", 133: "You", 134: "Both", 135: "Me", 136: "Both",
+        // Family of Origin Roles (Q284-303)
+        284: "Both equally", 285: "Mom", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Both equally", 290: "Mom", 291: "Both equally", 292: "Mom", 293: "Mom",
+        294: "Mom", 295: "Dad", 296: "Both equally", 297: "Dad", 298: "Mom", 299: "Both equally", 300: "Mom", 301: "Both equally", 302: "Dad", 303: "Mom",
         // AFFIRMING SPOUSE: Supportive, encouraging, emotionally responsive
         151: 3, 152: 5, 153: 3, 154: 4, 155: 3, 156: 5, 157: 5, 158: 5, 159: 5, 160: 5, // High support
         161: 5, 162: 5, 163: 3, 164: 5, 165: 5, 166: 5, 167: 3, 168: 5, 169: 5, 170: 5, // Encouraging
@@ -272,10 +278,13 @@
         93: "I don't budget",  // No budget
         94: "More than $50,000",  // High debt
         95: 2, 96: 2, 97: 3, 98: 2,
-        99: true, 100: true, 101: true, 102: true,  // All 4 fears active
+        99: ["Lack of Security", "Not Realizing Dreams", "Lack of Influence", "Lack of Respect"],  // Financial fears - ranked (all active, security top)
         103: 5, 104: 5, 105: 3,        // Role Expectations (Q117-136) - Disagreements (use strings: "Me", "You", "Both", "Neither")
         117: "Me", 118: "Me", 119: "Me", 120: "You", 121: "Me", 122: "Me", 123: "Me", 124: "Me", 125: "Me", 126: "Me",
         127: "Me", 128: "Me", 129: "Me", 130: "Me", 131: "Me", 132: "Me", 133: "Me", 134: "You", 135: "You", 136: "Me",
+        // Family of Origin Roles (Q284-303)
+        284: "Mom", 285: "Dad", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Mom", 290: "Neither/Someone else", 291: "Mom", 292: "Mom", 293: "Neither/Someone else",
+        294: "Mom", 295: "Both equally", 296: "Mom", 297: "Dad", 298: "Mom", 299: "Dad", 300: "Dad", 301: "Neither/Someone else", 302: "Dad", 303: "Dad",
         // ANALYZING SPOUSE: Thoughtful, processes deeply, problem-solving focused
         151: 2, 152: 2, 153: 5, 154: 5, 155: 2, 156: 2, 157: 2, 158: 5, 159: 5, 160: 5, // Deep thinking
         161: 2, 162: 2, 163: 5, 164: 5, 165: 5, 166: 2, 167: 5, 168: 5, 169: 5, 170: 2, // Analytical
@@ -332,10 +341,13 @@
         93: "I track generally",  // Budget approach
         94: "Less than $10,000",  // Low debt
         95: 4, 96: 4, 97: 4, 98: 4,
-        99: false, 100: true, 101: false, 102: false,  // One fear: lack of security
+        99: ["Lack of Security", "Not Realizing Dreams", "Lack of Influence", "Lack of Respect"],  // Financial fears - ranked (top: security)
         103: 3, 104: 3, 105: 4,        // Role Expectations (Q117-136) - Directing patterns (use strings: "Me", "You", "Both", "Neither")
         117: "You", 118: "Me", 119: "Me", 120: "Me", 121: "Me", 122: "You", 123: "You", 124: "You", 125: "You", 126: "You",
         127: "You", 128: "Me", 129: "You", 130: "Me", 131: "You", 132: "Me", 133: "Both", 134: "Both", 135: "Me", 136: "Me",
+        // Family of Origin Roles (Q284-303)
+        284: "Mom", 285: "Dad", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Mom", 290: "Mom", 291: "Mom", 292: "Both equally", 293: "Dad",
+        294: "Both equally", 295: "Dad", 296: "Mom", 297: "Dad", 298: "Both equally", 299: "Dad", 300: "Mom", 301: "Dad", 302: "Dad", 303: "Mom",
         141: 5, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3, 148: 3, 149: 3, 150: 3,
         // DIRECTING SPOUSE: Decisive, takes charge, goal-oriented
         151: 2, 152: 2, 153: 2, 154: 5, 155: 5, 156: 2, 157: 2, 158: 2, 159: 2, 160: 2, // Takes initiative
@@ -762,45 +774,48 @@
     if (questionId >= 11 && questionId <= 16) return 'scale_1_5'; // Relationship quality
     if (questionId >= 17 && questionId <= 91) return 'scale_1_5'; // Mindset, wellbeing, personality
     
-    // FINANCES (Q92-116) - Mixed types!
+    // FINANCES (Q92-113) - Mixed types!
     if (questionId >= 92 && questionId <= 94) return 'choice'; // Money style, budget, debt
     if (questionId >= 95 && questionId <= 98) return 'scale_1_5'; // Debt comfort, discussions
-    if (questionId >= 99 && questionId <= 102) return 'boolean'; // Financial fears
-    if (questionId >= 103 && questionId <= 116) return 'scale_1_5'; // Financial attitudes
+    if (questionId === 99) return 'rank_order'; // Financial fears - now rank-order
+    if (questionId >= 100 && questionId <= 113) return 'scale_1_5'; // Financial attitudes
     
-    // ROLES (Q117-136)
-    if (questionId >= 117 && questionId <= 136) return 'role_selection'; // Who does what
+    // ROLES (Q114-133)
+    if (questionId >= 114 && questionId <= 133) return 'role_selection'; // Who does what
     
-    // DYNAMICS (Q137-150)
-    if (questionId >= 137 && questionId <= 150) return 'scale_1_5';
+    // DYNAMICS (Q134-147)
+    if (questionId >= 134 && questionId <= 147) return 'scale_1_5';
     
-    // SOCIAL SUPPORT (Q151-180)
-    if (questionId >= 151 && questionId <= 180) return 'scale_1_5';
+    // SOCIAL SUPPORT (Q148-177)
+    if (questionId >= 148 && questionId <= 177) return 'scale_1_5';
     
-    // SEXUALITY (Q181-200)
-    if (questionId === 188) return 'choice'; // Abstaining
-    if (questionId === 189) return 'scale_1_10'; // Desire rating
-    if (questionId === 190) return 'choice'; // Who initiates
-    if (questionId === 191) return 'choice'; // Frequency
-    if (questionId >= 181 && questionId <= 200) return 'scale_1_5';
+    // SEXUALITY (Q178-197)
+    if (questionId === 185) return 'choice'; // Abstaining
+    if (questionId === 186) return 'scale_1_10'; // Desire rating
+    if (questionId === 187) return 'choice'; // Who initiates
+    if (questionId === 188) return 'choice'; // Frequency
+    if (questionId >= 178 && questionId <= 197) return 'scale_1_5';
     
-    // LOVE (Q201-210)
-    if (questionId === 201) return 'rank_order'; // Love definitions
-    if (questionId >= 202 && questionId <= 210) return 'scale_1_5';
+    // LOVE (Q198-207)
+    if (questionId === 184) return 'rank_order'; // Love definitions
+    if (questionId >= 185 && questionId <= 207) return 'scale_1_5';
     
-    // GENDER NEEDS (Q211-230)
-    if (questionId >= 211 && questionId <= 230) return 'scale_1_5';
+    // GENDER NEEDS (Q208-227)
+    if (questionId >= 208 && questionId <= 227) return 'scale_1_5';
     
-    // CONFLICT (Q231-246)
-    if (questionId === 231) return 'rank_order'; // Hot topics
-    if (questionId >= 232 && questionId <= 246) return 'boolean';
+    // CONFLICT (Q228-243)
+    if (questionId === 214) return 'rank_order'; // Hot topics
+    if (questionId >= 215 && questionId <= 243) return 'boolean';
     
-    // SPIRITUALITY (Q247-280)
-    if (questionId === 247) return 'text'; // Feels closest to God
-    if (questionId >= 248 && questionId <= 280) return 'scale_1_5';
+    // SPIRITUALITY (Q244-277)
+    if (questionId === 244) return 'text'; // Feels closest to God
+    if (questionId >= 245 && questionId <= 277) return 'scale_1_5';
     
-    // REFLECTIONS (Q281-300)
-    if (questionId >= 281 && questionId <= 300) return 'text';
+    // REFLECTIONS (Q278-283)
+    if (questionId >= 278 && questionId <= 283) return 'text';
+    
+    // FAMILY OF ORIGIN - ROLES (Q284-303)
+    if (questionId >= 284 && questionId <= 303) return 'choice';
     
     return 'text'; // Default fallback
   }
@@ -821,19 +836,19 @@
 
       const profile = await supabaseAuth.getUserProfile();
       const count = await reportsApi.getResponseCountForUser(user.id);
-      const complete = count >= 290;
+      const complete = count >= 300;
       const partnership = await partnershipsApi.getAcceptedPartnership();
 
       let status = '';
       status += `<strong>You (${profile?.full_name || 'User'}):</strong><br>`;
-      status += `${count}/300 questions ${complete ? '✅' : '⏳'}<br><br>`;
+      status += `${count}/303 questions ${complete ? '✅' : '⏳'}<br><br>`;
 
       if (partnership) {
         const partnerId = partnership.partner.id;
         const partnerCount = await reportsApi.getResponseCountForUser(partnerId);
-        const partnerComplete = partnerCount >= 290;
+        const partnerComplete = partnerCount >= 300;
         status += `<strong>Partner (${partnership.partner.full_name}):</strong><br>`;
-        status += `${partnerCount}/300 questions ${partnerComplete ? '✅' : '⏳'}<br><br>`;
+        status += `${partnerCount}/303 questions ${partnerComplete ? '✅' : '⏳'}<br><br>`;
 
         if (complete && partnerComplete) {
           status += `<span style="color: #4caf50; font-weight: bold;">✅ Ready to generate report!</span>`;
