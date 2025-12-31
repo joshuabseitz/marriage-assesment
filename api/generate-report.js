@@ -108,19 +108,35 @@ async function callGeminiAPI(genAI, prompt, passName, maxRetries = MAX_RETRIES) 
 }
 
 /**
- * Load data extractor from file
+ * Load data extractor from file with dynamics templates
  */
 function loadDataExtractor() {
   try {
+    // Load dynamics templates library
+    const templatesPath = join(__dirname, '..', 'lib', 'dynamics-templates.js');
+    const templatesCode = readFileSync(templatesPath, 'utf-8');
+    
+    // Load extractor
     const extractorPath = join(__dirname, 'report-data-extractor.js');
     const extractorCode = readFileSync(extractorPath, 'utf-8');
 
-    const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', `
+    // Execute templates first to make it available
+    const templatesFunc = new Function(`
+      ${templatesCode}
+      return (typeof module !== 'undefined' && module.exports) || {};
+    `);
+    const DynamicsTemplates = templatesFunc();
+    
+    console.log('✅ Dynamics templates loaded:', Object.keys(DynamicsTemplates).length, 'exports');
+
+    // Execute extractor with templates injected
+    const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', 'DynamicsTemplates', `
       ${extractorCode}
       return extractBaseReport(person1Responses, person2Responses, user1Profile, user2Profile);
     `);
 
-    return extractBaseReport;
+    // Return wrapped function that injects templates
+    return (p1, p2, u1, u2) => extractBaseReport(p1, p2, u1, u2, DynamicsTemplates);
   } catch (error) {
     console.error('Error loading data extractor:', error);
     throw new Error(`Failed to load data extractor: ${error.message}`);
