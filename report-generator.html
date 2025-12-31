@@ -383,9 +383,17 @@
 
       document.getElementById('regenerate-btn').addEventListener('click', async () => {
         if (confirm('Are you sure you want to regenerate the report? This will replace the existing report.')) {
-          // Delete existing report and regenerate
-          existingReport = null;
-          render();
+          try {
+            // Delete existing report from database
+            await window.reportsApi.deleteReport(existingReport.id);
+            // Clear cached report from localStorage
+            localStorage.removeItem('generated_report');
+            existingReport = null;
+            render();
+          } catch (error) {
+            console.error('Error deleting report:', error);
+            alert('Failed to delete existing report. Please try again.');
+          }
         }
       });
     }
