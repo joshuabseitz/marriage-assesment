@@ -185,3 +185,4 @@ Profile pictures will now be displayed:
 - Images are cached for 1 hour (3600 seconds) to improve performance
 - Old images are automatically replaced when uploading new ones (using `upsert: true`)
 
+

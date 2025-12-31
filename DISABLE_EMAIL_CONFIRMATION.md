@@ -112,3 +112,4 @@ CREATE TRIGGER on_auth_user_created_auto_confirm
 - ✅ If email confirmation required, shows helpful message
 - ⏳ **Action needed**: Disable email confirmation in Supabase dashboard
 
+

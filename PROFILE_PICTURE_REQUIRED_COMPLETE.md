@@ -167,3 +167,4 @@ If you want to re-enable email verification in the future:
 
 For now, the flow is optimized for immediate signup with required profile pictures! 🎉
 
+

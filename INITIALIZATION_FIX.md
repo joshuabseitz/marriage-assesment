@@ -193,3 +193,4 @@ async function getSupabase() {
 
 The authentication system should now work reliably! 🎉
 
+

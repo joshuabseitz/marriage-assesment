@@ -93,3 +93,4 @@ CREATE TRIGGER update_responses_updated_at BEFORE UPDATE ON responses
 CREATE TRIGGER update_partnerships_updated_at BEFORE UPDATE ON partnerships
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
+

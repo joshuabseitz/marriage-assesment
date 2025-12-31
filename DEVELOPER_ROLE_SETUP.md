@@ -265,3 +265,4 @@ If you encounter issues:
 3. Verify migrations were applied correctly
 4. Ensure RLS policies allow the operations
 
+

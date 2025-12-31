@@ -249,3 +249,4 @@ Partners connected → One/Both incomplete survey
 **Visual Guide Version**: 1.0
 **Created**: December 28, 2025
 
+

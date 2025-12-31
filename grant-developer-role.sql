@@ -21,3 +21,4 @@ WHERE email = 'joshuabseitz@gmail.com';
 -- To see all developers:
 -- SELECT email, role, full_name FROM user_profiles WHERE role IN ('developer', 'admin');
 
+

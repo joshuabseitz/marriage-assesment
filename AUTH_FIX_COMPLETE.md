@@ -173,3 +173,4 @@ Your Supabase credentials are already in `config.js`:
 
 Everything is ready to use!
 
+

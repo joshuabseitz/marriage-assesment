@@ -48,3 +48,4 @@ USING (bucket_id = 'profile-pictures');
 -- SELECT * FROM storage.buckets WHERE id = 'profile-pictures';
 -- SELECT * FROM pg_policies WHERE tablename = 'objects' AND schemaname = 'storage';
 
+

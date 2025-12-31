@@ -29,3 +29,4 @@ $$ LANGUAGE plpgsql SECURITY DEFINER;
 -- Grant execute permission to authenticated users
 GRANT EXECUTE ON FUNCTION public.is_developer() TO authenticated;
 
+
