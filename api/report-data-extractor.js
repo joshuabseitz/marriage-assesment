@@ -34,7 +34,7 @@ function extractBaseReport(person1Responses, person2Responses, user1Profile = nu
       sexuality: extractSexuality(person1Responses, person2Responses)
     },
     spirituality: extractSpirituality(person1Responses, person2Responses),
-    expectations: extractExpectations(person1Responses, person2Responses),
+    expectations: extractExpectations(person1Responses, person2Responses, user1Profile, user2Profile),
     caution_flags: {
       person_1: extractCautionFlags(person1Responses),
       person_2: extractCautionFlags(person2Responses)
@@ -298,18 +298,18 @@ function extractSpirituality(person1Responses, person2Responses) {
 
 function extractPersonSpirituality(responses) {
   return {
-    feels_closest_to_god_through: responses[261] || "Not specified",
+    feels_closest_to_god_through: responses[247] || "Not specified",
     spiritual_practices: {
-      attend_church_weekly: (parseInt(responses[262]) || 0) >= 4,
-      go_to_same_church: (parseInt(responses[263]) || 0) >= 4,
-      discuss_spiritual_issues: (parseInt(responses[264]) || 0) >= 4,
-      receive_communion_regularly: (parseInt(responses[265]) || 0) >= 4,
-      agree_on_theology: (parseInt(responses[266]) || 0) >= 4,
-      give_financial_tithe: (parseInt(responses[267]) || 0) >= 4,
-      pray_for_each_other: (parseInt(responses[268]) || 0) >= 4,
-      pray_together_daily: (parseInt(responses[269]) || 0) >= 4,
-      serve_others_together: (parseInt(responses[270]) || 0) >= 4,
-      study_bible_together: (parseInt(responses[271]) || 0) >= 4
+      attend_church_weekly: (parseInt(responses[248]) || 0) >= 4,
+      go_to_same_church: (parseInt(responses[249]) || 0) >= 4,
+      discuss_spiritual_issues: (parseInt(responses[250]) || 0) >= 4,
+      receive_communion_regularly: (parseInt(responses[251]) || 0) >= 4,
+      agree_on_theology: (parseInt(responses[252]) || 0) >= 4,
+      give_financial_tithe: (parseInt(responses[253]) || 0) >= 4,
+      pray_for_each_other: (parseInt(responses[254]) || 0) >= 4,
+      pray_together_daily: (parseInt(responses[255]) || 0) >= 4,
+      serve_others_together: (parseInt(responses[256]) || 0) >= 4,
+      study_bible_together: (parseInt(responses[257]) || 0) >= 4
     }
   };
 }
@@ -318,7 +318,7 @@ function extractPersonSpirituality(responses) {
  * Extract role expectations and analyze agreement
  * Questions 117-136 in survey format
  */
-function extractExpectations(person1Responses, person2Responses) {
+function extractExpectations(person1Responses, person2Responses, user1Profile, user2Profile) {
   const roleQuestions = [
     { id: 117, task: "Staying home with children" },
     { id: 118, task: "Paying bills and handling finances" },
@@ -345,8 +345,8 @@ function extractExpectations(person1Responses, person2Responses) {
   const agreedRoles = [];
   const needsDiscussion = [];
 
-  const p1Name = person1Responses[1] || "Person 1";
-  const p2Name = person2Responses[1] || "Person 2";
+  const p1Name = user1Profile?.full_name || "Person 1";
+  const p2Name = user2Profile?.full_name || "Person 2";
 
   roleQuestions.forEach(role => {
     const p1ViewRaw = person1Responses[role.id];
