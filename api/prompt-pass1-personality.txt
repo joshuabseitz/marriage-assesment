@@ -94,7 +94,9 @@ Your task is to generate ONLY the descriptive text explaining what this type mea
 
 # YOUR TASK
 
-Generate personality and dynamics sections for a couples assessment report. You will analyze survey responses and create rich, specific narratives that feel personally crafted for THIS couple, not generic templates.
+Generate personality sections for a couples assessment report (Mindset and Attitude/Resilience only). 
+
+**IMPORTANT**: Dynamics (personality types, strengths, style sliders) are now generated using deterministic templates for consistency and clinical rigor. You should ONLY generate Mindset and Attitude sections. Do NOT generate Dynamics content.
 
 # CORE PRINCIPLES
 
@@ -123,6 +125,8 @@ Generate personality and dynamics sections for a couples assessment report. You 
 
 Return ONLY valid JSON (no markdown, no text before/after). Start with `{` and end with `}`.
 
+**NOTE**: Do NOT include "dynamics" in your output - it's now generated via templates.
+
 ```json
 {
   "momentum": {
@@ -137,61 +141,6 @@ Return ONLY valid JSON (no markdown, no text before/after). Start with `{` and e
       }
     },
     "how_mindsets_mesh": "2-3 paragraphs (200-250 words) analyzing how THESE TWO SPECIFIC mindsets interact"
-  },
-  
-  "dynamics": {
-    "overall_type": "Combined description using PROVIDED types (e.g., '{person1_dynamics_type} + {person2_dynamics_type}')",
-    "overall_description": "2-3 paragraphs (250-300 words MINIMUM) about how their personalities complement or clash. MUST include: (1) Specific references to their Q137-Q186 responses with scores, (2) Statistical comparisons ('You are X% more likely than...', 'In the top Y% of couples...'), (3) Practical 'how to leverage' advice, (4) Both strengths AND potential friction points, (5) Behavioral examples from daily life",
-    
-    "person_1": {
-      "type": "{person1_dynamics_type}",  // DO NOT CHANGE - use provided value exactly
-      "full_description": "2 paragraphs (150-200 words) with specific behavioral tendencies from their responses",
-      "love_view": "One sentence describing how they view love based on their type",
-      "strengths": [
-        "5 specific strength statements",
-        "Each 8-12 words",
-        "Action-oriented and concrete",
-        "MUST reference their actual high-scoring questions (Q137-Q186) where they scored 4-5",
-        "Format: 'Maintains calm under pressure (Q159: 5/5)' NOT generic type descriptions"
-      ]
-    },
-    
-    "person_2": {
-      "type": "{person2_dynamics_type}",  // DO NOT CHANGE - use provided value exactly
-      "full_description": "2 paragraphs (150-200 words) with specific behavioral tendencies from their responses",
-      "love_view": "One sentence describing how they view love based on their type",
-      "strengths": [
-        "5 specific strength statements with question references",
-        "MUST cite actual Q# and scores from their responses"
-      ]
-    },
-    
-    "styles": {
-      "solving_problems": {
-        "person_1_position": 0-100,
-        "person_2_position": 0-100,
-        "scale_left": "Reflective",
-        "scale_right": "Aggressive"
-      },
-      "influencing_each_other": {
-        "person_1_position": 0-100,
-        "person_2_position": 0-100,
-        "scale_left": "Facts",
-        "scale_right": "Feelings"
-      },
-      "reacting_to_change": {
-        "person_1_position": 0-100,
-        "person_2_position": 0-100,
-        "scale_left": "Accept",
-        "scale_right": "Resist"
-      },
-      "making_decisions": {
-        "person_1_position": 0-100,
-        "person_2_position": 0-100,
-        "scale_left": "Spontaneous",
-        "scale_right": "Cautious"
-      }
-    }
   },
   
   "attitude": {
@@ -272,103 +221,17 @@ Write 200-250 words analyzing:
 
 ---
 
-## DYNAMICS ANALYSIS (Q137-Q186)
+## DYNAMICS - NOW TEMPLATE-BASED
 
-### Personality Type Determination
+**IMPORTANT**: Dynamics content (personality types, strengths, style sliders, overall descriptions) is now generated using deterministic templates for consistency and clinical rigor. You do NOT need to generate this content.
 
-**CRITICAL**: Dynamics types are PRE-CALCULATED from Q137-Q186 using DISC model. DO NOT recalculate - use provided types.
+The dynamics section includes:
+- Overall type combination (e.g., "Cooperating Spouse + Affirming Spouse")
+- Pre-written descriptions for all 16 type combinations
+- Strengths extracted from actual high-scoring questions
+- Style slider positions calculated from Q139-Q162 responses
 
-**Cooperating Spouse** (High S - Steadiness):
-- Key indicators: Q137 (listener), Q141 (steady), Q143 (avoids conflict), Q159 (patient), Q161 (cooperative)
-- Prefers harmony, stability, non-confrontational
-- Extract strengths from their high scores on these questions
-
-**Affirming Spouse** (High I - Influence):  
-- Key indicators: Q138 (talkative), Q142 (fun-loving), Q154 (entertaining), Q186 (extrovert)
-- Optimistic, enthusiastic, needs social connection
-- Extract strengths from their high scores on these questions
-
-**Directing Spouse** (High D - Dominance):
-- Key indicators: Q144 (persuasive), Q160 (intense), Q162 (competitive), Q170 (dominate)
-- Direct, confident, results-oriented
-- Extract strengths from their high scores on these questions
-
-**Analyzing Spouse** (High C - Conscientiousness):
-- Key indicators: Q139 (cautious), Q145 (fact-based), Q155 (detail-oriented), Q183 (accurate)
-- Precise, systematic, needs quality and accuracy
-- Extract strengths from their high scores on these questions
-
-### Full Description Requirements
-
-Write 2 paragraphs (150-200 words) that include:
-1. **Primary Behavioral Pattern**: How they typically act in relationships
-2. **Social Tendencies**: How they interact with others
-3. **Stress Response**: What happens when under pressure
-4. **Time Management**: How they approach commitments and schedules
-5. **Communication Style**: Preview of how they express themselves
-6. **Spouse Impact**: How their partner experiences them
-
-Example for Cooperating Spouse:
-"You are well-regarded because you rarely antagonize others or seek the spotlight. You become most comfortable when the best offense is a good defense. You seldom act aggressively toward your spouse, but may demonstrate passive resistance from time to time. When meeting new people, you're rather reassuring and mild-mannered.
-
-You will be cooperative and easygoing in social groups and family events, because of an inherent need not to make waves or cause hostility. You are rather quiet and modest, tending not to show assertiveness and never being domineering or self-centered. You prefer your spouse to be in the spotlight rather than yourself. However, this can sometimes lead to unexpressed needs and resentment building under the surface."
-
-### Love View
-
-One sentence capturing how THIS type views love in action:
-- Cooperating: "Being heart-felt, vulnerable, and giving the benefit of the doubt"
-- Affirming: "Being attentive and giving each other affection and acceptance"
-- Directing: "Being loyal, protective, and achieving goals together"
-- Analyzing: "Being thoughtful, consistent, and maintaining high standards"
-
-### Strengths Array
-
-Extract 5 specific strengths based on their Q137-Q186 responses where they scored 4-5:
-- MUST be action-oriented: "Maintains calm under pressure" NOT "Is calm"
-- MUST reference their actual question numbers and scores
-- Each 8-12 words total
-- Format examples:
-  * "Excellent listener who creates space for others (Q137: 5/5)"
-  * "Brings steady reliability even under stress (Q141: 5/5)"
-  * "Patient and measured in approach (Q159: 4/5)"
-  * "Entertaining presence that energizes the room (Q154: 5/5)"
-  * "Thoughtful decision-maker who weighs all options (Q139: 5/5)"
-- DO NOT use generic type descriptions - extract from THEIR actual high scores
-- If they didn't score 4-5 on many questions, note the questions where they scored 3 with context
-
-### Styles Positions (0-100 scale)
-
-**Solving Problems** (Q73-82):
-- Calculate average of Q73-82
-- Low scores (1-2 avg) → Position 0-35 (Reflective)
-- Mid scores (3) → Position 35-65 (Balanced)
-- High scores (4-5 avg) → Position 65-100 (Aggressive)
-
-**Influencing Each Other** (Q83-92):
-- Low scores → Position 0-35 (Facts-driven)
-- High scores → Position 65-100 (Feelings-driven)
-
-**Reacting to Change** (Q93-102):
-- Low scores → Position 0-35 (Accept easily)
-- High scores → Position 65-100 (Resist change)
-
-**Making Decisions** (Q103-112):
-- Low scores → Position 0-35 (Spontaneous)
-- High scores → Position 65-100 (Cautious)
-
-### Overall Description
-
-Write 2-3 paragraphs (250-300 words MINIMUM) about their combined dynamics:
-1. **Type Combination**: Name both types and overall impression
-2. **Specific Response References**: Cite at least 3-4 specific Q# responses with scores (e.g., "{person1_name} scored 5/5 on 'Talkative' (Q138) while {person2_name} scored 3/5...")
-3. **Statistical Contextualization**: Use phrases like "You're in the top 20% of couples...", "Compared to average couples...", "Research shows that pairs with this combination..."
-4. **Complementarity**: How do they balance each other with specific behavioral examples?
-5. **Conflict Points**: Where will friction arise? Be specific about daily scenarios
-6. **Strength as Team**: What makes them work well together?
-7. **Practical "How to Leverage" Advice**: 2-3 actionable suggestions for their specific type combination
-8. **Cautions**: What should they watch out for?
-
-**Quality Check**: If your description is under 250 words, it's too generic. Expand with more specific examples.
+This ensures every couple with the same type combination receives the same clinically-reviewed content, with personalization coming from their specific question scores and style positions.
 
 ---
 

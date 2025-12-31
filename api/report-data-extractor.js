@@ -10,7 +10,19 @@
  * - Sexuality preferences
  * - Spiritual practices
  * - Role expectations
+ * - Dynamics (using template library for consistency)
  */
+
+// Import dynamics templates library (if in Node.js environment)
+let DynamicsTemplates = null;
+if (typeof require !== 'undefined') {
+  try {
+    DynamicsTemplates = require('../lib/dynamics-templates.js');
+  } catch (e) {
+    console.warn('Could not load dynamics-templates.js in Node environment');
+  }
+}
+// In browser, it will be loaded via window.DynamicsTemplates
 
 // ============================================================================
 // MAIN EXTRACTION FUNCTION
@@ -50,7 +62,9 @@ function extractBaseReport(person1Responses, person2Responses, user1Profile = nu
         mindset: calculateMindsetType(person2Responses),
         dynamics: calculateDynamicsType(person2Responses)
       }
-    }
+    },
+    // DYNAMICS - Template-based extraction for consistency
+    dynamics: extractDynamics(person1Responses, person2Responses, user1Profile, user2Profile)
   };
 }
 
@@ -466,6 +480,136 @@ function normalizeWho(answer) {
   if (ans.includes("you") || ans.includes("partner") || ans.includes("spouse")) return "You";
   if (ans.includes("both") || ans.includes("together") || ans.includes("we")) return "Both";
   return null;
+}
+
+/**
+ * Extract Dynamics using template library (template-based, not AI)
+ * This ensures consistency and clinical rigor at scale
+ */
+function extractDynamics(person1Responses, person2Responses, user1Profile, user2Profile) {
+  // Get templates library (works in both Node and browser)
+  const templates = DynamicsTemplates || (typeof window !== 'undefined' ? window.DynamicsTemplates : null);
+  
+  if (!templates) {
+    console.warn('⚠️ Dynamics templates library not loaded. Dynamics section will have minimal data.');
+    return {
+      overall_type: "Type calculation in progress",
+      overall_description: "Dynamics analysis requires template library.",
+      person_1: { type: "Unknown", strengths: [], full_description: "" },
+      person_2: { type: "Unknown", strengths: [], full_description: "" },
+      styles: {}
+    };
+  }
+  
+  // Calculate types (already done in calculated_types, but we need them here)
+  const person1Type = calculateDynamicsType(person1Responses);
+  const person2Type = calculateDynamicsType(person2Responses);
+  
+  const person1Name = user1Profile?.full_name || "Person 1";
+  const person2Name = user2Profile?.full_name || "Person 2";
+  
+  // Get overall type string
+  const overallType = templates.getOverallType(person1Type, person2Type);
+  
+  // Get description from templates (not AI)
+  const overallDescription = templates.getDynamicsDescription(
+    person1Type,
+    person2Type,
+    person1Name,
+    person2Name
+  );
+  
+  // Get strengths from templates based on actual high scores
+  const person1Strengths = templates.getStrengthsList(person1Type, person1Responses);
+  const person2Strengths = templates.getStrengthsList(person2Type, person2Responses);
+  
+  // Calculate style positions (0-100 scale)
+  const styles = {
+    solving_problems: {
+      person_1_position: calculateDimensionScore(person1Responses, [159, 160, 162]),
+      person_2_position: calculateDimensionScore(person2Responses, [159, 160, 162]),
+      scale_left: "Reflective",
+      scale_right: "Aggressive"
+    },
+    influencing_each_other: {
+      person_1_position: calculateDimensionScore(person1Responses, [145, 146]),
+      person_2_position: calculateDimensionScore(person2Responses, [145, 146]),
+      scale_left: "Facts",
+      scale_right: "Feelings"
+    },
+    reacting_to_change: {
+      person_1_position: calculateDimensionScore(person1Responses, [147, 148]),
+      person_2_position: calculateDimensionScore(person2Responses, [147, 148]),
+      scale_left: "Accept",
+      scale_right: "Resist"
+    },
+    making_decisions: {
+      person_1_position: calculateDimensionScore(person1Responses, [139, 140]),
+      person_2_position: calculateDimensionScore(person2Responses, [139, 140]),
+      scale_left: "Spontaneous",
+      scale_right: "Cautious"
+    }
+  };
+  
+  // Calculate style gaps for compatibility assessment
+  const styleGaps = {
+    solving_problems: Math.abs(styles.solving_problems.person_1_position - styles.solving_problems.person_2_position),
+    influencing_each_other: Math.abs(styles.influencing_each_other.person_1_position - styles.influencing_each_other.person_2_position),
+    reacting_to_change: Math.abs(styles.reacting_to_change.person_1_position - styles.reacting_to_change.person_2_position),
+    making_decisions: Math.abs(styles.making_decisions.person_1_position - styles.making_decisions.person_2_position)
+  };
+  
+  // Add style gap analysis to description if gaps are significant
+  let enhancedDescription = overallDescription;
+  Object.entries(styleGaps).forEach(([styleName, gap]) => {
+    if (gap >= 30) {
+      const gapAnalysis = templates.getStyleGapAnalysis(
+        styleName,
+        styles[styleName].person_1_position,
+        styles[styleName].person_2_position,
+        person1Name,
+        person2Name
+      );
+      if (gapAnalysis) {
+        enhancedDescription += ' ' + gapAnalysis;
+      }
+    }
+  });
+  
+  // Calculate compatibility score
+  const compatibilityScore = templates.calculateDynamicsCompatibility(
+    person1Type,
+    person2Type,
+    styleGaps
+  );
+  
+  return {
+    overall_type: overallType,
+    overall_description: enhancedDescription,
+    compatibility_score: compatibilityScore,
+    
+    person_1: {
+      type: person1Type,
+      strengths: person1Strengths,
+      full_description: `${person1Name} exhibits the characteristics of a ${person1Type}. This means they naturally bring ${person1Type === 'Cooperating Spouse' ? 'collaborative partnership, patient listening, and diplomatic balance' : person1Type === 'Affirming Spouse' ? 'enthusiastic energy, verbal expressiveness, and social warmth' : person1Type === 'Directing Spouse' ? 'decisive leadership, goal-oriented drive, and confident action' : 'systematic thinking, careful analysis, and quality focus'} to the relationship.`,
+      love_view: person1Type === 'Cooperating Spouse' ? 'Being heart-felt, vulnerable, and giving the benefit of the doubt' :
+                person1Type === 'Affirming Spouse' ? 'Being attentive and giving each other affection and acceptance' :
+                person1Type === 'Directing Spouse' ? 'Being loyal, protective, and achieving goals together' :
+                'Being thoughtful, consistent, and maintaining high standards'
+    },
+    
+    person_2: {
+      type: person2Type,
+      strengths: person2Strengths,
+      full_description: `${person2Name} exhibits the characteristics of a ${person2Type}. This means they naturally bring ${person2Type === 'Cooperating Spouse' ? 'collaborative partnership, patient listening, and diplomatic balance' : person2Type === 'Affirming Spouse' ? 'enthusiastic energy, verbal expressiveness, and social warmth' : person2Type === 'Directing Spouse' ? 'decisive leadership, goal-oriented drive, and confident action' : 'systematic thinking, careful analysis, and quality focus'} to the relationship.`,
+      love_view: person2Type === 'Cooperating Spouse' ? 'Being heart-felt, vulnerable, and giving the benefit of the doubt' :
+                person2Type === 'Affirming Spouse' ? 'Being attentive and giving each other affection and acceptance' :
+                person2Type === 'Directing Spouse' ? 'Being loyal, protective, and achieving goals together' :
+                'Being thoughtful, consistent, and maintaining high standards'
+    },
+    
+    styles: styles
+  };
 }
 
 // ============================================================================
@@ -1544,6 +1688,7 @@ if (typeof module !== 'undefined' && module.exports) {
   // Node.js export
   module.exports = {
     extractBaseReport,
+    extractDynamics,
     getResponsesForQuestions,
     calculateAverage,
     scaleToPercentage,
@@ -1564,6 +1709,7 @@ if (typeof module !== 'undefined' && module.exports) {
 if (typeof window !== 'undefined') {
   window.ReportDataExtractor = {
     extractBaseReport,
+    extractDynamics,
     getResponsesForQuestions,
     calculateAverage,
     scaleToPercentage,

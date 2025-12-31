@@ -303,7 +303,7 @@ export default async function handler(req, res) {
 
       // Execute all three passes in parallel
       const [pass1Results, pass2Results, pass3Results] = await Promise.all([
-        // Pass 1: Personality & Dynamics
+        // Pass 1: Personality (Mindset & Resilience only - Dynamics now template-based)
         callGeminiAPI(
           genAI,
           fillPromptTemplate(pass1Template, promptData),
@@ -371,11 +371,8 @@ export default async function handler(req, res) {
             ...pass2Results.momentum,
             ...synthesisResults.momentum
           },
-          dynamics: {
-            ...baseReport.dynamics,
-            ...pass1Results.dynamics,
-            ...synthesisResults.dynamics
-          },
+          // Dynamics: 100% template-based (from baseReport), no AI generation
+          dynamics: baseReport.dynamics,
           love: {
             ...baseReport.love,
             ...pass3Results.love,
@@ -401,10 +398,8 @@ export default async function handler(req, res) {
             ...pass1Results.momentum,
             ...pass2Results.momentum
           },
-          dynamics: {
-            ...baseReport.dynamics,
-            ...pass1Results.dynamics
-          },
+          // Dynamics: 100% template-based (from baseReport), no AI generation
+          dynamics: baseReport.dynamics,
           love: {
             ...baseReport.love,
             ...pass3Results.love
