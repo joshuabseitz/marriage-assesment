@@ -372,30 +372,51 @@
     }
 
     function setupExistingReportListeners() {
-      document.getElementById('view-report-btn').addEventListener('click', async () => {
+      const viewBtn = document.getElementById('view-report-btn');
+      const downloadBtn = document.getElementById('download-json-btn');
+      const regenerateBtn = document.getElementById('regenerate-btn');
+
+      console.log('Setting up report listeners:', { viewBtn, downloadBtn, regenerateBtn });
+
+      if (!viewBtn || !downloadBtn || !regenerateBtn) {
+        console.error('⚠️ One or more buttons not found in DOM');
+        return;
+      }
+
+      viewBtn.addEventListener('click', async () => {
+        console.log('View report clicked');
         await window.reportsApi.loadReportForRendering(existingReport.id);
         window.location.href = '/';
       });
 
-      document.getElementById('download-json-btn').addEventListener('click', () => {
+      downloadBtn.addEventListener('click', () => {
+        console.log('Download clicked');
         window.reportsApi.downloadReportJSON(existingReport.id);
       });
 
-      document.getElementById('regenerate-btn').addEventListener('click', async () => {
+      regenerateBtn.addEventListener('click', async () => {
+        console.log('Regenerate clicked');
         if (confirm('Are you sure you want to regenerate the report? This will replace the existing report.')) {
           try {
+            console.log('User confirmed, deleting report:', existingReport.id);
             // Delete existing report from database
             await window.reportsApi.deleteReport(existingReport.id);
+            console.log('Report deleted successfully');
             // Clear cached report from localStorage
             localStorage.removeItem('generated_report');
             existingReport = null;
+            console.log('Re-rendering generator UI');
             render();
           } catch (error) {
             console.error('Error deleting report:', error);
-            alert('Failed to delete existing report. Please try again.');
+            alert(`Failed to delete existing report: ${error.message}\n\nPlease try again or contact support if the issue persists.`);
           }
+        } else {
+          console.log('User cancelled regeneration');
         }
       });
+
+      console.log('✅ Report listeners attached successfully');
     }
 
     async function handleGenerate() {
