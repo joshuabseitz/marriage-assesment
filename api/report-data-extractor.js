@@ -568,15 +568,6 @@ function extractExpectations(person1Responses, person2Responses, user1Profile, u
   };
 }
 
-function normalizeWho(answer) {
-  if (!answer) return null;
-  const ans = answer.toString().toLowerCase();
-  if (ans.includes("me") || ans.includes("myself") || ans.includes("i will")) return "Me";
-  if (ans.includes("you") || ans.includes("partner") || ans.includes("spouse")) return "You";
-  if (ans.includes("both") || ans.includes("together") || ans.includes("we")) return "Both";
-  return null;
-}
-
 /**
  * Extract Dynamics using template library (template-based, not AI)
  * This ensures consistency and clinical rigor at scale
