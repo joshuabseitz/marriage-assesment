@@ -121,9 +121,11 @@ function loadDataExtractor() {
     const extractorCode = readFileSync(extractorPath, 'utf-8');
 
     // Execute templates first to make it available
+    // Create a mock module object to capture exports
     const templatesFunc = new Function(`
+      const module = { exports: {} };
       ${templatesCode}
-      return (typeof module !== 'undefined' && module.exports) || {};
+      return module.exports;
     `);
     const DynamicsTemplates = templatesFunc();
     
