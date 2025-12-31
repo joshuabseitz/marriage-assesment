@@ -757,17 +757,57 @@
 
   // Get question type helper
   function getQuestionType(questionId) {
-    // Simplified type mapping based on question ID ranges
-    if (questionId >= 1 && questionId <= 30) return 'text';
-    if (questionId >= 31 && questionId <= 90) return 'scale_1_5';
-    if (questionId >= 91 && questionId <= 105) return 'scale_1_10';
-    if (questionId >= 106 && questionId <= 150) return 'choice';
-    if (questionId >= 151 && questionId <= 200) return 'scale_1_5';
-    if (questionId >= 201 && questionId <= 230) return 'choice';
-    if (questionId >= 231 && questionId <= 260) return 'boolean';
-    if (questionId >= 261 && questionId <= 280) return 'scale_1_5';
+    // Map question IDs to their correct types from questions-data.json
+    // This must match the actual question types defined in the JSON file
+    
+    if (questionId >= 1 && questionId <= 6) return 'text'; // Demographics
+    if (questionId >= 7 && questionId <= 10) return 'text'; // Relationship history
+    if (questionId === 6) return 'date'; // Wedding date
+    if (questionId === 10) return 'boolean'; // Expecting
+    if (questionId >= 11 && questionId <= 16) return 'scale_1_5'; // Relationship quality
+    if (questionId >= 17 && questionId <= 91) return 'scale_1_5'; // Mindset, wellbeing, personality
+    
+    // FINANCES (Q92-116) - Mixed types!
+    if (questionId >= 92 && questionId <= 94) return 'choice'; // Money style, budget, debt
+    if (questionId >= 95 && questionId <= 98) return 'scale_1_5'; // Debt comfort, discussions
+    if (questionId >= 99 && questionId <= 102) return 'boolean'; // Financial fears
+    if (questionId >= 103 && questionId <= 116) return 'scale_1_5'; // Financial attitudes
+    
+    // ROLES (Q117-136)
+    if (questionId >= 117 && questionId <= 136) return 'role_selection'; // Who does what
+    
+    // DYNAMICS (Q137-150)
+    if (questionId >= 137 && questionId <= 150) return 'scale_1_5';
+    
+    // SOCIAL SUPPORT (Q151-180)
+    if (questionId >= 151 && questionId <= 180) return 'scale_1_5';
+    
+    // SEXUALITY (Q181-200)
+    if (questionId === 188) return 'choice'; // Abstaining
+    if (questionId === 189) return 'scale_1_10'; // Desire rating
+    if (questionId === 190) return 'choice'; // Who initiates
+    if (questionId === 191) return 'choice'; // Frequency
+    if (questionId >= 181 && questionId <= 200) return 'scale_1_5';
+    
+    // LOVE (Q201-210)
+    if (questionId === 201) return 'rank_order'; // Love definitions
+    if (questionId >= 202 && questionId <= 210) return 'scale_1_5';
+    
+    // GENDER NEEDS (Q211-230)
+    if (questionId >= 211 && questionId <= 230) return 'scale_1_5';
+    
+    // CONFLICT (Q231-246)
+    if (questionId === 231) return 'rank_order'; // Hot topics
+    if (questionId >= 232 && questionId <= 246) return 'boolean';
+    
+    // SPIRITUALITY (Q247-280)
+    if (questionId === 247) return 'text'; // Feels closest to God
+    if (questionId >= 248 && questionId <= 280) return 'scale_1_5';
+    
+    // REFLECTIONS (Q281-300)
     if (questionId >= 281 && questionId <= 300) return 'text';
-    return 'text';
+    
+    return 'text'; // Default fallback
   }
 
   // Update status display
