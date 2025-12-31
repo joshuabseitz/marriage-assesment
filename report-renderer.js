@@ -744,195 +744,107 @@ function updateRatingBar(selector, value) {
   }
 }
 
-// PAGE 6: Finances - HIGH FIDELITY RENDERING
+// PAGE 6: Finances - WEB-OPTIMIZED DASHBOARD RENDERING
 function renderPage6() {
   if (!reportData) return;
 
   const { finances, couple } = reportData;
-  const person1Name = couple?.person_1?.name || 'Toni';
-  const person2Name = couple?.person_2?.name || 'Chris';
+  const p1 = couple?.person_1;
+  const p2 = couple?.person_2;
+  const p1Name = p1?.name || 'Toni';
+  const p2Name = p2?.name || 'Chris';
 
-  console.log('💰 Rendering Page 6 - Finances (High Fidelity)');
+  console.log('💰 Rendering Page 6 - Finances (Dashboard Refresh)');
+
+  // Update Photos
+  const p1Photo = document.querySelector('[data-field="person1_photo"]');
+  const p2Photo = document.querySelector('[data-field="person2_photo"]');
+  if (p1Photo && p1?.photo_url) p1Photo.src = p1.photo_url;
+  if (p2Photo && p2?.photo_url) p2Photo.src = p2.photo_url;
 
   // Names
-  updateAll('[data-person="person1"]', p1Name => p1Name || person1Name);
-  updateAll('[data-person="person2"]', p2Name => p2Name || person2Name);
+  const personLabels = document.querySelectorAll('[data-person]');
+  personLabels.forEach(el => {
+    const p = el.getAttribute('data-person');
+    el.textContent = p === 'person1' ? p1Name : p2Name;
+  });
 
-  // Money Styles with Piggy Bank Icons
-  renderMoneyStyle(
-    '[data-container="person1_money_style"]',
-    finances?.person_1?.money_style,
-    person1Name,
-    'p1'
-  );
-  renderMoneyStyle(
-    '[data-container="person2_money_style"]',
-    finances?.person_2?.money_style,
-    person2Name,
-    'p2'
-  );
+  // 1. Money Style & Budget
+  const renderProfile = (pData, styleSel, budgetSel) => {
+    const style = pData?.money_style || 'Saver';
+    const budget = pData?.budget_approach || "I don't budget";
 
-  // Budget Skills with quoted text and icons
-  renderBudgetSkills(
-    '[data-container="budget_skills"]',
-    finances?.person_1,
-    finances?.person_2,
-    person1Name,
-    person2Name
-  );
+    // Style Badge
+    const styleContainer = document.querySelector(styleSel);
+    if (styleContainer) {
+      const colorClass = style.toLowerCase() === 'spender' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700';
+      styleContainer.innerHTML = `<span class="px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-tighter ${colorClass}">${style}</span>`;
+    }
 
-  // Debt Section
-  renderDebtSection(
-    '[data-container="person1_debt"]',
-    finances?.person_1?.debt,
-    person1Name
-  );
-  renderDebtSection(
-    '[data-container="person2_debt"]',
-    finances?.person_2?.debt,
-    person2Name
-  );
+    // Budget Text
+    updateText(`[data-field="${budgetSel}"]`, `"${budget}"`);
+  };
 
-  // Financial Fears Comparison Table (pick top fear)
-  renderFinancialFearsGrid(
-    '[data-container="fears_grid"]',
-    finances?.person_1?.financial_fears,
-    finances?.person_2?.financial_fears,
-    person1Name,
-    person2Name
-  );
+  renderProfile(finances?.person_1, '#person1_money_style_badge', 'person1_budget_text');
+  renderProfile(finances?.person_2, '#person2_money_style_badge', 'person2_budget_text');
 
-  // Contextual discussion question
-  const discussionQuestion = getFinanceDiscussionQuestion(
-    finances?.person_1,
-    finances?.person_2,
-    person1Name,
-    person2Name
-  );
-  updateText('[data-field="finance_discussion_question"]', discussionQuestion);
-}
+  // 2. Financial Fears (Top Fear Highlight)
+  const renderTopFear = (fears, iconSel, labelSel) => {
+    const fearKeys = [
+      { key: 'lack_of_influence', label: 'Lack of Influence', emoji: '💡' },
+      { key: 'lack_of_security', label: 'Lack of Security', emoji: '🔒' },
+      { key: 'lack_of_respect', label: 'Lack of Respect', emoji: '🤝' },
+      { key: 'not_realizing_dreams', label: 'Not Realizing Dreams', emoji: '🌟' }
+    ];
 
-// Helper: Money style with piggy bank SVG
-function renderMoneyStyle(selector, style, name, colorType) {
-  const container = document.querySelector(selector);
-  if (!container) return;
+    let topFear = fearKeys.find(f => fears?.[f.key] === true) || fearKeys[1]; // Fallback to security
 
-  const color = colorType === 'p1' ? '#E88B88' : '#4FB8B1';
-  const label = (style || 'Saver').toUpperCase();
+    const iconEl = document.querySelector(iconSel);
+    const labelEl = document.querySelector(labelSel);
+    if (iconEl) iconEl.textContent = topFear.emoji;
+    if (labelEl) labelEl.textContent = topFear.label;
+  };
 
-  container.innerHTML = `
-    <div class="flex flex-col items-center">
-      <div class="text-xs font-bold text-gray-400 mb-1 uppercase tracking-tighter">${name}</div>
-      <svg class="w-16 h-16 mb-1" viewBox="0 0 100 100" fill="${color}">
-        <path d="M85,55c0-15-12-27-27-27c-3,0-6,1-9,2c-1-1-2-1-3-1c-1-6-6-11-12-11c-7,0-12,5-12,12c0,1,0,2,0,3 c-6,8-10,18-10,29c0,13,8,24,20,29v5h10v-5c2,0,4,0,6,0v5h10v-5c12-3,22-13,26-25C84,60,85,58,85,55z M66,45c-2,0-4-2-4-4s2-4,4-4 s4,2,4,4S68,45,66,45z M45,70 c-8,0-15-7-15-15h5c0,6,4,10,10,10V70z"/>
-        <path d="M50,45c-1,0-2,1-2,2v6c0,1,1,2,2,2s2-1,2-2v-6C52,46,51,45,50,45z" fill="white"/>
-      </svg>
-      <div class="text-xs font-black italic text-gray-700">${label}</div>
-    </div>
-  `;
-}
+  renderTopFear(finances?.person_1?.financial_fears, '#person1_top_fear_icon', '#person1_top_fear_label');
+  renderTopFear(finances?.person_2?.financial_fears, '#person2_top_fear_icon', '#person2_top_fear_label');
 
-// Helper: Budget skills with pencil/calculator icons
-function renderBudgetSkills(selector, person1, person2, name1, name2) {
-  const container = document.querySelector(selector);
-  if (!container) return;
+  // 3. Debt Status
+  const renderDebtStatus = (debt, selector, name) => {
+    const container = document.querySelector(selector);
+    if (!container) return;
 
-  const renderItem = (name, pData) => {
-    const icon = pData?.budget_icon === 'bars' ? '📝' : '📟';
-    const text = pData?.budget_approach || "I don't budget";
-    return `
-      <div class="flex items-center gap-4 py-2">
-        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center text-2xl">
-          ${pData?.budget_icon === 'bars' ?
-        '<svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>' :
-        '<svg class="w-8 h-8 text-gray-400" fill="currentColor" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H6c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h12c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1zM7 7h2v2H7V7zm4 0h2v2h-2V7zm4 0h2v2h-2V7zm-8 4h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2zm-8 4h2v2H7v-2zm4 0h2v2h-2v-2zm4 0h2v6h-2v-6z"/></svg>'}
-        </div>
-        <div>
-          <div class="text-[10px] font-black text-gray-400 uppercase tracking-tighter">${name}</div>
-          <div class="text-[13px] text-gray-600 italic leading-none font-medium">"${text}"</div>
-        </div>
+    const amount = debt?.amount || 'None';
+    let icon = '✅';
+    let statusColor = 'text-green-600';
+    let desc = `No recorded debt. Excellent starting point!`;
+
+    if (amount !== 'None' && amount.toLowerCase() !== 'none') {
+      icon = '⚠️';
+      statusColor = 'text-amber-600';
+      desc = `Reported debt: ${amount}. Discuss your plan for management.`;
+    }
+
+    container.innerHTML = `
+      <div class="text-3xl">${icon}</div>
+      <div>
+        <div class="text-[11px] font-bold text-gray-400 uppercase">${name}'s Debt</div>
+        <div class="text-sm ${statusColor} font-bold">${amount}</div>
+        <p class="text-[12px] text-gray-500 mt-1 leading-tight">${desc}</p>
       </div>
     `;
   };
 
-  container.innerHTML = `
-    ${renderItem(name1, person1)}
-    <div class="h-px bg-gray-100 my-1 w-full"></div>
-    ${renderItem(name2, person2)}
-  `;
-}
+  renderDebtStatus(finances?.person_1?.debt, '#person1_debt_status', p1Name);
+  renderDebtStatus(finances?.person_2?.debt, '#person2_debt_status', p2Name);
 
-// Helper: Debt section with icon and color based on amount
-function renderDebtSection(selector, debt, name) {
-  const container = document.querySelector(selector);
-  if (!container) return;
-
-  const debtAmount = debt?.amount || 'None';
-  const template = typeof FinancesTemplates !== 'undefined'
-    ? FinancesTemplates.getDebtTemplate(debtAmount)
-    : { bgClass: 'bg-green-100', iconClass: 'text-green-600', nameClass: 'text-green-700', template: 'No debt status.' };
-
-  // Icon SVGs mapped to library names
-  const iconSvgs = {
-    check: `<svg class="w-6 h-6 ${template.iconClass}" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>`,
-    warning: `<svg class="w-6 h-6 ${template.iconClass}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>`,
-    alert: `<svg class="w-6 h-6 ${template.iconClass}" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.5L19.5 19H4.5L12 5.5zM11 10h2v4h-2v-4zm0 5h2v2h-2v-2z"/></svg>`
-  };
-
-  const iconHtml = iconSvgs[template.icon] || iconSvgs.check;
-  const description = template.template.replace('{name}', name);
-
-  container.innerHTML = `
-    <div class="debt-icon ${template.bgClass}">
-      ${iconHtml}
-    </div>
-    <div>
-      <div class="font-bold text-sm ${template.nameClass} mb-1">${name}</div>
-      <p class="text-sm text-gray-600">${description}</p>
-    </div>
-  `;
-}
-
-// Helper: Financial fears grid with bills
-function renderFinancialFearsGrid(selector, p1Fears, p2Fears, name1, name2) {
-  const container = document.querySelector(selector);
-  if (!container) return;
-
-  const fearKeys = [
-    { key: 'lack_of_influence', label: 'Lack of Influence' },
-    { key: 'lack_of_security', label: 'Lack of Security' },
-    { key: 'lack_of_respect', label: 'Lack of Respect' },
-    { key: 'not_realizing_dreams', label: 'Not Realizing Dreams' }
-  ];
-
-  const pickTopFear = (fears) => {
-    if (!fears) return null;
-    // Map of keys to return the first one that is true
-    for (const fear of fearKeys) {
-      if (fears[fear.key] === true) return fear.key;
-    }
-    return null;
-  };
-
-  const p1Top = pickTopFear(p1Fears);
-  const p2Top = pickTopFear(p2Fears);
-
-  const renderBill = (active) => {
-    if (!active) return `<div class="w-16 h-8 bg-gray-100 rounded flex items-center justify-center opacity-30"><svg class="w-10 h-10 text-gray-300" viewBox="0 0 100 60"><rect width="100" height="60" rx="8" fill="currentColor"/><circle cx="50" cy="30" r="15" fill="white" fill-opacity="0.3"/><text x="50" y="36" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text></svg></div>`;
-    return `<div class="w-16 h-8 bg-[#86C766] rounded flex items-center justify-center shadow-sm"><svg class="w-10 h-10 text-white" viewBox="0 0 100 60"><rect width="100" height="60" rx="8" fill="currentColor"/><circle cx="50" cy="30" r="15" fill="white" fill-opacity="0.5"/><text x="50" y="36" text-anchor="middle" fill="white" font-size="20" font-weight="bold">$</text></svg></div>`;
-  };
-
-  container.innerHTML = `
-    <div class="grid grid-cols-[1fr_80px_80px] gap-2 items-center">
-      <div class="col-start-2 text-center text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${name1}</div>
-      <div class="col-start-3 text-center text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${name2}</div>
-      ${fearKeys.map(fear => `
-        <div class="text-[13px] font-medium text-gray-600">${fear.label}</div>
-        <div class="flex justify-center">${renderBill(p1Top === fear.key)}</div>
-        <div class="flex justify-center">${renderBill(p2Top === fear.key)}</div>
-      `).join('')}
-    </div>
-  `;
+  // 4. Discussion Question
+  const discussionQuestion = getFinanceDiscussionQuestion(
+    finances?.person_1,
+    finances?.person_2,
+    p1Name,
+    p2Name
+  );
+  updateText('[data-field="finance_discussion_question"]', discussionQuestion);
 }
 
 // Helper: Wrap library discussion question generator

@@ -150,104 +150,135 @@
             <div class="header-rule"></div>
         </section>
 
-        <!-- Money Matrix Section -->
-        <section class="mb-10">
-            <h2 class="text-center text-[22px] font-black text-[#333] uppercase mb-8 tracking-tighter"
-                style="font-family: 'Montserrat', sans-serif;">
-                Money Matrix
-            </h2>
-
-            <!-- Main Matrix Container -->
-            <div class="relative bg-[#F8FBFA] rounded-[32px] p-8 pb-12 shadow-inner border border-gray-100">
-
-                <div class="grid md:grid-cols-2 gap-x-16 gap-y-12 relative">
-                    <!-- Top Left: Money Style -->
-                    <div class="flex justify-around items-end pb-4" data-container="money_style_group">
-                        <div id="person1_money_style" data-container="person1_money_style"></div>
-                        <div id="person2_money_style" data-container="person2_money_style"></div>
-                    </div>
-
-                    <!-- Top Right: Budget Skills -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100"
-                        data-container="budget_skills">
-                        <!-- Rendered by JS -->
-                    </div>
-
-                    <!-- Bottom Left: Debt -->
-                    <div class="space-y-4">
-                        <div class="debt-card bg-white p-4 rounded-xl shadow-sm border border-gray-100"
-                            data-container="person1_debt"></div>
-                        <div id="person2_debt"
-                            class="debt-card bg-white p-4 rounded-xl shadow-sm border border-gray-100"
-                            data-container="person2_debt"></div>
-                    </div>
-
-                    <!-- Bottom Right: Financial Fears Grid -->
-                    <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100" data-container="fears_grid">
-                        <!-- Rendered by JS -->
-                    </div>
-
-                    <!-- Central Stack Graphic (Pure CSS/SVG approximation) -->
-                    <div class="absolute inset-0 pointer-events-none hidden md:flex items-center justify-center">
-                        <div class="w-48 h-64 flex flex-col items-center justify-center gap-1 opacity-80">
-                            <!-- Money Style Disc -->
-                            <div
-                                class="w-32 h-10 bg-[#83B643] rounded-[100%] border-b-4 border-[#6a9436] flex items-center justify-center text-[10px] text-white font-black uppercase shadow-lg">
-                                Money Style</div>
-                            <!-- Budget Skills Disc -->
-                            <div
-                                class="w-32 h-10 bg-[#E58B12] rounded-[100%] border-b-4 border-[#b9700f] flex items-center justify-center text-[10px] text-white font-black uppercase shadow-lg">
-                                Budget Skills</div>
-                            <!-- Financial Fears Disc -->
-                            <div
-                                class="w-32 h-10 bg-[#4FB8B1] rounded-[100%] border-b-4 border-[#3d8d88] flex items-center justify-center text-[10px] text-white font-black uppercase shadow-lg">
-                                Financial Fears</div>
-                            <!-- Debt Disc -->
-                            <div
-                                class="w-32 h-10 bg-[#4A5568] rounded-[100%] border-b-4 border-[#2d3748] flex items-center justify-center text-[10px] text-white font-black uppercase shadow-lg">
-                                Debt</div>
+        <!-- Main Dashboard Layout -->
+        <div class="space-y-8">
+            <!-- Row 1: Personal Money Profile -->
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Money Style & Budgeting -->
+                <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-xs font-black text-[#5B8FB9] uppercase tracking-widest mb-6 px-1">Money Profile
+                        </h2>
+                        <div class="space-y-8" data-container="money_profile_rows">
+                            <!-- Person 1 Profile -->
+                            <div class="flex items-center gap-6">
+                                <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni"
+                                    class="w-16 h-16 rounded-full border-2 border-[#E88B88] shadow-sm">
+                                <div class="flex-1">
+                                    <div class="text-[11px] font-bold text-gray-400 uppercase" data-person="person1">
+                                        Toni</div>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <div id="person1_money_style_badge" data-container="person1_money_style_badge">
+                                        </div>
+                                        <div class="h-4 w-px bg-gray-200"></div>
+                                        <div class="text-sm font-medium text-gray-700 italic"
+                                            data-field="person1_budget_text">...</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Separator -->
+                            <div class="border-t border-gray-50"></div>
+                            <!-- Person 2 Profile -->
+                            <div class="flex items-center gap-6">
+                                <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris"
+                                    class="w-16 h-16 rounded-full border-2 border-[#4FB8B1] shadow-sm">
+                                <div class="flex-1">
+                                    <div class="text-[11px] font-bold text-gray-400 uppercase" data-person="person2">
+                                        Chris</div>
+                                    <div class="flex items-center gap-3 mt-1">
+                                        <div id="person2_money_style_badge" data-container="person2_money_style_badge">
+                                        </div>
+                                        <div class="h-4 w-px bg-gray-200"></div>
+                                        <div class="text-sm font-medium text-gray-700 italic"
+                                            data-field="person2_budget_text">...</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Connectors (Approximated with simple borders/lines if needed, but the layout does the job) -->
-            </div>
-        </section>
-
-        <!-- Money Talks -->
-        <div class="bg-gradient-to-r from-teal-50 to-blue-50 rounded-xl p-8 mb-8">
-            <h2 class="text-center text-[20px] font-black text-[#333] uppercase mb-4"
-                style="font-family: 'Montserrat', sans-serif;">
-                Money Talks
-            </h2>
-            <p class="text-center text-sm text-gray-600 italic mb-6">
-                To minimize friction over finances, you'll want to keep the communication channels clear. Completing
-                these sentences with your Facilitator will help you do just that:
-            </p>
-            <ul class="space-y-2 text-sm text-gray-700">
-                <li>• In my home growing up, money was...</li>
-                <li>• When I think about our financial future...</li>
-                <li>• What you may not know about money and me is...</li>
-                <li>• The thing I appreciate about you in relationship to money is...</li>
-                <li>• When it comes to money, I'd like to improve my...</li>
-                <li>• One specific action we could take right now that would help me is...</li>
-            </ul>
-        </div>
-
-        <!-- Question Box -->
-        <div class="bg-[#F0F8F7] border-l-4 border-[#4FB8B1] p-6 rounded-r-lg mb-8 flex gap-4">
-            <div class="flex-shrink-0">
-                <div class="w-12 h-12 bg-[#4FB8B1] rounded-full flex items-center justify-center">
-                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z" />
-                    </svg>
+                <!-- Financial Fears: The Top Driver -->
+                <div class="bg-[#F8FBFA] rounded-2xl p-8 shadow-sm border border-teal-50">
+                    <h2 class="text-xs font-black text-[#4FB8B1] uppercase tracking-widest mb-6 px-1">Primary Financial
+                        Fear</h2>
+                    <div class="grid grid-cols-2 gap-4" data-container="fears_dashboard">
+                        <!-- Person 1 Fear -->
+                        <div
+                            class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center">
+                            <div class="text-[10px] font-black text-[#E88B88] uppercase mb-3" data-person="person1">Toni
+                            </div>
+                            <div id="person1_top_fear_icon" class="text-4xl mb-3">...</div>
+                            <div id="person1_top_fear_label" class="text-[13px] font-bold text-gray-700 leading-tight">
+                                ...</div>
+                        </div>
+                        <!-- Person 2 Fear -->
+                        <div
+                            class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center">
+                            <div class="text-[10px] font-black text-[#4FB8B1] uppercase mb-3" data-person="person2">
+                                Chris</div>
+                            <div id="person2_top_fear_icon" class="text-4xl mb-3">...</div>
+                            <div id="person2_top_fear_label" class="text-[13px] font-bold text-gray-700 leading-tight">
+                                ...</div>
+                        </div>
+                    </div>
+                    <p class="mt-6 text-[12px] text-gray-500 italic text-center px-4">
+                        Understanding each other's fears is the first step toward financial harmony.
+                    </p>
                 </div>
             </div>
-            <div class="flex-1">
-                <p class="text-gray-600 italic text-[14px] leading-relaxed" data-field="finance_discussion_question">
-                    What concerns you most about the financial context you're each bringing into your marriage and why?
-                    What gives you peace about your financial future?
-                </p>
+
+            <!-- Row 2: Debt & Obligations -->
+            <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
+                <h2 class="text-xs font-black text-gray-400 uppercase tracking-widest mb-6 px-1">Debt & Obligations</h2>
+                <div class="grid md:grid-cols-2 gap-8" data-container="debt_dashboard">
+                    <div id="person1_debt_status" class="flex items-start gap-4"></div>
+                    <div id="person2_debt_status" class="flex items-start gap-4"></div>
+                </div>
+            </div>
+
+            <!-- Row 3: Money Talks -->
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 bg-gradient-to-r from-teal-50 to-blue-50 rounded-2xl p-8">
+                    <h2 class="text-sm font-black text-gray-800 uppercase mb-4">Conversation Starters</h2>
+                    <div class="grid sm:grid-cols-2 gap-x-8 gap-y-3">
+                        <div class="flex items-start gap-2 text-[13px] text-gray-700">
+                            <span class="text-teal-500 font-bold">•</span>
+                            <span>In my home growing up, money was...</span>
+                        </div>
+                        <div class="flex items-start gap-2 text-[13px] text-gray-700">
+                            <span class="text-teal-500 font-bold">•</span>
+                            <span>When I think about our financial future...</span>
+                        </div>
+                        <div class="flex items-start gap-2 text-[13px] text-gray-700">
+                            <span class="text-teal-500 font-bold">•</span>
+                            <span>What you may not know about money and me is...</span>
+                        </div>
+                        <div class="flex items-start gap-2 text-[13px] text-gray-700">
+                            <span class="text-teal-500 font-bold">•</span>
+                            <span>The thing I appreciate about you is...</span>
+                        </div>
+                        <div class="flex items-start gap-2 text-[13px] text-gray-700">
+                            <span class="text-teal-500 font-bold">•</span>
+                            <span>I'd like to improve our...</span>
+                        </div>
+                        <div class="flex items-start gap-2 text-[13px] text-gray-700">
+                            <span class="text-teal-500 font-bold">•</span>
+                            <span>One action we could take right now is...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Discussion Question -->
+                <div class="bg-[#F0F8F7] border-l-8 border-[#4FB8B1] rounded-2xl p-8 flex flex-col justify-center">
+                    <svg class="w-8 h-8 text-[#4FB8B1] mb-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z" />
+                    </svg>
+                    <p class="text-[14px] text-gray-700 font-bold italic leading-relaxed"
+                        data-field="finance_discussion_question">
+                        ...
+                    </p>
+                </div>
             </div>
         </div>
 
