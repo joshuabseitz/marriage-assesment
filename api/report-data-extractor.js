@@ -179,12 +179,21 @@ function extractPersonFinances(responses) {
   // Helper to map choice indices to labels if needed
   const getChoiceLabel = (val, options) => {
     if (!val && val !== 0) return "Not specified";
-    if (typeof val === 'string') return val;
-    // Handle 1-based indexing common in some exports, or 0-based
+
+    // Check if it's already a known label
+    if (typeof val === 'string' && options.includes(val)) return val;
+
+    // Parse numeric value
     const idx = parseInt(val);
-    if (isNaN(idx)) return "Not specified";
+    if (isNaN(idx)) {
+      if (typeof val === 'string') return val;
+      return "Not specified";
+    }
+
+    // Try both 0-based and 1-based indexing
+    if (options[idx - 1] && idx > 0) return options[idx - 1];
     if (options[idx]) return options[idx];
-    if (options[idx - 1]) return options[idx - 1];
+
     return "Not specified";
   };
 
@@ -348,13 +357,44 @@ function extractExpectations(person1Responses, person2Responses, user1Profile, u
   const p1Name = user1Profile?.full_name || "Person 1";
   const p2Name = user2Profile?.full_name || "Person 2";
 
+  // Helper to map choice indices to labels if needed
+  const getChoiceLabel = (val) => {
+    if (!val && val !== 0) return "Not specified";
+
+    const options = ["Me", "You", "Both", "Neither"];
+    if (typeof val === 'string' && options.includes(val)) return val;
+
+    const idx = parseInt(val);
+    if (isNaN(idx)) {
+      if (typeof val === 'string') return normalizeWho(val);
+      return "Not specified";
+    }
+
+    // Try 1-based then 0-based
+    if (options[idx - 1]) return options[idx - 1];
+    if (options[idx]) return options[idx];
+
+    return "Not specified";
+  };
+
+  // Fallback for string matching
+  function normalizeWho(answer) {
+    if (!answer) return "Not specified";
+    const ans = answer.toString().toLowerCase();
+    if (ans.includes("me") || ans.includes("myself") || ans.includes("i will")) return "Me";
+    if (ans.includes("you") || ans.includes("partner") || ans.includes("spouse")) return "You";
+    if (ans.includes("both") || ans.includes("together") || ans.includes("we")) return "Both";
+    if (ans.includes("neither") || ans.includes("none")) return "Neither";
+    return "Not specified";
+  }
+
   roleQuestions.forEach(role => {
     const p1ViewRaw = person1Responses[role.id];
     const p2ViewRaw = person2Responses[role.id];
 
     // Normalize answers
-    const p1Who = normalizeWho(p1ViewRaw);
-    const p2Who = normalizeWho(p2ViewRaw);
+    const p1Who = getChoiceLabel(p1ViewRaw);
+    const p2Who = getChoiceLabel(p2ViewRaw);
 
     // Analyze Agreement
     // Agreements happen when:

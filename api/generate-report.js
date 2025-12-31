@@ -34,8 +34,23 @@ function extractJSON(responseText) {
     throw new Error('No JSON found in response');
   }
 
-  const jsonStr = responseText.substring(startIdx, endIdx);
-  return JSON.parse(jsonStr);
+  let jsonStr = responseText.substring(startIdx, endIdx);
+
+  // SANITIZE: Replace prohibited control characters (0-31) that break JSON.parse.
+  // We replace literal newlines, tabs, and carriage returns with spaces.
+  // This is a common issue where the AI outputs a literal newline inside a string.
+  jsonStr = jsonStr.replace(/[\x00-\x1F]/g, (match) => {
+    if (match === '\n' || match === '\r' || match === '\t') return ' ';
+    return ''; // Strip other control characters
+  });
+
+  try {
+    return JSON.parse(jsonStr);
+  } catch (parseError) {
+    console.error('❌ JSON Parse Error. Original length:', jsonStr.length);
+    console.error('❌ Context around error:', jsonStr.substring(0, 500) + '...');
+    throw parseError;
+  }
 }
 
 /**
@@ -72,8 +87,15 @@ async function callGeminiAPI(genAI, prompt, passName, maxRetries = MAX_RETRIES) 
       const errorMsg = error.message || String(error);
       console.error(`❌ ${passName} failed (attempt ${attempt}):`, errorMsg);
 
-      // Retry on rate limit or timeout
-      if (attempt < maxRetries && (errorMsg.includes('429') || errorMsg.includes('quota') || errorMsg.includes('timeout'))) {
+      // Retry on rate limit, timeout, OR JSON parse errors (AI sometimes fixes formatting on retry)
+      if (attempt < maxRetries && (
+        errorMsg.includes('429') ||
+        errorMsg.includes('quota') ||
+        errorMsg.includes('timeout') ||
+        errorMsg.includes('JSON') ||
+        errorMsg.includes('SyntaxError') ||
+        errorMsg.includes('Syntax error')
+      )) {
         const delay = 2000 * attempt;
         console.log(`⏳ ${passName}: Retrying in ${delay}ms...`);
         await new Promise(resolve => setTimeout(resolve, delay));
