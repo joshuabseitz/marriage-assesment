@@ -7,8 +7,7 @@
 const NAV_CONFIG = {
   pages: {
     survey: { title: 'Survey', url: 'survey' },
-    generator: { title: 'Generate Report', url: 'report-generator' },
-    report: { title: 'View Report', url: 'index' }
+    generator: { title: 'Report', url: 'report-generator' }
   },
   reportPages: [
     { num: 1, title: 'Overview', url: 'index' },
@@ -61,24 +60,13 @@ function createNavBar(currentPage = '') {
               </a>
               <a href="report-generator" 
                  class="nav-link px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                   currentPage === 'generator' 
+                   currentPage === 'generator' || currentPage === 'report'
                      ? 'bg-slate-50 text-slate-900 font-semibold' 
                      : status.reportGenerated 
                        ? 'text-rose-600 hover:text-rose-700 hover:bg-rose-50' 
                        : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
                  }">
-                ${status.reportGenerated ? '✓ ' : ''}Generate Report
-              </a>
-              <a href="index" 
-                 class="nav-link px-4 py-2 rounded-lg text-sm transition-all duration-200 ${
-                   currentPage === 'report' 
-                     ? 'bg-slate-50 text-slate-900 font-semibold' 
-                     : status.reportGenerated 
-                       ? 'text-slate-500 hover:text-slate-900 hover:bg-slate-50' 
-                       : 'text-slate-300 cursor-not-allowed'
-                 }"
-                 ${!status.reportGenerated ? 'onclick="return false;"' : ''}>
-                View Report
+                ${status.reportGenerated ? '✓ View Report' : 'Generate Report'}
               </a>
             </div>
           </div>
@@ -116,18 +104,9 @@ function createNavBar(currentPage = '') {
           </a>
           <a href="report-generator" 
              class="block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-               currentPage === 'generator' ? 'bg-slate-50 text-slate-900' : 'text-slate-600'
+               currentPage === 'generator' || currentPage === 'report' ? 'bg-slate-50 text-slate-900' : 'text-slate-600'
              } hover:bg-slate-50 hover:text-slate-900">
-            ${status.reportGenerated ? '✓ ' : ''}Generate Report
-          </a>
-          <a href="index" 
-             class="block px-3 py-2 rounded-md text-base font-medium transition-colors ${
-               status.reportGenerated 
-                 ? currentPage === 'report' ? 'bg-slate-50 text-slate-900' : 'text-slate-600' 
-                 : 'text-slate-400'
-             } hover:bg-slate-50 hover:text-slate-900"
-             ${!status.reportGenerated ? 'onclick="return false;"' : ''}>
-            View Report
+            ${status.reportGenerated ? '✓ View Report' : 'Generate Report'}
           </a>
           <hr class="my-2">
           <a href="partner-connect" 
