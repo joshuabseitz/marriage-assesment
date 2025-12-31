@@ -38,7 +38,7 @@ function createNavBar(currentPage = '') {
   const status = getNavigationStatus();
   
   return `
-    <nav class="symbis-nav bg-white border-b border-slate-100 sticky top-0 z-50">
+    <nav class="symbis-nav bg-white border-b border-slate-100 fixed top-0 left-0 right-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
           <!-- Logo and Main Nav -->
@@ -97,10 +97,6 @@ function createNavBar(currentPage = '') {
                class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">
               Profile
             </a>
-            <button onclick="SymbisNav.signOut()" 
-                    class="text-slate-600 hover:text-red-600 text-sm font-medium transition-colors">
-              Sign Out
-            </button>
           </div>
           
           <!-- Mobile Menu Button -->
@@ -150,10 +146,6 @@ function createNavBar(currentPage = '') {
              class="block px-3 py-2 rounded-md text-base font-medium text-slate-600 hover:bg-slate-50">
             Profile
           </a>
-          <button onclick="SymbisNav.signOut()" 
-                  class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-red-600 hover:bg-red-50">
-            Sign Out
-          </button>
         </div>
       </div>
     </nav>
@@ -172,7 +164,7 @@ function createReportNav(currentPageNum) {
   const nextPage = currentPageNum < totalPages ? NAV_CONFIG.reportPages[currentPageNum] : null;
   
   return `
-    <div class="report-navigation bg-white border-t border-slate-100 py-4 px-6 sticky bottom-0 shadow-lg">
+    <div class="report-navigation bg-white border-t border-slate-100 py-4 px-6 fixed bottom-0 left-0 right-0 shadow-lg z-40">
       <div class="max-w-7xl mx-auto">
         <!-- Mobile: Simplified Navigation -->
         <div class="flex md:hidden items-center justify-between">
