@@ -114,7 +114,12 @@ function loadDataExtractor() {
   try {
     // Load dynamics templates library
     const templatesPath = join(__dirname, '..', 'lib', 'dynamics-templates.js');
-    const templatesCode = readFileSync(templatesPath, 'utf-8');
+    let templatesCode = readFileSync(templatesPath, 'utf-8');
+    
+    // Remove export blocks that cause issues in Function scope
+    templatesCode = templatesCode
+      .replace(/if \(typeof module !== 'undefined' && module\.exports\) \{[\s\S]*?\}/g, '')
+      .replace(/if \(typeof window !== 'undefined'\) \{[\s\S]*?\}/g, '');
     
     // Load extractor
     const extractorPath = join(__dirname, 'report-data-extractor.js');
@@ -122,7 +127,7 @@ function loadDataExtractor() {
 
     // Execute both files together in a single scope
     const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', `
-      // Inject templates code
+      // Inject templates code (export blocks removed)
       ${templatesCode}
       
       // Now DynamicsTemplates functions are available in scope
