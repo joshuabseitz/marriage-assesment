@@ -598,7 +598,7 @@ function identifyAgreementGaps(person1Responses, person2Responses, questionIds, 
 
 /**
  * Calculate personality dimension score from DISC-style questions
- * Used for dynamics analysis
+ * Used for dynamics analysis (style sliders)
  */
 function calculateDimensionScore(responses, questionIds) {
   const scores = questionIds
@@ -617,6 +617,43 @@ function calculateDimensionScore(responses, questionIds) {
 }
 
 /**
+ * Validate style position gaps and flag extreme differences
+ */
+function validateStyleGaps(person1Styles, person2Styles, person1Name, person2Name) {
+  const warnings = [];
+  
+  const styleNames = {
+    solving_problems: 'problem-solving approach',
+    influencing_each_other: 'influence style',
+    reacting_to_change: 'reaction to change',
+    making_decisions: 'decision-making speed'
+  };
+
+  Object.keys(styleNames).forEach(key => {
+    if (person1Styles[key] && person2Styles[key]) {
+      const p1Pos = person1Styles[key].person_1_position || 50;
+      const p2Pos = person2Styles[key].person_2_position || 50;
+      const gap = Math.abs(p1Pos - p2Pos);
+
+      // Flag gaps > 70 points as extreme
+      if (gap > 70) {
+        warnings.push({
+          dimension: styleNames[key],
+          gap: gap,
+          message: `${person1Name} and ${person2Name} have a ${gap}-point difference in ${styleNames[key]}. This is in the top 10% of couple differences and may cause friction.`
+        });
+      }
+    }
+  });
+
+  if (warnings.length > 0) {
+    console.log(`ℹ️ Style gaps detected:`, warnings);
+  }
+
+  return warnings;
+}
+
+/**
  * Determine personality type from dynamics scores
  * Returns: 'Cooperating Spouse' | 'Affirming Spouse' | 'Directing Spouse' | 'Analyzing Spouse'
  */
@@ -626,10 +663,33 @@ function determinePersonalityType(responses) {
   // Q138, 142, 154, 186: High = Affirming (talkative, fun-loving, entertaining, extrovert)
   // Q139, 145, 155, 183: High = Analyzing (cautious, facts-needed, detail-oriented, accurate)
 
+  const allDynamicsQuestions = Array.from({ length: 50 }, (_, i) => 137 + i); // Q137-Q186
+  const answeredCount = allDynamicsQuestions.filter(q => responses[q] !== undefined && responses[q] !== null).length;
+  const completionRate = answeredCount / allDynamicsQuestions.length;
+
+  // Validation: Minimum 70% completion required
+  if (completionRate < 0.7) {
+    console.warn(`⚠️ Dynamics type calculation: Only ${Math.round(completionRate * 100)}% of questions answered. Minimum 70% required for reliable typing.`);
+  }
+
   const steadiness = calculateAverage(responses, [137, 141, 143, 159, 161]);
   const aggressiveness = calculateAverage(responses, [162, 170, 160, 144]);
   const expressiveness = calculateAverage(responses, [138, 142, 154, 186]);
   const cautiousness = calculateAverage(responses, [139, 145, 155, 183]);
+
+  // Validation: Check for extreme scores (all 1s or all 5s - indicates survey gaming)
+  const allScores = allDynamicsQuestions
+    .map(q => responses[q])
+    .filter(val => val !== undefined && val !== null && typeof val === 'number');
+  
+  if (allScores.length > 10) {
+    const mean = allScores.reduce((sum, val) => sum + val, 0) / allScores.length;
+    const variance = allScores.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / allScores.length;
+    
+    if (variance < 0.5) {
+      console.warn(`⚠️ Dynamics type calculation: Very low variance (${variance.toFixed(2)}). Possible response set bias or lack of self-awareness.`);
+    }
+  }
 
   // Find dominant trait
   const scores = {
@@ -641,13 +701,25 @@ function determinePersonalityType(responses) {
 
   let maxType = 'Cooperating Spouse';
   let maxScore = steadiness;
+  let secondMaxScore = 0;
+  let secondMaxType = '';
 
   Object.entries(scores).forEach(([type, score]) => {
     if (score > maxScore) {
+      secondMaxScore = maxScore;
+      secondMaxType = maxType;
       maxScore = score;
       maxType = type;
+    } else if (score > secondMaxScore) {
+      secondMaxScore = score;
+      secondMaxType = type;
     }
   });
+
+  // Validation: Flag tied scores (difference < 0.3 on 1-5 scale)
+  if (maxScore - secondMaxScore < 0.3 && secondMaxType) {
+    console.log(`ℹ️ Dynamics type: Close scores detected. Primary: ${maxType} (${maxScore.toFixed(2)}), Secondary: ${secondMaxType} (${secondMaxScore.toFixed(2)}). Consider mentioning blend in AI description.`);
+  }
 
   return maxType;
 }

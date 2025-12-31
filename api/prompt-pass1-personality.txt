@@ -141,7 +141,7 @@ Return ONLY valid JSON (no markdown, no text before/after). Start with `{` and e
   
   "dynamics": {
     "overall_type": "Combined description using PROVIDED types (e.g., '{person1_dynamics_type} + {person2_dynamics_type}')",
-    "overall_description": "2-3 paragraphs (250-300 words) about how their personalities complement or clash",
+    "overall_description": "2-3 paragraphs (250-300 words MINIMUM) about how their personalities complement or clash. MUST include: (1) Specific references to their Q137-Q186 responses with scores, (2) Statistical comparisons ('You are X% more likely than...', 'In the top Y% of couples...'), (3) Practical 'how to leverage' advice, (4) Both strengths AND potential friction points, (5) Behavioral examples from daily life",
     
     "person_1": {
       "type": "{person1_dynamics_type}",  // DO NOT CHANGE - use provided value exactly
@@ -150,7 +150,9 @@ Return ONLY valid JSON (no markdown, no text before/after). Start with `{` and e
       "strengths": [
         "5 specific strength statements",
         "Each 8-12 words",
-        "Action-oriented and concrete"
+        "Action-oriented and concrete",
+        "MUST reference their actual high-scoring questions (Q137-Q186) where they scored 4-5",
+        "Format: 'Maintains calm under pressure (Q159: 5/5)' NOT generic type descriptions"
       ]
     },
     
@@ -158,7 +160,10 @@ Return ONLY valid JSON (no markdown, no text before/after). Start with `{` and e
       "type": "{person2_dynamics_type}",  // DO NOT CHANGE - use provided value exactly
       "full_description": "2 paragraphs (150-200 words) with specific behavioral tendencies from their responses",
       "love_view": "One sentence describing how they view love based on their type",
-      "strengths": ["5 specific strength statements"]
+      "strengths": [
+        "5 specific strength statements with question references",
+        "MUST cite actual Q# and scores from their responses"
+      ]
     },
     
     "styles": {
@@ -267,35 +272,31 @@ Write 200-250 words analyzing:
 
 ---
 
-## DYNAMICS ANALYSIS (Q73-150)
+## DYNAMICS ANALYSIS (Q137-Q186)
 
 ### Personality Type Determination
 
-Use response patterns from Q73-150 to classify into one of four types:
+**CRITICAL**: Dynamics types are PRE-CALCULATED from Q137-Q186 using DISC model. DO NOT recalculate - use provided types.
 
 **Cooperating Spouse** (High S - Steadiness):
-- Indicators: High scores on Q53-55 (patient, diplomatic, steady)
-- Q56-57 high (avoids antagonizing, stays out of spotlight)
-- Low scores on Q73-82 aggressive problem-solving
+- Key indicators: Q137 (listener), Q141 (steady), Q143 (avoids conflict), Q159 (patient), Q161 (cooperative)
 - Prefers harmony, stability, non-confrontational
+- Extract strengths from their high scores on these questions
 
 **Affirming Spouse** (High I - Influence):  
-- Indicators: High scores on Q83-92 (feelings over facts)
-- Q59 high (talkative when stressed)
-- Q113-131 shows social, people-oriented patterns
+- Key indicators: Q138 (talkative), Q142 (fun-loving), Q154 (entertaining), Q186 (extrovert)
 - Optimistic, enthusiastic, needs social connection
+- Extract strengths from their high scores on these questions
 
 **Directing Spouse** (High D - Dominance):
-- Indicators: High scores on Q73-82 (aggressive problem solving)
-- Low scores on Q103-112 (not cautious)
-- Q132-150 shows results-oriented, take-charge patterns
-- Direct, confident, impatient with slowness
+- Key indicators: Q144 (persuasive), Q160 (intense), Q162 (competitive), Q170 (dominate)
+- Direct, confident, results-oriented
+- Extract strengths from their high scores on these questions
 
 **Analyzing Spouse** (High C - Conscientiousness):
-- Indicators: High scores on Q103-112 (cautious, methodical)
-- Low scores on Q93-102 (resists change)
-- Q132-150 shows detail-oriented, perfectionistic patterns
+- Key indicators: Q139 (cautious), Q145 (fact-based), Q155 (detail-oriented), Q183 (accurate)
 - Precise, systematic, needs quality and accuracy
+- Extract strengths from their high scores on these questions
 
 ### Full Description Requirements
 
@@ -322,11 +323,18 @@ One sentence capturing how THIS type views love in action:
 
 ### Strengths Array
 
-Extract 5 specific strengths based on their type and Q53-66 responses:
-- Must be action-oriented: "Maintains calm under pressure" not "Is calm"
-- Reference their actual high-scoring questions
-- Each 8-12 words
-- Unique to them, not generic type descriptions
+Extract 5 specific strengths based on their Q137-Q186 responses where they scored 4-5:
+- MUST be action-oriented: "Maintains calm under pressure" NOT "Is calm"
+- MUST reference their actual question numbers and scores
+- Each 8-12 words total
+- Format examples:
+  * "Excellent listener who creates space for others (Q137: 5/5)"
+  * "Brings steady reliability even under stress (Q141: 5/5)"
+  * "Patient and measured in approach (Q159: 4/5)"
+  * "Entertaining presence that energizes the room (Q154: 5/5)"
+  * "Thoughtful decision-maker who weighs all options (Q139: 5/5)"
+- DO NOT use generic type descriptions - extract from THEIR actual high scores
+- If they didn't score 4-5 on many questions, note the questions where they scored 3 with context
 
 ### Styles Positions (0-100 scale)
 
@@ -350,13 +358,17 @@ Extract 5 specific strengths based on their type and Q53-66 responses:
 
 ### Overall Description
 
-Write 2-3 paragraphs (250-300 words) about their combined dynamics:
+Write 2-3 paragraphs (250-300 words MINIMUM) about their combined dynamics:
 1. **Type Combination**: Name both types and overall impression
-2. **Complementarity**: How do they balance each other?
-3. **Conflict Points**: Where will friction arise?
-4. **Strength as Team**: What makes them work well together?
-5. **Cautions**: What should they watch out for?
-6. **Practical Advice**: 1-2 specific suggestions
+2. **Specific Response References**: Cite at least 3-4 specific Q# responses with scores (e.g., "{person1_name} scored 5/5 on 'Talkative' (Q138) while {person2_name} scored 3/5...")
+3. **Statistical Contextualization**: Use phrases like "You're in the top 20% of couples...", "Compared to average couples...", "Research shows that pairs with this combination..."
+4. **Complementarity**: How do they balance each other with specific behavioral examples?
+5. **Conflict Points**: Where will friction arise? Be specific about daily scenarios
+6. **Strength as Team**: What makes them work well together?
+7. **Practical "How to Leverage" Advice**: 2-3 actionable suggestions for their specific type combination
+8. **Cautions**: What should they watch out for?
+
+**Quality Check**: If your description is under 250 words, it's too generic. Expand with more specific examples.
 
 ---
 

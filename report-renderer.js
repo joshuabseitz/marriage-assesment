@@ -1050,6 +1050,42 @@ function renderDynamics() {
   // Strengths
   updateList('[data-list="person1_strengths"]', dynamics?.person_1?.strengths || []);
   updateList('[data-list="person2_strengths"]', dynamics?.person_2?.strengths || []);
+
+  // Update slider positions dynamically
+  if (dynamics?.styles) {
+    updateSliderPositions('solving_problems', dynamics.styles.solving_problems);
+    updateSliderPositions('influencing_each_other', dynamics.styles.influencing_each_other);
+    updateSliderPositions('reacting_to_change', dynamics.styles.reacting_to_change);
+    updateSliderPositions('making_decisions', dynamics.styles.making_decisions);
+  }
+}
+
+/**
+ * Update slider dot positions based on calculated percentages
+ */
+function updateSliderPositions(styleName, styleData) {
+  if (!styleData) return;
+
+  const container = document.querySelector(`[data-style="${styleName}"]`);
+  if (!container) {
+    if (debugMode) console.warn(`⚠️ Slider container not found: ${styleName}`);
+    return;
+  }
+
+  const person1Dot = container.querySelector('.person1-dot');
+  const person2Dot = container.querySelector('.person2-dot');
+
+  if (person1Dot && styleData.person_1_position !== undefined) {
+    // Clamp position between 0 and 100
+    const position = Math.max(0, Math.min(100, styleData.person_1_position));
+    person1Dot.style.left = `${position}%`;
+  }
+
+  if (person2Dot && styleData.person_2_position !== undefined) {
+    // Clamp position between 0 and 100
+    const position = Math.max(0, Math.min(100, styleData.person_2_position));
+    person2Dot.style.left = `${position}%`;
+  }
 }
 
 // PAGE 10: Love & Sexuality
