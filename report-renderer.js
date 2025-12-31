@@ -751,10 +751,10 @@ function renderPage6() {
   const { finances, couple } = reportData;
   const p1 = couple?.person_1;
   const p2 = couple?.person_2;
-  const p1Name = p1?.name || 'Toni';
-  const p2Name = p2?.name || 'Chris';
+  const p1Name = p1?.name || 'Person 1';
+  const p2Name = p2?.name || 'Person 2';
 
-  console.log('💰 Rendering Page 6 - Finances (Dashboard Refresh)');
+  console.log('💰 Rendering Page 6 - Finances (Template-Driven)');
 
   // Update Photos
   const p1Photo = document.querySelector('[data-field="person1_photo"]');
@@ -774,15 +774,24 @@ function renderPage6() {
     const style = pData?.money_style || 'Saver';
     const budget = pData?.budget_approach || "I don't budget";
 
-    // Style Badge
+    // Style Badge from Templates
     const styleContainer = document.querySelector(styleSel);
-    if (styleContainer) {
+    if (styleContainer && typeof FinancesTemplates !== 'undefined') {
+      const template = FinancesTemplates.getMoneyStyleTemplate(style);
+      styleContainer.innerHTML = `<span class="px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-tighter ${template.badge_class}">${style}</span>`;
+    } else if (styleContainer) {
+      // Fallback if library missing
       const colorClass = style.toLowerCase() === 'spender' ? 'bg-blue-100 text-blue-700' : 'bg-green-100 text-green-700';
       styleContainer.innerHTML = `<span class="px-3 py-1 rounded-full text-[11px] font-black uppercase tracking-tighter ${colorClass}">${style}</span>`;
     }
 
-    // Budget Text
-    updateText(`[data-field="${budgetSel}"]`, `"${budget}"`);
+    // Budget Text with Emoji from Templates
+    let budgetDisplay = `"${budget}"`;
+    if (typeof FinancesTemplates !== 'undefined') {
+      const bTemplate = FinancesTemplates.getBudgetTemplate(budget);
+      budgetDisplay = `${bTemplate.emoji} "${budget}"`;
+    }
+    updateText(`[data-field="${budgetSel}"]`, budgetDisplay);
   };
 
   renderProfile(finances?.person_1, '#person1_money_style_badge', 'person1_budget_text');
@@ -790,19 +799,22 @@ function renderPage6() {
 
   // 2. Financial Fears (Top Fear Highlight)
   const renderTopFear = (fears, iconSel, labelSel) => {
-    const fearKeys = [
-      { key: 'lack_of_influence', label: 'Lack of Influence', emoji: '💡' },
-      { key: 'lack_of_security', label: 'Lack of Security', emoji: '🔒' },
-      { key: 'lack_of_respect', label: 'Lack of Respect', emoji: '🤝' },
-      { key: 'not_realizing_dreams', label: 'Not Realizing Dreams', emoji: '🌟' }
-    ];
+    if (typeof FinancesTemplates === 'undefined') return;
 
-    let topFear = fearKeys.find(f => fears?.[f.key] === true) || fearKeys[1]; // Fallback to security
+    const templates = FinancesTemplates.FINANCIAL_FEAR_TEMPLATES;
+    const fearKeys = Object.keys(templates);
+
+    // Find first true fear or default to security
+    const topFearKey = fearKeys.find(key => fears?.[key] === true) || 'lack_of_security';
+    const topFear = templates[topFearKey];
 
     const iconEl = document.querySelector(iconSel);
     const labelEl = document.querySelector(labelSel);
     if (iconEl) iconEl.textContent = topFear.emoji;
     if (labelEl) labelEl.textContent = topFear.label;
+
+    // Add description as tooltip if element exists
+    if (labelEl) labelEl.title = topFear.description;
   };
 
   renderTopFear(finances?.person_1?.financial_fears, '#person1_top_fear_icon', '#person1_top_fear_label');
@@ -814,30 +826,55 @@ function renderPage6() {
     if (!container) return;
 
     const amount = debt?.amount || 'None';
-    let icon = '✅';
-    let statusColor = 'text-green-600';
-    let desc = `No recorded debt. Excellent starting point!`;
 
-    if (amount !== 'None' && amount.toLowerCase() !== 'none') {
-      icon = '⚠️';
-      statusColor = 'text-amber-600';
-      desc = `Reported debt: ${amount}. Discuss your plan for management.`;
+    if (typeof FinancesTemplates !== 'undefined') {
+      const template = FinancesTemplates.getDebtTemplate(amount);
+      const icon = template.level === 'none' ? '✅' : (template.level === 'high' ? '🚨' : '⚠️');
+
+      container.innerHTML = `
+        <div class="text-3xl">${icon}</div>
+        <div>
+          <div class="text-[11px] font-bold text-gray-400 uppercase">${name}'s Debt</div>
+          <div class="text-sm ${template.iconClass} font-bold">${amount}</div>
+          <p class="text-[12px] text-gray-500 mt-1 leading-tight">${template.template}</p>
+        </div>
+      `;
+    } else {
+      // Fallback
+      const isNone = amount === 'None' || amount.toLowerCase() === 'none';
+      const icon = isNone ? '✅' : '⚠️';
+      const statusColor = isNone ? 'text-green-600' : 'text-amber-600';
+      const desc = isNone ? 'No recorded debt. Excellent starting point!' : `Reported debt: ${amount}. Discuss your plan.`;
+
+      container.innerHTML = `
+        <div class="text-3xl">${icon}</div>
+        <div>
+          <div class="text-[11px] font-bold text-gray-400 uppercase">${name}'s Debt</div>
+          <div class="text-sm ${statusColor} font-bold">${amount}</div>
+          <p class="text-[12px] text-gray-500 mt-1 leading-tight">${desc}</p>
+        </div>
+      `;
     }
-
-    container.innerHTML = `
-      <div class="text-3xl">${icon}</div>
-      <div>
-        <div class="text-[11px] font-bold text-gray-400 uppercase">${name}'s Debt</div>
-        <div class="text-sm ${statusColor} font-bold">${amount}</div>
-        <p class="text-[12px] text-gray-500 mt-1 leading-tight">${desc}</p>
-      </div>
-    `;
   };
 
   renderDebtStatus(finances?.person_1?.debt, '#person1_debt_status', p1Name);
   renderDebtStatus(finances?.person_2?.debt, '#person2_debt_status', p2Name);
 
-  // 4. Discussion Question
+  // 4. Money Talks / Conversation Starters
+  const promptsContainer = document.querySelector('.bg-gradient-to-r.from-teal-50.to-blue-50 .grid');
+  if (promptsContainer && typeof FinancesTemplates !== 'undefined') {
+    const prompts = FinancesTemplates.MONEY_TALKS_PROMPTS || [];
+    if (prompts.length > 0) {
+      promptsContainer.innerHTML = prompts.map(prompt => `
+        <div class="flex items-start gap-2 text-[13px] text-gray-700">
+          <span class="text-teal-500 font-bold">•</span>
+          <span>${prompt}</span>
+        </div>
+      `).join('');
+    }
+  }
+
+  // 5. Discussion Question
   const discussionQuestion = getFinanceDiscussionQuestion(
     finances?.person_1,
     finances?.person_2,
@@ -855,96 +892,121 @@ function getFinanceDiscussionQuestion(person1Finances, person2Finances, name1, n
   return "What concerns you most about the financial context you're each bringing into your marriage and why? What gives you peace about your financial future?";
 }
 
-// Helper to update lists
-// PAGE 7: Expectations - HIGH FIDELITY GRID RENDERING
+// PAGE 7: Expectations - WEB-OPTIMIZED DASHBOARD RENDERING
 function renderPage7() {
   if (!reportData) return;
 
   const { expectations, couple } = reportData;
   const p1 = couple?.person_1;
   const p2 = couple?.person_2;
-  const p1Name = p1?.name || 'Toni';
-  const p2Name = p2?.name || 'Chris';
+  const p1Name = p1?.name || 'Person 1';
+  const p2Name = p2?.name || 'Person 2';
 
-  console.log('📝 Rendering Page 7 - Expectations (Deterministic Grid)');
+  console.log('📝 Rendering Page 7 - Expectations (Web Dashboard)');
 
-  // Update Photos and Names
+  // Update Photos
   const p1Photo = document.querySelector('[data-field="person1_photo"]');
   const p2Photo = document.querySelector('[data-field="person2_photo"]');
   if (p1Photo && p1?.photo_url) p1Photo.src = p1.photo_url;
   if (p2Photo && p2?.photo_url) p2Photo.src = p2.photo_url;
 
-  // Containers
+  // Summary Stats
+  const agreedRoles = expectations?.agreed_roles || [];
+  const needsDiscussion = expectations?.needs_discussion || [];
+  const totalCount = agreedRoles.length + needsDiscussion.length;
+  const agreementRate = totalCount > 0 ? Math.round((agreedRoles.length / totalCount) * 100) : 0;
+
+  updateText('[data-field="total_roles"]', totalCount);
+  updateText('[data-field="agreed_count"]', agreedRoles.length);
+  updateText('[data-field="discussion_count"]', needsDiscussion.length);
+  updateText('[data-field="agreement_rate"]', agreementRate + '%');
+
+  // Sublabels
+  updateText('[data-field="agreed_sublabel"]', `${agreedRoles.length} items with mutual agreement`);
+  updateText('[data-field="discussion_sublabel"]', `${needsDiscussion.length} items to align on`);
+
+  // Render Containers
   const agreedContainer = document.getElementById('agreed-roles-container');
   const discussionContainer = document.getElementById('discussion-roles-container');
 
   if (agreedContainer) {
-    agreedContainer.innerHTML = (expectations?.agreed_roles || [])
-      .map(role => renderRoleRow(role, p1Name, p2Name, true))
-      .join('');
+    if (agreedRoles.length > 0) {
+      agreedContainer.innerHTML = agreedRoles.map(role => renderExpectationRow(role, true, p1Name, p2Name)).join('');
+    } else {
+      agreedContainer.innerHTML = '<div class="p-8 text-center text-gray-400 italic">No agreements found.</div>';
+    }
   }
 
   if (discussionContainer) {
-    discussionContainer.innerHTML = (expectations?.needs_discussion || [])
-      .map(role => renderRoleRow(role, p1Name, p2Name, false))
-      .join('');
+    if (needsDiscussion.length > 0) {
+      discussionContainer.innerHTML = needsDiscussion.map(role => renderExpectationRow(role, false, p1Name, p2Name)).join('');
+    } else {
+      discussionContainer.innerHTML = '<div class="p-8 text-center text-gray-400 italic text-sm">Everything is in sync!</div>';
+    }
   }
 
   // Reflection Question
-  if (reportData.reflection_questions?.page_7) {
-    updateText('[data-field="reflection_question"]', reportData.reflection_questions.page_7);
-  }
+  const reflectionQ = "How are you going to handle role behaviors where you are currently not in sync? What can help you decide who does what?";
+  updateText('[data-field="reflection_question"]', reflectionQ);
 }
 
 /**
- * Helper to render a single row in the expectations grid
+ * Modern Row Renderer for Expectations
  */
-function renderRoleRow(role, p1Name, p2Name, isAgreed) {
-  const getX = (active, type) => active ? `<div class="x-mark ${type}"></div>` : '<div class="empty-dash"></div>';
-
-  // Assignment Badge Logic
-  let assignmentLabel = '';
-  let assignmentClass = '';
-
+function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
+  // Determine Assignment Badge
+  let badgeHtml = '';
   if (isAgreed) {
-    assignmentLabel = role.assigned_to === 'Both' ? 'Both' : (role.assigned_to === 'Neither' ? 'Neither' : role.assigned_to);
-    assignmentClass = role.assigned_to === p1Name ? 'assigned-toni' : (role.assigned_to === p2Name ? 'assigned-chris' : (role.assigned_to === 'Both' ? 'assigned-both' : ''));
+    const assigned = role.assigned_to;
+    let badgeClass = 'assigned-neither';
+    if (assigned === 'Both') badgeClass = 'assigned-both';
+    else if (assigned === p1Name) badgeClass = 'assigned-p1';
+    else if (assigned === p2Name) badgeClass = 'assigned-p2';
+
+    badgeHtml = `<span class="role-badge ${badgeClass}">${assigned}</span>`;
+  } else {
+    badgeHtml = `<span class="role-badge assigned-neither">Pending</span>`;
   }
 
-  // Checkbox logic for Person 1 (Toni)
-  const p1Me = role.person_1_view.who === 'Me' || role.person_1_view.who === 'Both';
-  const p1You = role.person_1_view.who === 'You' || role.person_1_view.who === 'Both';
+  // Perspective Icons/Pills
+  const getPerspectivePill = (who, color) => {
+    let emoji = '👤';
+    let label = who || 'None';
+    if (who === 'Both') emoji = '👥';
+    if (who === 'Neither') emoji = '🚫';
 
-  // Checkbox logic for Person 2 (Chris)
-  const p2Me = role.person_2_view.who === 'Me' || role.person_2_view.who === 'Both';
-  const p2You = role.person_2_view.who === 'You' || role.person_2_view.who === 'Both';
+    return `
+      <div class="perspective-pill ${who?.toLowerCase() === 'me' ? 'me' : (who?.toLowerCase() === 'both' ? 'both' : '')}">
+        <span class="text-[10px]">${emoji}</span>
+        <span>${label}</span>
+      </div>
+    `;
+  };
 
   return `
-    <div class="expectation-row">
-      <!-- Assigned To -->
-      <div class="flex justify-end">
-        ${isAgreed ? `<div class="assigned-badge ${assignmentClass}">${assignmentLabel}</div>` : '<div class="w-12 h-0.5 bg-gray-200 mt-2"></div>'}
+    <div class="expectation-item p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-colors">
+      <!-- Task Detail -->
+      <div class="flex-1">
+        <div class="text-[11px] font-black text-gray-400 uppercase tracking-widest mb-1">Task</div>
+        <div class="text-[15px] font-bold text-gray-800">${role.task}</div>
       </div>
-      
-      <!-- Task Name -->
-      <div class="text-[13px] font-medium text-gray-700 pl-2">
-        ${role.task}
+
+      <!-- Individual Perspectives -->
+      <div class="grid grid-cols-2 gap-3 w-full sm:w-auto">
+        <div>
+          <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${p1Name}'s View</div>
+          ${getPerspectivePill(role.person_1_view.who, 'red')}
+        </div>
+        <div>
+          <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${p2Name}'s View</div>
+          ${getPerspectivePill(role.person_2_view.who, 'teal')}
+        </div>
       </div>
-      
-      <!-- Toni's Grid (Mom, Dad, Me, You) -->
-      <div class="checkbox-grid">
-        <div class="grid-cell">${getX(role.person_1_view.mom, 'gray')}</div>
-        <div class="grid-cell">${getX(role.person_1_view.dad, 'gray')}</div>
-        <div class="grid-cell highlight">${getX(p1Me, 'p1')}</div>
-        <div class="grid-cell">${getX(p1You, 'p1')}</div>
-      </div>
-      
-      <!-- Chris's Grid (Mom, Dad, Me, You) -->
-      <div class="checkbox-grid">
-        <div class="grid-cell">${getX(role.person_2_view.mom, 'gray')}</div>
-        <div class="grid-cell">${getX(role.person_2_view.dad, 'gray')}</div>
-        <div class="grid-cell highlight">${getX(p2Me, 'p2')}</div>
-        <div class="grid-cell">${getX(p2You, 'p2')}</div>
+
+      <!-- Action/Result -->
+      <div class="w-full sm:w-32 flex flex-col items-start sm:items-end justify-center">
+        <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">Status</div>
+        ${badgeHtml}
       </div>
     </div>
   `;

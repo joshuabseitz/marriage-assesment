@@ -28,15 +28,17 @@
 
         body {
             font-family: 'Open Sans', sans-serif;
-            background-color: #e5e7eb;
-            color: #333;
+            background-color: #f1f5f9;
+            color: #334155;
         }
 
         .report-container {
             max-width: 950px;
             margin: 2rem auto;
             background: white;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+            border-radius: 1.5rem;
+            overflow: hidden;
         }
 
         h1,
@@ -46,7 +48,7 @@
         }
 
         .header-rule {
-            border-bottom: 2px dashed #d1d5db;
+            border-bottom: 2px dashed #e2e8f0;
             margin: 1.5rem 0;
         }
 
@@ -56,45 +58,22 @@
             letter-spacing: -0.05em;
         }
 
-        .nav-button {
-            transition: all 0.2s ease;
-        }
-
-        .nav-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Expectation Table Styles */
-        .expectation-row {
-            display: grid;
-            grid-template-columns: 80px 1fr 160px 160px;
-            gap: 12px;
-            padding: 8px 0;
-            border-bottom: 1px solid #f0f0f0;
-            align-items: center;
-        }
-
-        .expectation-row:nth-child(even) {
-            background-color: #fcfcfc;
-        }
-
-        .assigned-badge {
+        /* Role Badge Styling */
+        .role-badge {
             font-size: 11px;
             font-weight: 800;
-            text-align: right;
-            color: #666;
-            padding: 4px 8px;
-            background: #f0f0f0;
-            border-radius: 4px;
+            padding: 4px 12px;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
         }
 
-        .assigned-toni {
+        .assigned-p1 {
             background: #fee2e2;
             color: #9f1239;
         }
 
-        .assigned-chris {
+        .assigned-p2 {
             background: #dcfce7;
             color: #166534;
         }
@@ -104,90 +83,41 @@
             color: #854d0e;
         }
 
-        /* Grid Styles */
-        .checkbox-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            border: 1px solid #ccc;
-            height: 32px;
-            background: white;
+        .assigned-neither {
+            background: #f1f5f9;
+            color: #475569;
         }
 
-        .grid-cell {
-            border-right: 1px solid #ccc;
+        /* Perspective Indicator */
+        .perspective-pill {
             display: flex;
             align-items: center;
-            justify-content: center;
-            position: relative;
+            gap: 6px;
+            padding: 4px 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
         }
 
-        .grid-cell:last-child {
-            border-right: none;
+        .perspective-pill.me {
+            border-color: #cbd5e1;
+            background: #f1f5f9;
         }
 
-        .grid-cell.highlight {
-            border-left: 2px dashed #999;
+        .perspective-pill.both {
+            border-color: #fde68a;
+            background: #fffbeb;
         }
 
-        /* The "X" Marks */
-        .x-mark {
-            width: 16px;
-            height: 16px;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        /* Row Hover */
+        .expectation-item {
+            transition: all 0.2s ease;
         }
 
-        .x-mark::before,
-        .x-mark::after {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 14px;
-            background-color: #555;
-            border-radius: 1px;
-        }
-
-        .x-mark::before {
-            transform: rotate(45deg);
-        }
-
-        .x-mark::after {
-            transform: rotate(-45deg);
-        }
-
-        .x-mark.p1 {
-            background-color: transparent;
-        }
-
-        .x-mark.p1::before,
-        .x-mark.p1::after {
-            background-color: #E54D42;
-        }
-
-        /* Red for Toni */
-        .x-mark.p2 {
-            background-color: transparent;
-        }
-
-        .x-mark.p2::before,
-        .x-mark.p2::after {
-            background-color: #4FB8B1;
-        }
-
-        /* Teal for Chris */
-        .x-mark.gray::before,
-        .x-mark.gray::after {
-            background-color: #999;
-        }
-
-        /* Gray for FOO */
-
-        .empty-dash {
-            width: 80%;
-            height: 1px;
-            background: #ddd;
+        .expectation-item:hover {
+            background-color: #f8fafc;
         }
     </style>
 </head>
@@ -196,125 +126,150 @@
     <!-- Navigation Bar -->
     <div id="symbis-navigation"></div>
 
-    <div class="report-container p-8 sm:p-14">
-        <!-- Navigation -->
-        <div class="flex justify-between items-center mb-6">
-            <a href="page6"
-                class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">←
-                Previous</a>
-            <span class="text-gray-400 text-sm font-bold">Page 7</span>
-            <a href="page8"
-                class="nav-button px-6 py-2 bg-gray-100 rounded-full text-sm font-bold text-gray-700 hover:bg-gray-200">Next
-                →</a>
-        </div>
+    <div class="report-container">
+        <!-- Dashboard Header -->
+        <div class="bg-white p-8 sm:p-14 pb-0">
+            <!-- Breadcrumbs/Nav -->
+            <div class="flex justify-between items-center mb-8">
+                <a href="page6"
+                    class="flex items-center gap-2 px-5 py-2 hover:bg-gray-50 rounded-full transition-colors text-sm font-bold text-gray-400">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Previous
+                </a>
+                <div class="flex gap-2">
+                    <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                    <div class="w-2 h-2 rounded-full bg-[#5B8FB9]"></div>
+                    <div class="w-2 h-2 rounded-full bg-gray-200"></div>
+                </div>
+                <a href="page8"
+                    class="flex items-center gap-2 px-5 py-2 bg-[#5B8FB9] hover:bg-[#4a7ba1] rounded-full transition-colors text-sm font-bold text-white shadow-sm">
+                    Next
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
 
-        <!-- Header -->
-        <section class="mb-8">
-            <div class="flex items-start gap-6">
+            <!-- Main Title Header -->
+            <div class="flex flex-col sm:flex-row items-center sm:items-start gap-8 mb-10 text-center sm:text-left">
                 <div class="flex-shrink-0">
-                    <div class="w-20 h-20 bg-[#5B8FB9] rounded-xl flex items-center justify-center shadow-lg">
-                        <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    <div
+                        class="w-24 h-24 bg-gradient-to-br from-[#5B8FB9] to-[#4FB8B1] rounded-3xl flex items-center justify-center shadow-xl transform -rotate-3">
+                        <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                         </svg>
                     </div>
                 </div>
                 <div class="flex-1">
-                    <h1 class="text-[26px] font-extrabold text-[#333] tracking-tight uppercase leading-none mb-2">
-                        CONTEXT: EXPECTATIONS</h1>
-                    <p class="text-gray-600 italic text-[14px] leading-relaxed max-w-2xl">
-                        Making your roles conscious: for most people, the biggest part of their "context" is what they
-                        unconsciously learned about a husband and wife's roles from their family of origin.
+                    <div class="flex items-center gap-3 mb-2 justify-center sm:justify-start">
+                        <span
+                            class="px-3 py-1 bg-blue-50 text-[#5B8FB9] text-[11px] font-black uppercase tracking-wider rounded-md">Context</span>
+                        <h1 class="text-3xl font-black text-gray-800 tracking-tight uppercase">Expectations</h1>
+                    </div>
+                    <p class="text-gray-500 italic text-[15px] leading-relaxed max-w-2xl">
+                        Unconscious expectations about roles often come from your family of origin. Identifying them
+                        early turns "unspoken" into "understood."
                     </p>
                 </div>
             </div>
-            <div class="header-rule"></div>
-        </section>
 
-        <!-- Role Grid Legend & Headers -->
-        <div class="mb-4 flex items-end justify-between px-2">
-            <div>
-                <!-- Legend can go here if needed, but the headers do the job -->
-            </div>
-            <div class="flex gap-4 sm:gap-12 mr-2">
-                <!-- Person 1 Header -->
-                <div class="text-center w-[160px]">
-                    <img data-field="person1_photo" src="https://i.pravatar.cc/150?u=toni" alt="Toni"
-                        class="w-16 h-16 rounded-full border-4 border-white shadow-md mx-auto mb-2"
-                        style="border-color: #E88B88;">
-                    <div
-                        class="flex justify-between text-[10px] font-bold text-gray-400 uppercase tracking-tighter w-full px-2">
-                        <span>Mom</span>
-                        <span>Dad</span>
-                        <span>Me</span>
-                        <span>You</span>
+            <!-- Stats Summary Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+                <div class="bg-gray-50 rounded-2xl p-5 border border-gray-100 text-center">
+                    <div class="text-2xl font-black text-gray-800" data-field="total_roles">0</div>
+                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Total Tasks</div>
+                </div>
+                <div class="bg-[#f0fdf4] rounded-2xl p-5 border border-green-100 text-center">
+                    <div class="text-2xl font-black text-green-700" data-field="agreed_count">0</div>
+                    <div class="text-[10px] font-bold text-green-500 uppercase tracking-widest mt-1">Role Agreement
                     </div>
                 </div>
-                <!-- Person 2 Header -->
-                <div class="text-center w-[160px]">
-                    <img data-field="person2_photo" src="https://i.pravatar.cc/150?u=chris" alt="Chris"
-                        class="w-16 h-16 rounded-full border-4 border-white shadow-md mx-auto mb-2"
-                        style="border-color: #4FB8B1;">
+                <div class="bg-[#fffbeb] rounded-2xl p-5 border border-yellow-100 text-center">
+                    <div class="text-2xl font-black text-yellow-700" data-field="discussion_count">0</div>
+                    <div class="text-[10px] font-bold text-yellow-500 uppercase tracking-widest mt-1">Discussion Needed
+                    </div>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-5 border border-gray-100 text-center">
+                    <div class="text-2xl font-black text-gray-800" data-field="agreement_rate">0%</div>
+                    <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Alignment Rate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Role Listing -->
+        <div class="bg-[#f8fafc] p-8 sm:p-14 border-t border-gray-100">
+            <!-- Agreed Section -->
+            <div class="mb-12">
+                <div class="flex items-center gap-3 mb-6">
                     <div
-                        class="flex justify-between text-[10px] font-bold text-gray-400 uppercase tracking-tighter w-full px-2">
-                        <span>Mom</span>
-                        <span>Dad</span>
-                        <span>Me</span>
-                        <span>You</span>
+                        class="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center text-white shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-bold text-gray-800">Clear Role Agreements</h2>
+                    <span class="text-xs font-bold text-gray-400 px-3 py-1 bg-white rounded-full shadow-sm"
+                        data-field="agreed_sublabel">Tasks you both agree on</span>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div id="agreed-roles-container" class="divide-y divide-gray-100">
+                        <!-- Rows injected by JS -->
+                        <div class="p-8 text-center text-gray-400 italic">No agreements found yet.</div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Agreement Section -->
-        <div class="mb-10">
-            <div class="flex items-center gap-2 mb-1">
-                <div class="bg-[#83B643] text-white px-6 py-2 rounded-full inline-flex items-center gap-2 shadow-sm">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd"
-                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                            clip-rule="evenodd"></path>
-                    </svg>
-                    <h2 class="text-[15px] font-bold italic">We both agree on who is doing these things:</h2>
+            <!-- Needs Discussion Section -->
+            <div class="mb-12">
+                <div class="flex items-center gap-3 mb-6">
+                    <div
+                        class="w-8 h-8 rounded-full bg-yellow-500 flex items-center justify-center text-white shadow-sm">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-lg font-bold text-gray-800">Tasks to Discuss</h2>
+                    <span class="text-xs font-bold text-gray-400 px-3 py-1 bg-white rounded-full shadow-sm"
+                        data-field="discussion_sublabel">Different perspectives found</span>
+                </div>
+
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div id="discussion-roles-container" class="divide-y divide-gray-100">
+                        <!-- Rows injected by JS -->
+                        <div class="p-8 text-center text-gray-400 italic">Everything is in sync!</div>
+                    </div>
                 </div>
             </div>
 
-            <div id="agreed-roles-container" class="border-t border-gray-200">
-                <!-- Rows injected by JS -->
-                <div class="text-center py-8 text-gray-400 italic text-sm">Loading agreed roles...</div>
-            </div>
-        </div>
-
-        <!-- Discussion Section -->
-        <div class="mb-10">
-            <div class="flex items-center gap-2 mb-1">
-                <div class="bg-[#C4D600] text-white px-6 py-2 rounded-full inline-flex items-center gap-2 shadow-sm">
-                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8c0 1.144-.842 2.1-2.037 2.454l-.303.104A1 1 0 0010 11.535V12a1 1 0 11-2 0v-.465c0-.97.616-1.815 1.517-2.128l.303-.104C10.518 9.102 11 8.618 11 8a1 1 0 00-1-1zM10 15a1 1 0 100-2 1 1 0 000 2z">
-                        </path>
-                    </svg>
-                    <h2 class="text-[15px] font-bold italic">We need to decide on:</h2>
+            <!-- Reflection/Discussion Topic -->
+            <div class="bg-[#F0F8F7] rounded-3xl p-8 border-l-8 border-[#4FB8B1]">
+                <div class="flex gap-4">
+                    <div
+                        class="flex-shrink-0 w-10 h-10 bg-[#4FB8B1] rounded-2xl flex items-center justify-center text-white">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2L15 8L21 9L16 14L18 20L12 17L6 20L8 14L3 9L9 8L12 2Z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-black text-[#4FB8B1] uppercase tracking-widest mb-3">Facilitator Prompt
+                        </h3>
+                        <p class="text-[16px] text-gray-700 font-bold italic leading-relaxed"
+                            data-field="reflection_question">
+                            Loading discussion prompt...
+                        </p>
+                    </div>
                 </div>
             </div>
-
-            <div id="discussion-roles-container" class="border-t border-gray-200">
-                <!-- Rows injected by JS -->
-                <div class="text-center py-8 text-gray-400 italic text-sm">Loading discussion items...</div>
-            </div>
-        </div>
-
-        <!-- Discussion Prompt -->
-        <div class="mt-8 bg-[#F0F8F7] rounded-2xl p-6 border-l-8 border-[#4FB8B1]">
-            <p class="text-[15px] text-gray-700 leading-relaxed italic" data-field="reflection_question">
-                How are you going to handle role behaviors where you are currently not in sync? What can help you decide
-                who does what?
-            </p>
         </div>
 
         <!-- Footer -->
-        <footer class="mt-12 pt-8 border-t border-gray-100">
+        <footer class="bg-white p-10 pt-4 border-t border-gray-100">
             <div class="flex flex-col sm:flex-row justify-between items-center text-[13px] text-gray-500">
                 <div class="italic mb-4 sm:mb-0">
                     Refer to Chapter 1 of SYMBIS: "Have You Faced the Myths of Marriage with Honesty?"
@@ -329,10 +284,9 @@
         </footer>
     </div>
 
-    <script src="/report-renderer.js"></script>
-    <!-- Report Navigation -->
+    <!-- Navigation JS -->
     <div id="report-navigation"></div>
-
+    <script src="/report-renderer.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             if (typeof SymbisNav !== 'undefined') {

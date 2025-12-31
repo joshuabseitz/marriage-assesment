@@ -61,8 +61,8 @@ function extractBaseReport(person1Responses, person2Responses, user1Profile = nu
 function extractMetadata(person1Responses, completionDate) {
   return {
     completion_date: completionDate,
-    invite_code: person1Responses[17] || "N/A",
-    wedding_date: person1Responses[16] || null,
+    invite_code: person1Responses.invite_code || person1Responses["invite_code"] || "N/A",
+    wedding_date: person1Responses[6] || null,
     report_version: "1.0",
     facilitator_name: null
   };
@@ -255,14 +255,14 @@ function extractSexuality(person1Responses, person2Responses) {
 }
 
 function extractPersonSexuality(responses) {
-  const abstaining = responses[202] || "Not specified";
-  const desireRating = parseInt(responses[203]) || 5;
+  const abstaining = responses[188] || "Not specified";
+  const desireRating = parseInt(responses[193]) || 5;
 
   return {
     abstaining: abstaining,
     desire_rating: desireRating,
-    initiate_expectation: responses[204] || "Both",
-    frequency_expectation: responses[205] || "Not specified"
+    initiate_expectation: responses[197] || "Both",
+    frequency_expectation: responses[200] || "Not specified"
   };
 }
 
@@ -1160,20 +1160,20 @@ function extractSocialSupport(person1Responses, person2Responses) {
  * Extract social support for a single person
  */
 function extractPersonSocialSupport(responses) {
-  // Friends/Family Support - Q151-155
-  const friendsFamilyScore = calculateSocialSupportScore(responses, [151, 152, 153, 154, 155], 20);
+  // Friends/Family Support - Q77-78
+  const friendsFamilyScore = calculateSocialSupportScore(responses, [77, 78], 20);
   const friendsFamily = getFriendsFamilyTemplate(friendsFamilyScore);
 
-  // In-Laws Relationship - Q156-160
-  const inLawsScore = calculateSocialSupportScore(responses, [156, 157, 158, 159, 160], 20);
+  // In-Laws Relationship - Q79-81
+  const inLawsScore = calculateSocialSupportScore(responses, [79, 80, 81], 20);
   const inLaws = getInLawsTemplate(inLawsScore);
 
-  // Mutual Friends - Q161-166
-  const mutualFriendsScore = calculateSocialSupportScore(responses, [161, 162, 163, 164, 165, 166], 16.67);
+  // Mutual Friends - Q82-84
+  const mutualFriendsScore = calculateSocialSupportScore(responses, [82, 83, 84], 16.67);
   const mutualFriends = getMutualFriendsTemplate(mutualFriendsScore);
 
-  // Faith Community - Q167-170
-  const faithScore = calculateSocialSupportScore(responses, [167, 168, 169, 170], 25);
+  // Faith Community - Q86-88
+  const faithScore = calculateSocialSupportScore(responses, [86, 87, 88], 25);
   const faithCommunity = getFaithCommunityTemplate(faithScore);
 
   return {
@@ -1383,17 +1383,17 @@ function calculateMindsetType(responses) {
  * Types determined by which dimension scores highest
  */
 function calculateDynamicsType(responses) {
-  // Cooperation indicators: Q73-82, Q113-121 (collaborative, flexible questions)
-  const cooperationQuestions = [73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 113, 114, 115, 116, 117, 118, 119, 120, 121];
+  // Cooperation indicators: (Disc S)
+  const cooperationQuestions = [137, 141, 143, 153, 159, 161, 167, 169, 180];
 
-  // Affirmation indicators: Q83-92, Q122-131 (supportive, encouraging questions)
-  const affirmationQuestions = [83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131];
+  // Affirmation indicators: (Disc I)
+  const affirmationQuestions = [138, 142, 144, 146, 150, 152, 154, 158, 164, 168, 176, 177];
 
-  // Direction indicators: Q93-102, Q132-141 (leadership, decisive questions)
-  const directionQuestions = [93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141];
+  // Direction indicators: (Disc D)
+  const directionQuestions = [140, 148, 160, 162, 170, 179];
 
-  // Analysis indicators: Q103-112, Q142-150 (thoughtful, processing questions)
-  const analysisQuestions = [103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 142, 143, 144, 145, 146, 147, 148, 149, 150];
+  // Analysis indicators: (Disc C)
+  const analysisQuestions = [139, 145, 147, 149, 155, 157, 163, 174, 175, 183];
 
   const scores = {
     cooperation: calculateAverage(responses, cooperationQuestions),

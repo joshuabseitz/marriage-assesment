@@ -289,60 +289,108 @@ function extractPersonSpirituality(responses) {
   };
 }
 
+/**
+ * Extract role expectations and analyze agreement
+ * Questions 117-136 in survey format
+ */
 function extractExpectations(person1Responses, person2Responses) {
   const roleQuestions = [
-    { id: 131, task: "Cooking meals" },
-    { id: 132, task: "Cleaning the house" },
-    { id: 133, task: "Doing laundry" },
-    { id: 134, task: "Managing finances" },
-    { id: 135, task: "Taking out trash" },
-    { id: 136, task: "Grocery shopping" },
-    { id: 137, task: "Yard work" },
-    { id: 138, task: "Car maintenance" },
-    { id: 139, task: "Planning date nights" },
-    { id: 140, task: "Caring for children" },
-    { id: 141, task: "Disciplining children" },
-    { id: 142, task: "Making major decisions" }
+    { id: 117, task: "Staying home with children" },
+    { id: 118, task: "Paying bills and handling finances" },
+    { id: 119, task: "Yard work" },
+    { id: 120, task: "Gassing up the car" },
+    { id: 121, task: "Fixing things around the house" },
+    { id: 122, task: "Laundry" },
+    { id: 123, task: "Making the bed" },
+    { id: 124, task: "Cooking meals" },
+    { id: 125, task: "Grocery shopping" },
+    { id: 126, task: "Caring for a pet" },
+    { id: 127, task: "Decorating the house" },
+    { id: 128, task: "Disciplining the children" },
+    { id: 129, task: "Doing the dishes" },
+    { id: 130, task: "Taking out the trash" },
+    { id: 131, task: "Cleaning the house" },
+    { id: 132, task: "Providing income" },
+    { id: 133, task: "Planning vacations & holidays" },
+    { id: 134, task: "Talking about spiritual matters" },
+    { id: 135, task: "Auto maintenance" },
+    { id: 136, task: "Scheduling social events" }
   ];
 
   const agreedRoles = [];
   const needsDiscussion = [];
 
+  const p1Name = person1Responses[1] || "Person 1";
+  const p2Name = person2Responses[1] || "Person 2";
+
+  // Helper to map choice indices to labels if needed
+  const getChoiceLabel = (val) => {
+    if (!val && val !== 0) return "Not specified";
+    if (typeof val === 'string') return val;
+    const options = ["Me", "You", "Both", "Neither"];
+    const idx = parseInt(val);
+    if (isNaN(idx)) return "Not specified";
+    // Many surveys export 1-based indices
+    if (options[idx - 1]) return options[idx - 1];
+    if (options[idx]) return options[idx];
+    return "Not specified";
+  };
+
   roleQuestions.forEach(role => {
-    const person1View = person1Responses[role.id];
-    const person2View = person2Responses[role.id];
+    const p1ViewRaw = person1Responses[role.id];
+    const p2ViewRaw = person2Responses[role.id];
 
     // Normalize answers
-    const p1Who = normalizeWho(person1View);
-    const p2Who = normalizeWho(person2View);
+    const p1Who = getChoiceLabel(p1ViewRaw);
+    const p2Who = getChoiceLabel(p2ViewRaw);
 
-    // Check if they agree
-    const agreed = p1Who === p2Who;
-
-    // Determine assignment
+    // Analyze Agreement
+    let agreed = false;
     let assignedTo = "Neither";
-    if (agreed) {
-      if (p1Who === "Me") assignedTo = person1Responses[1] || "Person 1";
-      else if (p1Who === "You") assignedTo = person2Responses[1] || "Person 2";
-      else if (p1Who === "Both") assignedTo = "Both";
+
+    if (p1Who === "Both" && p2Who === "Both") {
+      agreed = true;
+      assignedTo = "Both";
+    } else if (p1Who === "Neither" && p2Who === "Neither") {
+      agreed = true;
+      assignedTo = "Neither";
+    } else if (p1Who === "Me" && p2Who === "You") {
+      agreed = true;
+      assignedTo = p1Name;
+    } else if (p1Who === "You" && p2Who === "Me") {
+      agreed = true;
+      assignedTo = p2Name;
     }
 
-    agreedRoles.push({
+    const roleData = {
+      id: role.id,
       task: role.task,
-      person_1_view: { who: p1Who },
-      person_2_view: { who: p2Who },
+      person_1_view: {
+        who: p1Who,
+        mom: false, // Legacy placeholders
+        dad: false
+      },
+      person_2_view: {
+        who: p2Who,
+        mom: false,
+        dad: false
+      },
       agreed: agreed,
       assigned_to: assignedTo
-    });
+    };
 
-    if (!agreed) {
-      needsDiscussion.push(role.task);
+    if (agreed) {
+      agreedRoles.push(roleData);
+    } else {
+      needsDiscussion.push(roleData);
     }
   });
 
   return {
     agreed_roles: agreedRoles,
-    needs_discussion: needsDiscussion
+    needs_discussion: needsDiscussion,
+    p1_name: p1Name,
+    p2_name: p2Name
   };
 }
 
