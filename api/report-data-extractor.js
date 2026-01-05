@@ -501,6 +501,15 @@ function extractExpectations(person1Responses, person2Responses, user1Profile, u
     return "Not specified";
   }
 
+  // DIAGNOSTIC: Log raw family origin data for first few questions
+  console.log('🔍 DIAGNOSTIC: Family Origin Data Check');
+  console.log('   Q284 (Staying home) - P1:', person1Responses[284], '| P2:', person2Responses[284]);
+  console.log('   Q285 (Paying bills) - P1:', person1Responses[285], '| P2:', person2Responses[285]);
+  console.log('   Q286 (Yard work) - P1:', person1Responses[286], '| P2:', person2Responses[286]);
+  console.log('   Q287 (Gassing car) - P1:', person1Responses[287], '| P2:', person2Responses[287]);
+  console.log('   Q288 (Fixing house) - P1:', person1Responses[288], '| P2:', person2Responses[288]);
+  console.log('   Response keys present (284-303):', [284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303].filter(id => person1Responses[id] !== undefined).length, 'for P1,', [284,285,286,287,288,289,290,291,292,293,294,295,296,297,298,299,300,301,302,303].filter(id => person2Responses[id] !== undefined).length, 'for P2');
+
   roleQuestions.forEach((role, index) => {
     const p1ViewRaw = person1Responses[role.id];
     const p2ViewRaw = person2Responses[role.id];
@@ -511,8 +520,28 @@ function extractExpectations(person1Responses, person2Responses, user1Profile, u
 
     // Extract family of origin data (Q284-303 map to the same 20 tasks)
     const familyOriginQuestionId = 284 + index;
-    const p1FamilyOrigin = person1Responses[familyOriginQuestionId] || "Not captured";
-    const p2FamilyOrigin = person2Responses[familyOriginQuestionId] || "Not captured";
+    const p1FamilyOriginRaw = person1Responses[familyOriginQuestionId];
+    const p2FamilyOriginRaw = person2Responses[familyOriginQuestionId];
+    
+    // Normalize family origin answers - they should be "Mom", "Dad", "Both equally", etc.
+    // Valid options from questions-data.json Section 13 (Q284-303)
+    const validFamilyOriginOptions = ["Mom", "Dad", "Both equally", "Neither/Someone else", "N/A"];
+    
+    // If data is invalid or missing, show "Not captured" - user needs to complete Section 13
+    const p1FamilyOrigin = validFamilyOriginOptions.includes(p1FamilyOriginRaw) 
+      ? p1FamilyOriginRaw 
+      : "Not captured";
+    const p2FamilyOrigin = validFamilyOriginOptions.includes(p2FamilyOriginRaw) 
+      ? p2FamilyOriginRaw 
+      : "Not captured";
+    
+    // Log invalid data for debugging (but don't show to user)
+    if (p1FamilyOriginRaw && !validFamilyOriginOptions.includes(p1FamilyOriginRaw)) {
+      console.log(`⚠️ Q${familyOriginQuestionId} P1 has invalid family origin data: "${String(p1FamilyOriginRaw).substring(0, 50)}"`);
+    }
+    if (p2FamilyOriginRaw && !validFamilyOriginOptions.includes(p2FamilyOriginRaw)) {
+      console.log(`⚠️ Q${familyOriginQuestionId} P2 has invalid family origin data: "${String(p2FamilyOriginRaw).substring(0, 50)}"`);
+    }
 
     // Analyze Agreement
     // Agreements happen when:
@@ -1770,28 +1799,26 @@ function calculateDynamicsType(responses) {
 // EXPORTS
 // ============================================================================
 
-if (typeof module !== 'undefined' && module.exports) {
-  // Node.js export
-  module.exports = {
-    extractBaseReport,
-    extractDynamics,
-    getResponsesForQuestions,
-    calculateAverage,
-    scaleToPercentage,
-    calculateCompatibilityScore,
-    extractTopValues,
-    identifyAgreementGaps,
-    calculateDimensionScore,
-    determinePersonalityType,
-    extractCautionFlags,
-    assessRelationshipTimeline,
-    generateCompatibilitySummary,
-    calculateMindsetType,
-    calculateDynamicsType
-  };
-}
+// ES Module exports (for dynamic import)
+export {
+  extractBaseReport,
+  extractDynamics,
+  getResponsesForQuestions,
+  calculateAverage,
+  scaleToPercentage,
+  calculateCompatibilityScore,
+  extractTopValues,
+  identifyAgreementGaps,
+  calculateDimensionScore,
+  determinePersonalityType,
+  extractCautionFlags,
+  assessRelationshipTimeline,
+  generateCompatibilitySummary,
+  calculateMindsetType,
+  calculateDynamicsType
+};
 
-// Browser global export
+// Browser global export (for script tag loading)
 if (typeof window !== 'undefined') {
   window.ReportDataExtractor = {
     extractBaseReport,

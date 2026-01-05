@@ -108,59 +108,39 @@ async function callGeminiAPI(genAI, prompt, passName, maxRetries = MAX_RETRIES) 
 }
 
 /**
- * Load data extractor from file with dynamics templates
+ * Load data extractor using dynamic import()
+ * VERSION 4 - Simplified, only load what we need
  */
-function loadDataExtractor() {
+async function loadDataExtractor() {
   try {
-    // Load dynamics templates library
-    const templatesPath = join(__dirname, '..', 'lib', 'dynamics-templates.js');
-    let templatesCode = readFileSync(templatesPath, 'utf-8');
+    console.log('📦 VERSION 4: Loading data extractor via dynamic import()...');
     
-    // Remove export blocks that cause issues in Function scope
-    templatesCode = templatesCode
-      .replace(/if \(typeof module !== 'undefined' && module\.exports\) \{[\s\S]*?\}/g, '')
-      .replace(/if \(typeof window !== 'undefined'\) \{[\s\S]*?\}/g, '');
+    // Load dynamics templates and inject into global for the extractor to use
+    const dynamicsPath = join(__dirname, '..', 'lib', 'dynamics-templates.js');
+    const DynamicsModule = await import(dynamicsPath);
+    global.DynamicsTemplates = DynamicsModule;
+    console.log('  ✓ Loaded dynamics-templates.js:', Object.keys(DynamicsModule).length, 'exports');
     
-    // Load extractor
+    // Load extractor (it has WELLBEING_TEMPLATES defined internally)
     const extractorPath = join(__dirname, 'report-data-extractor.js');
-    let extractorCode = readFileSync(extractorPath, 'utf-8');
+    const ExtractorModule = await import(extractorPath);
+    console.log('  ✓ Loaded report-data-extractor.js:', Object.keys(ExtractorModule).length, 'exports');
     
-    // Remove export blocks from extractor too
-    extractorCode = extractorCode
-      .replace(/if \(typeof module !== 'undefined' && module\.exports\) \{[\s\S]*?\}/g, '')
-      .replace(/if \(typeof window !== 'undefined'\) \{[\s\S]*?\}/g, '');
-
-    // Execute both files together in a single scope
-    const extractBaseReport = new Function('person1Responses', 'person2Responses', 'user1Profile', 'user2Profile', `
-      // Inject templates code (export blocks removed)
-      ${templatesCode}
-      
-      // Now DynamicsTemplates functions are available in scope
-      const DynamicsTemplates = {
-        TYPE_COMBINATION_TEMPLATES,
-        STRENGTH_STATEMENTS,
-        GENERIC_TYPE_STRENGTHS,
-        STYLE_GAP_TEMPLATES,
-        getDynamicsDescription,
-        getStrengthsList,
-        calculateDynamicsCompatibility,
-        getStyleGapAnalysis,
-        getOverallType,
-        getTypeCombinationKey,
-        personalizeDescription,
-        getStylePositions
-      };
-      
-      // Inject extractor code
-      ${extractorCode}
-      
-      return extractBaseReport(person1Responses, person2Responses, user1Profile, user2Profile);
-    `);
-
-    console.log('✅ Data extractor with dynamics templates loaded');
+    const extractBaseReport = ExtractorModule.extractBaseReport;
+    
+    if (!extractBaseReport) {
+      console.error('  ⚠️ extractBaseReport not found. Available:', Object.keys(ExtractorModule));
+      throw new Error('extractBaseReport function not exported from report-data-extractor.js');
+    }
+    
+    console.log('✅ Data extractor loaded successfully');
     return extractBaseReport;
+    
   } catch (error) {
-    console.error('Error loading data extractor:', error);
+    console.error('❌ Failed to load data extractor');
+    console.error('Error type:', error.constructor.name);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
     throw new Error(`Failed to load data extractor: ${error.message}`);
   }
 }
@@ -296,7 +276,7 @@ export default async function handler(req, res) {
 
     // Extract base data
     console.log('📦 Extracting base data...');
-    const extractBaseReport = loadDataExtractor();
+    const extractBaseReport = await loadDataExtractor();
     const baseReport = extractBaseReport(person1_responses, person2_responses, user1Profile, user2Profile);
     console.log('✅ Base data extracted');
     console.log('  - Person 1 caution flags:', baseReport.caution_flags?.person_1?.length || 0);

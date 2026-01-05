@@ -1049,6 +1049,14 @@ function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
     `;
   };
 
+  // Format family origin display - handle "Not captured" gracefully
+  const formatFamilyOrigin = (firstName, value) => {
+    if (!value || value === 'Not captured' || value === 'N/A') {
+      return `<div class="text-[10px] text-gray-400 italic mt-1">In ${firstName}'s home: <span class="text-orange-500">Not captured</span></div>`;
+    }
+    return `<div class="text-[10px] text-gray-500 italic mt-1">In ${firstName}'s home: ${value}</div>`;
+  };
+
   return `
     <div class="expectation-item p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 transition-colors">
       <!-- Task Detail -->
@@ -1062,16 +1070,12 @@ function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
         <div>
           <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${p1Name}'s View</div>
           ${getPerspectivePill(role.person_1_view.who, 'red')}
-          <div class="text-[10px] text-gray-500 italic mt-1">
-            In ${p1Name.split(' ')[0]}'s home: ${role.person_1_view.family_origin || 'N/A'}
-          </div>
+          ${formatFamilyOrigin(p1Name.split(' ')[0], role.person_1_view.family_origin)}
         </div>
         <div>
           <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${p2Name}'s View</div>
           ${getPerspectivePill(role.person_2_view.who, 'teal')}
-          <div class="text-[10px] text-gray-500 italic mt-1">
-            In ${p2Name.split(' ')[0]}'s home: ${role.person_2_view.family_origin || 'N/A'}
-          </div>
+          ${formatFamilyOrigin(p2Name.split(' ')[0], role.person_2_view.family_origin)}
         </div>
       </div>
 
