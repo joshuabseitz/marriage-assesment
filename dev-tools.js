@@ -203,11 +203,13 @@
         94: "$10,000 - $50,000",  // Moderate debt
         95: 3, 96: 3, 97: 4, 98: 3,
         99: ["Lack of Respect", "Lack of Security", "Lack of Influence", "Not Realizing Dreams"],  // Financial fears - ranked (top: respect)
-        103: 3, 104: 3, 105: 4, 106: 3, 107: 3, 108: 3, 109: 3, 110: 3, 111: 3, 112: 3,
+        103: 3, 104: 3, 105: 4,
+        106: 3, 107: 3, 108: 3, 109: 3, 110: 3, 111: 3, 112: 3,
         113: 3, 114: 3, 115: 3, 116: 3,
         // Role Expectations (Q117-136) - Some mixed patterns (use strings: "Me", "You", "Both", "Neither")
         117: "Me", 118: "Both", 119: "Me", 120: "Both", 121: "Both", 122: "Me", 123: "Both", 124: "Both", 125: "Me", 126: "Both",
         127: "Both", 128: "Both", 129: "Both", 130: "Me", 131: "Both", 132: "Both", 133: "You", 134: "Both", 135: "Me", 136: "Both",
+        137: 3, 138: 3, 139: 3, 140: 3, 141: 3, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3, 148: 3, 149: 3, 150: 3,
         // Family of Origin Roles (Q284-303)
         284: "Both equally", 285: "Mom", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Both equally", 290: "Mom", 291: "Both equally", 292: "Mom", 293: "Mom",
         294: "Mom", 295: "Dad", 296: "Both equally", 297: "Dad", 298: "Mom", 299: "Both equally", 300: "Mom", 301: "Both equally", 302: "Dad", 303: "Mom",
@@ -263,7 +265,9 @@
         94: "More than $50,000",  // High debt
         95: 2, 96: 2, 97: 3, 98: 2,
         99: ["Lack of Security", "Not Realizing Dreams", "Lack of Influence", "Lack of Respect"],  // Financial fears - ranked (all active, security top)
-        103: 5, 104: 5, 105: 3,        // Role Expectations (Q117-136) - Disagreements (use strings: "Me", "You", "Both", "Neither")
+        103: 5, 104: 5, 105: 3,
+        106: 2, 107: 2, 108: 3, 109: 2, 110: 2, 111: 2, 112: 2, 113: 2, 114: 2, 115: 2, 116: 2,
+        // Role Expectations (Q117-136) - Disagreements (use strings: "Me", "You", "Both", "Neither")
         117: "Me", 118: "Me", 119: "Me", 120: "You", 121: "Me", 122: "Me", 123: "Me", 124: "Me", 125: "Me", 126: "Me",
         127: "Me", 128: "Me", 129: "Me", 130: "Me", 131: "Me", 132: "Me", 133: "Me", 134: "You", 135: "You", 136: "Me",
         // Family of Origin Roles (Q284-303)
@@ -321,7 +325,9 @@
         94: "Less than $10,000",  // Low debt
         95: 4, 96: 4, 97: 4, 98: 4,
         99: ["Lack of Security", "Not Realizing Dreams", "Lack of Influence", "Lack of Respect"],  // Financial fears - ranked (top: security)
-        103: 3, 104: 3, 105: 4,        // Role Expectations (Q117-136) - Directing patterns (use strings: "Me", "You", "Both", "Neither")
+        103: 3, 104: 3, 105: 4,
+        106: 3, 107: 3, 108: 4, 109: 4, 110: 4, 111: 4, 112: 4, 113: 4, 114: 4, 115: 4, 116: 4,
+        // Role Expectations (Q117-136) - Directing patterns (use strings: "Me", "You", "Both", "Neither")
         117: "You", 118: "Me", 119: "Me", 120: "Me", 121: "Me", 122: "You", 123: "You", 124: "You", 125: "You", 126: "You",
         127: "You", 128: "Me", 129: "You", 130: "Me", 131: "You", 132: "Me", 133: "Both", 134: "Both", 135: "Me", 136: "Me",
         // Family of Origin Roles (Q284-303)
@@ -841,6 +847,134 @@
   }
 
   // Initialize when DOM is ready
+  // ============================================================================
+  // DIAGNOSTIC: Check and fix Q284-303 (Family Origin) data
+  // ============================================================================
+  
+  async function diagnoseFamilyOriginData() {
+    const supabase = await supabaseAuth.getSupabase();
+    const user = await supabaseAuth.getCurrentUser();
+    if (!user) {
+      console.error('❌ Not authenticated');
+      return;
+    }
+
+    const partnership = await partnershipsApi.getAcceptedPartnership();
+    const partnerId = partnership ? (partnership.user1_id === user.id ? partnership.user2_id : partnership.user1_id) : null;
+
+    console.log('🔍 DIAGNOSTIC: Checking Q284-303 (Family Origin) responses...');
+    console.log('Current user:', user.id);
+    console.log('Partner:', partnerId || 'No partner');
+
+    // Check current user's responses
+    const { data: myResponses, error: myError } = await supabase
+      .from('responses')
+      .select('question_id, value')
+      .eq('user_id', user.id)
+      .gte('question_id', 284)
+      .lte('question_id', 303);
+
+    if (myError) {
+      console.error('Error fetching my responses:', myError);
+    } else {
+      console.log(`📊 My Q284-303 responses (${myResponses.length}/20):`);
+      if (myResponses.length === 0) {
+        console.log('   ⚠️ NO DATA - need to run test data population or complete survey Section 13');
+      } else {
+        myResponses.forEach(r => console.log(`   Q${r.question_id}: ${r.value}`));
+      }
+    }
+
+    // Check partner's responses
+    if (partnerId) {
+      const { data: partnerResponses, error: partnerError } = await supabase
+        .from('responses')
+        .select('question_id, value')
+        .eq('user_id', partnerId)
+        .gte('question_id', 284)
+        .lte('question_id', 303);
+
+      if (partnerError) {
+        console.error('Error fetching partner responses:', partnerError);
+      } else {
+        console.log(`📊 Partner Q284-303 responses (${partnerResponses.length}/20):`);
+        if (partnerResponses.length === 0) {
+          console.log('   ⚠️ NO DATA - need to run test data population for partner');
+        } else {
+          partnerResponses.forEach(r => console.log(`   Q${r.question_id}: ${r.value}`));
+        }
+      }
+    }
+
+    return { user: user.id, partner: partnerId };
+  }
+
+  async function fixFamilyOriginData() {
+    const supabase = await supabaseAuth.getSupabase();
+    const user = await supabaseAuth.getCurrentUser();
+    if (!user) {
+      alert('❌ Not authenticated');
+      return;
+    }
+
+    const partnership = await partnershipsApi.getAcceptedPartnership();
+    if (!partnership) {
+      alert('❌ No partner connected');
+      return;
+    }
+
+    const isUser1 = partnership.user1_id === user.id;
+    const partnerId = isUser1 ? partnership.user2_id : partnership.user1_id;
+
+    // Family origin data from profiles A and B
+    const profileA_familyOrigin = {
+      284: "Mom", 285: "Dad", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Mom", 290: "Both equally", 291: "Mom", 292: "Mom", 293: "Both equally",
+      294: "Mom", 295: "Both equally", 296: "Mom", 297: "Dad", 298: "Mom", 299: "Dad", 300: "Both equally", 301: "Mom", 302: "Dad", 303: "Both equally"
+    };
+    const profileB_familyOrigin = {
+      284: "Both equally", 285: "Mom", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Both equally", 290: "Mom", 291: "Both equally", 292: "Mom", 293: "Mom",
+      294: "Mom", 295: "Dad", 296: "Both equally", 297: "Dad", 298: "Mom", 299: "Both equally", 300: "Mom", 301: "Both equally", 302: "Dad", 303: "Mom"
+    };
+
+    const myData = isUser1 ? profileA_familyOrigin : profileB_familyOrigin;
+    const partnerData = isUser1 ? profileB_familyOrigin : profileA_familyOrigin;
+
+    console.log('🔧 Fixing Q284-303 for both users...');
+
+    let myCount = 0, partnerCount = 0;
+
+    // Fix my data
+    for (const [qId, value] of Object.entries(myData)) {
+      const { error } = await supabase.from('responses').upsert({
+        user_id: user.id,
+        question_id: parseInt(qId),
+        question_type: 'choice',
+        value: value
+      }, { onConflict: 'user_id,question_id' });
+      if (!error) myCount++;
+    }
+
+    // Fix partner data
+    for (const [qId, value] of Object.entries(partnerData)) {
+      const { error } = await supabase.from('responses').upsert({
+        user_id: partnerId,
+        question_id: parseInt(qId),
+        question_type: 'choice',
+        value: value
+      }, { onConflict: 'user_id,question_id' });
+      if (!error) partnerCount++;
+    }
+
+    console.log(`✅ Fixed ${myCount}/20 for me, ${partnerCount}/20 for partner`);
+    alert(`✅ Fixed Family Origin data!\n\nMe: ${myCount}/20 questions\nPartner: ${partnerCount}/20 questions\n\nNow regenerate the report.`);
+  }
+
+  // Expose globally for console access
+  window.devTools = {
+    diagnoseFamilyOriginData,
+    fixFamilyOriginData
+  };
+
   console.log('🛠️ Dev tools: Initializing button...');
   console.log('🛠️ Dev tools: Document ready state:', document.readyState);
 
