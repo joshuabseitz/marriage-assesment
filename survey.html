@@ -52,6 +52,52 @@
     #completion-screen::-webkit-scrollbar-thumb:hover {
       background: #94a3b8;
     }
+    
+    /* Role Expectations Table Styles */
+    .role-table-btn {
+      min-width: 48px;
+      text-align: center;
+    }
+    
+    .role-table-btn:hover {
+      transform: scale(1.05);
+    }
+    
+    .role-table-btn:active {
+      transform: scale(0.95);
+    }
+    
+    /* Table responsive stacking on mobile */
+    @media (max-width: 768px) {
+      .role-table-btn {
+        min-width: 40px;
+        padding: 0.375rem 0.5rem;
+        font-size: 0.65rem;
+      }
+      
+      table thead th {
+        font-size: 0.6rem;
+        padding: 0.75rem 0.5rem;
+      }
+      
+      table tbody td {
+        padding: 0.75rem 0.5rem;
+        font-size: 0.75rem;
+      }
+      
+      table tbody td:first-child {
+        font-size: 0.7rem;
+      }
+    }
+    
+    /* Smooth transitions for table rows */
+    table tbody tr {
+      transition: background-color 0.15s ease;
+    }
+    
+    table tbody tr:hover {
+      background-color: rgba(241, 245, 249, 0.8) !important;
+    }
   </style>
 </head>
 <body class="bg-[#fcfaf8]">

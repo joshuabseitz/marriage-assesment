@@ -115,8 +115,24 @@ function showSectionOverview() {
   overviewEl.innerHTML = '';
   
   surveyData.sections.forEach((section, index) => {
-    const questionsInSection = section.questions.length;
-    const answeredInSection = section.questions.filter(q => responses[q.id] !== undefined).length;
+    // Handle special table sections vs regular question sections
+    let questionsInSection, answeredInSection;
+    
+    if (section.type === 'role_expectations_table') {
+      // Table section: count tasks * 2 (expectation + family origin)
+      questionsInSection = section.tasks.length * 2;
+      answeredInSection = section.tasks.filter(t => 
+        responses[t.expectation_id] !== undefined && responses[t.family_origin_id] !== undefined
+      ).length * 2;
+      // Add partial answers
+      answeredInSection += section.tasks.filter(t => 
+        (responses[t.expectation_id] !== undefined) !== (responses[t.family_origin_id] !== undefined)
+      ).length;
+    } else {
+      questionsInSection = section.questions.length;
+      answeredInSection = section.questions.filter(q => responses[q.id] !== undefined).length;
+    }
+    
     const percentComplete = Math.round((answeredInSection / questionsInSection) * 100);
     
     const card = document.createElement('div');
@@ -166,6 +182,14 @@ function showQuestion() {
   document.getElementById('completion-screen').classList.add('hidden');
   
   const section = surveyData.sections[currentSection];
+  
+  // Handle special table section type
+  if (section.type === 'role_expectations_table') {
+    renderRoleExpectationsTable(section);
+    updateProgress();
+    return;
+  }
+  
   const question = section.questions[currentQuestionIndex];
   
   // Update header breadcrumb
@@ -298,6 +322,184 @@ function renderQuestionInput(question) {
   
   // Add change listeners to save answers
   addAnswerListeners();
+}
+
+// Render the combined Role Expectations Table
+async function renderRoleExpectationsTable(section) {
+  const questionContainer = document.getElementById('question-container');
+  const surveyHeader = document.getElementById('survey-header');
+  const bottomNavBar = document.getElementById('bottom-nav-bar');
+  
+  // Hide the regular survey header (we'll make our own)
+  surveyHeader.classList.add('hidden');
+  
+  // Get partner name
+  let partnerName = 'Partner';
+  try {
+    const partnership = await window.partnershipsApi.getAcceptedPartnership();
+    if (partnership) {
+      const currentUser = await window.supabaseAuth.getCurrentUser();
+      const partnerId = partnership.user1_id === currentUser.id ? partnership.user2_id : partnership.user1_id;
+      const supabase = await window.supabaseAuth.getSupabase();
+      const { data: partnerProfile } = await supabase
+        .from('user_profiles')
+        .select('full_name')
+        .eq('id', partnerId)
+        .single();
+      if (partnerProfile?.full_name) {
+        partnerName = partnerProfile.full_name.split(' ')[0]; // First name only
+      }
+    }
+  } catch (e) {
+    console.log('Could not fetch partner name, using default');
+  }
+  
+  // Count answered
+  const totalQuestions = section.tasks.length * 2;
+  const answeredCount = section.tasks.reduce((count, task) => {
+    let c = 0;
+    if (responses[task.expectation_id] !== undefined) c++;
+    if (responses[task.family_origin_id] !== undefined) c++;
+    return count + c;
+  }, 0);
+  const percentComplete = Math.round((answeredCount / totalQuestions) * 100);
+  
+  // Build table HTML
+  const tableRowsHtml = section.tasks.map((task, idx) => {
+    const expectationValue = responses[task.expectation_id];
+    const familyOriginValue = responses[task.family_origin_id];
+    
+    const expectationOptions = section.expectation_options.map(opt => {
+      const displayOpt = opt === 'Partner' ? partnerName : opt;
+      const isSelected = expectationValue === opt || (opt === 'Partner' && expectationValue === partnerName);
+      return `<button 
+        type="button" 
+        data-task-idx="${idx}" 
+        data-type="expectation" 
+        data-value="${opt}"
+        class="role-table-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+          isSelected 
+            ? 'bg-slate-800 text-white shadow-md' 
+            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+        }">${displayOpt === 'Neither' ? '—' : displayOpt}</button>`;
+    }).join('');
+    
+    const familyOriginOpts = section.family_origin_options.map(opt => {
+      const isSelected = familyOriginValue === opt;
+      return `<button 
+        type="button" 
+        data-task-idx="${idx}" 
+        data-type="family_origin" 
+        data-value="${opt}"
+        class="role-table-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+          isSelected 
+            ? 'bg-rose-600 text-white shadow-md' 
+            : 'bg-rose-50 text-rose-700 hover:bg-rose-100'
+        }">${opt === 'Both' ? 'Both' : opt}</button>`;
+    }).join('');
+    
+    const rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50';
+    
+    return `
+      <tr class="${rowBg} border-b border-slate-100">
+        <td class="py-4 px-4 text-sm font-medium text-slate-700">${task.task}</td>
+        <td class="py-4 px-3">
+          <div class="flex flex-wrap gap-1.5 justify-center">${expectationOptions}</div>
+        </td>
+        <td class="py-4 px-3">
+          <div class="flex flex-wrap gap-1.5 justify-center">${familyOriginOpts}</div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+  
+  questionContainer.innerHTML = `
+    <div class="max-w-5xl mx-auto px-4 py-6">
+      <!-- Section Header -->
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-2">
+          <h1 class="text-2xl font-black text-slate-800 tracking-tight">${section.title}</h1>
+          <span class="text-sm font-bold text-slate-500">${answeredCount}/${totalQuestions} answered</span>
+        </div>
+        <p class="text-slate-500 text-sm mb-4">${section.description}</p>
+        <div class="w-full bg-slate-100 rounded-full h-2">
+          <div class="bg-gradient-to-r from-rose-500 to-rose-600 h-2 rounded-full transition-all duration-500" style="width: ${percentComplete}%"></div>
+        </div>
+      </div>
+      
+      <!-- Table -->
+      <div class="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+        <table class="w-full">
+          <thead class="bg-slate-800 text-white sticky top-0">
+            <tr>
+              <th class="py-4 px-4 text-left text-xs font-bold uppercase tracking-wider w-1/3">Task</th>
+              <th class="py-4 px-3 text-center text-xs font-bold uppercase tracking-wider">
+                <div>Who Will Do This?</div>
+                <div class="text-[10px] font-normal opacity-75 mt-0.5">In your future home</div>
+              </th>
+              <th class="py-4 px-3 text-center text-xs font-bold uppercase tracking-wider">
+                <div>Growing Up</div>
+                <div class="text-[10px] font-normal opacity-75 mt-0.5">In your childhood home</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tableRowsHtml}
+          </tbody>
+        </table>
+      </div>
+      
+      <!-- Bottom Actions -->
+      <div class="mt-6 flex justify-between items-center">
+        <button id="table-back-btn" class="px-6 py-3 rounded-xl border-2 border-slate-200 text-slate-600 font-semibold hover:border-slate-400 transition-all">
+          ← Back to Overview
+        </button>
+        <button id="table-complete-btn" class="px-6 py-3 rounded-xl bg-slate-800 text-white font-semibold hover:bg-slate-900 transition-all ${answeredCount === totalQuestions ? '' : 'opacity-50 cursor-not-allowed'}" ${answeredCount === totalQuestions ? '' : 'disabled'}>
+          Complete Section →
+        </button>
+      </div>
+    </div>
+  `;
+  
+  // Add click handlers for buttons
+  questionContainer.querySelectorAll('.role-table-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const taskIdx = parseInt(btn.dataset.taskIdx);
+      const type = btn.dataset.type;
+      let value = btn.dataset.value;
+      const task = section.tasks[taskIdx];
+      
+      // If "Partner" was selected, save the actual partner name
+      if (value === 'Partner') {
+        value = partnerName;
+      }
+      
+      const questionId = type === 'expectation' ? task.expectation_id : task.family_origin_id;
+      const questionType = type === 'expectation' ? 'role_selection' : 'choice';
+      
+      responses[questionId] = value;
+      await saveToSupabase(questionId, questionType, value);
+      
+      // Re-render to update UI
+      renderRoleExpectationsTable(section);
+    });
+  });
+  
+  // Back button
+  document.getElementById('table-back-btn').addEventListener('click', () => {
+    showSectionOverview();
+  });
+  
+  // Complete button
+  const completeBtn = document.getElementById('table-complete-btn');
+  if (completeBtn && !completeBtn.disabled) {
+    completeBtn.addEventListener('click', () => {
+      showSectionOverview();
+    });
+  }
+  
+  // Hide bottom nav for table view (we have our own buttons)
+  bottomNavBar.classList.add('hidden');
 }
 
 // Render choice input (radio buttons)
@@ -780,7 +982,13 @@ async function showCompletion() {
   surveyHeader.classList.add('hidden');
   bottomNavBar.classList.add('hidden');
   
-  const allQuestionsCount = surveyData.sections.reduce((sum, section) => sum + section.questions.length, 0);
+  // Count total questions including table sections
+  const allQuestionsCount = surveyData.sections.reduce((sum, section) => {
+    if (section.type === 'role_expectations_table') {
+      return sum + (section.tasks.length * 2); // 2 questions per task
+    }
+    return sum + section.questions.length;
+  }, 0);
   const answeredCount = Object.keys(responses).length;
   
   if (answeredCount === allQuestionsCount) {
@@ -817,7 +1025,14 @@ async function showCompletion() {
 
 // Update progress bar
 function updateProgress() {
-  const allQuestionsCount = surveyData.sections.reduce((sum, section) => sum + section.questions.length, 0);
+  // Count total questions including table sections
+  const allQuestionsCount = surveyData.sections.reduce((sum, section) => {
+    if (section.type === 'role_expectations_table') {
+      return sum + (section.tasks.length * 2); // 2 questions per task
+    }
+    return sum + section.questions.length;
+  }, 0);
+  
   const answeredCount = Object.keys(responses).length;
   const percentage = Math.round((answeredCount / allQuestionsCount) * 100);
   
