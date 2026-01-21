@@ -204,8 +204,16 @@ export default async function handler(req, res) {
     const SUPABASE_URL = process.env.SUPABASE_URL || 'https://tobxdhqcdttgawqewpwl.supabase.co';
     const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
+    // Debug: Log which env vars are present (not values, just existence)
+    console.log('🔑 Environment variable check:', {
+      GEMINI_API_KEY: GEMINI_API_KEY ? `Set (${GEMINI_API_KEY.length} chars)` : 'NOT SET',
+      SUPABASE_URL: SUPABASE_URL ? 'Set' : 'NOT SET',
+      SUPABASE_SERVICE_KEY: SUPABASE_SERVICE_KEY ? `Set (${SUPABASE_SERVICE_KEY.length} chars)` : 'NOT SET'
+    });
+
     if (!GEMINI_API_KEY) {
-      return res.status(500).json({ error: 'Gemini API key not configured' });
+      console.error('❌ GEMINI_API_KEY is not set in environment');
+      return res.status(500).json({ error: 'Gemini API key not configured. Please set GEMINI_API_KEY in Vercel environment variables and redeploy.' });
     }
     if (!SUPABASE_SERVICE_KEY) {
       return res.status(500).json({ error: 'Supabase service key not configured' });
