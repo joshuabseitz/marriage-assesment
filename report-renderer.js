@@ -1038,20 +1038,20 @@ function renderExpectationRow(role, isAgreed, p1Name, p2Name, p1PhotoUrl, p2Phot
       // Show both profile pictures side by side
       photoHtml = `
         <div class="flex -space-x-1">
-          <img src="${p1PhotoUrl}" alt="${p1Name}" class="w-5 h-5 rounded-full border-2 border-white object-cover">
-          <img src="${p2PhotoUrl}" alt="${p2Name}" class="w-5 h-5 rounded-full border-2 border-white object-cover">
+          <img src="${p1PhotoUrl}" alt="${p1Name}" class="w-6 h-6 rounded-full border-2 border-white object-cover">
+          <img src="${p2PhotoUrl}" alt="${p2Name}" class="w-6 h-6 rounded-full border-2 border-white object-cover">
         </div>
       `;
     } else if (who === 'Me') {
       // "Me" from their perspective - show the viewer's photo
       const photoUrl = isP1View ? p1PhotoUrl : p2PhotoUrl;
       const name = isP1View ? p1Name : p2Name;
-      photoHtml = `<img src="${photoUrl}" alt="${name}" class="w-5 h-5 rounded-full border border-slate-200 object-cover">`;
+      photoHtml = `<img src="${photoUrl}" alt="${name}" class="w-6 h-6 rounded-full border border-slate-200 object-cover">`;
     } else if (who === 'You' || who === p1Name || who === p2Name) {
       // "You" or partner's name - show the other person's photo
       const photoUrl = isP1View ? p2PhotoUrl : p1PhotoUrl;
       const name = isP1View ? p2Name : p1Name;
-      photoHtml = `<img src="${photoUrl}" alt="${name}" class="w-5 h-5 rounded-full border border-slate-200 object-cover">`;
+      photoHtml = `<img src="${photoUrl}" alt="${name}" class="w-6 h-6 rounded-full border border-slate-200 object-cover">`;
     } else if (who === 'Neither') {
       // Neither - show a subtle icon
       photoHtml = `<span class="text-[10px] text-slate-400">—</span>`;
