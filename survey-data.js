@@ -370,32 +370,35 @@ async function renderRoleExpectationsTable(section) {
     const familyOriginValue = responses[task.family_origin_id];
     
     const expectationOptions = section.expectation_options.map(opt => {
-      const displayOpt = opt === 'Partner' ? partnerName : opt;
+      const displayOpt = opt === 'Partner' ? partnerName : (opt === 'Neither' ? 'N/A' : opt);
       const isSelected = expectationValue === opt || (opt === 'Partner' && expectationValue === partnerName);
       return `<button 
         type="button" 
         data-task-idx="${idx}" 
         data-type="expectation" 
         data-value="${opt}"
+        data-expectation-id="${task.expectation_id}"
         class="role-table-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
           isSelected 
             ? 'bg-slate-800 text-white shadow-md' 
             : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-        }">${displayOpt === 'Neither' ? '—' : displayOpt}</button>`;
+        }">${displayOpt}</button>`;
     }).join('');
     
     const familyOriginOpts = section.family_origin_options.map(opt => {
+      const displayOpt = opt === 'Both equally' ? 'Both' : opt;
       const isSelected = familyOriginValue === opt;
       return `<button 
         type="button" 
         data-task-idx="${idx}" 
         data-type="family_origin" 
         data-value="${opt}"
+        data-family-origin-id="${task.family_origin_id}"
         class="role-table-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
           isSelected 
             ? 'bg-rose-600 text-white shadow-md' 
             : 'bg-rose-50 text-rose-700 hover:bg-rose-100'
-        }">${opt === 'Both' ? 'Both' : opt}</button>`;
+        }">${displayOpt}</button>`;
     }).join('');
     
     const rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50';
@@ -461,7 +464,7 @@ async function renderRoleExpectationsTable(section) {
     </div>
   `;
   
-  // Add click handlers for buttons
+  // Add click handlers for buttons with immediate UI feedback
   questionContainer.querySelectorAll('.role-table-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
       const taskIdx = parseInt(btn.dataset.taskIdx);
@@ -477,11 +480,59 @@ async function renderRoleExpectationsTable(section) {
       const questionId = type === 'expectation' ? task.expectation_id : task.family_origin_id;
       const questionType = type === 'expectation' ? 'role_selection' : 'choice';
       
-      responses[questionId] = value;
-      await saveToSupabase(questionId, questionType, value);
+      // IMMEDIATE UI UPDATE (optimistic)
+      // Find all buttons in this row for the same type and update their styles
+      const allBtnsInGroup = questionContainer.querySelectorAll(
+        `.role-table-btn[data-task-idx="${taskIdx}"][data-type="${type}"]`
+      );
       
-      // Re-render to update UI
-      renderRoleExpectationsTable(section);
+      allBtnsInGroup.forEach(b => {
+        const isThisBtn = b === btn;
+        if (type === 'expectation') {
+          b.className = `role-table-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+            isThisBtn 
+              ? 'bg-slate-800 text-white shadow-md' 
+              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+          }`;
+        } else {
+          b.className = `role-table-btn px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+            isThisBtn 
+              ? 'bg-rose-600 text-white shadow-md' 
+              : 'bg-rose-50 text-rose-700 hover:bg-rose-100'
+          }`;
+        }
+      });
+      
+      // Update progress counter immediately
+      responses[questionId] = value;
+      const newAnsweredCount = section.tasks.reduce((count, t) => {
+        let c = 0;
+        if (responses[t.expectation_id] !== undefined) c++;
+        if (responses[t.family_origin_id] !== undefined) c++;
+        return count + c;
+      }, 0);
+      const progressSpan = questionContainer.querySelector('.text-sm.font-bold.text-slate-500');
+      if (progressSpan) {
+        progressSpan.textContent = `${newAnsweredCount}/${totalQuestions} answered`;
+      }
+      const progressBar = questionContainer.querySelector('.bg-gradient-to-r');
+      if (progressBar) {
+        progressBar.style.width = `${Math.round((newAnsweredCount / totalQuestions) * 100)}%`;
+      }
+      
+      // Update complete button state
+      const completeBtn = document.getElementById('table-complete-btn');
+      if (completeBtn) {
+        if (newAnsweredCount === totalQuestions) {
+          completeBtn.disabled = false;
+          completeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+      }
+      
+      // Save in background (don't await - fire and forget for speed)
+      saveToSupabase(questionId, questionType, value).catch(err => {
+        console.error('Error saving response:', err);
+      });
     });
   });
   
