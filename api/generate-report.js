@@ -200,6 +200,13 @@ export default async function handler(req, res) {
     });
 
     // Validate environment variables
+    // Debug: Log ALL environment variable names to diagnose the issue
+    const allEnvKeys = Object.keys(process.env).filter(k => 
+      k.includes('GEMINI') || k.includes('SUPABASE') || k.includes('API')
+    );
+    console.log('🔑 Relevant environment variable NAMES found:', allEnvKeys);
+    console.log('🔑 All env var count:', Object.keys(process.env).length);
+    
     const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
     const SUPABASE_URL = process.env.SUPABASE_URL || 'https://tobxdhqcdttgawqewpwl.supabase.co';
     const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -212,8 +219,14 @@ export default async function handler(req, res) {
     });
 
     if (!GEMINI_API_KEY) {
-      console.error('❌ GEMINI_API_KEY is not set in environment');
-      return res.status(500).json({ error: 'Gemini API key not configured. Please set GEMINI_API_KEY in Vercel environment variables and redeploy.' });
+      console.error('❌ GEMINI_API_KEY is not set. Available env keys with GEMINI/SUPABASE/API:', allEnvKeys);
+      return res.status(500).json({ 
+        error: 'Gemini API key not configured', 
+        debug: { 
+          availableKeys: allEnvKeys,
+          totalEnvVars: Object.keys(process.env).length 
+        }
+      });
     }
     if (!SUPABASE_SERVICE_KEY) {
       return res.status(500).json({ error: 'Supabase service key not configured' });
