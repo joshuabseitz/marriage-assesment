@@ -88,8 +88,9 @@
 
         /* Perspective Indicator */
         .perspective-pill {
-            display: flex;
+            display: inline-flex;
             align-items: center;
+            justify-content: center;
             gap: 6px;
             padding: 4px 10px;
             background: #f8fafc;
@@ -97,6 +98,8 @@
             border-radius: 8px;
             font-size: 12px;
             font-weight: 600;
+            min-width: 70px;
+            text-align: center;
         }
 
         .perspective-pill.me {
@@ -107,6 +110,15 @@
         .perspective-pill.both {
             border-color: #fde68a;
             background: #fffbeb;
+        }
+        
+        /* Fixed width columns for user views */
+        .expectation-item .grid {
+            min-width: 280px;
+        }
+        
+        .expectation-item .grid > div {
+            min-width: 130px;
         }
 
         /* Row Hover */

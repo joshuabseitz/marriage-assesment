@@ -1057,13 +1057,13 @@ function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
       </div>
 
       <!-- Individual Perspectives -->
-      <div class="grid grid-cols-2 gap-3 w-full sm:w-auto">
-        <div>
+      <div class="grid grid-cols-2 gap-3 w-full sm:w-[280px]">
+        <div class="min-w-[130px]">
           <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${p1Name}'s View</div>
           ${getPerspectivePill(role.person_1_view.who, 'red')}
           ${formatFamilyOrigin(p1Name.split(' ')[0], role.person_1_view.family_origin)}
         </div>
-        <div>
+        <div class="min-w-[130px]">
           <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${p2Name}'s View</div>
           ${getPerspectivePill(role.person_2_view.who, 'teal')}
           ${formatFamilyOrigin(p2Name.split(' ')[0], role.person_2_view.family_origin)}
