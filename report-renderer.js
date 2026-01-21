@@ -980,9 +980,13 @@ function renderPage7() {
   const agreedContainer = document.getElementById('agreed-roles-container');
   const discussionContainer = document.getElementById('discussion-roles-container');
 
+  // Get photo URLs for the perspective pills
+  const p1PhotoUrl = p1?.photo_url || 'https://i.pravatar.cc/150?u=person1';
+  const p2PhotoUrl = p2?.photo_url || 'https://i.pravatar.cc/150?u=person2';
+
   if (agreedContainer) {
     if (agreedRoles.length > 0) {
-      agreedContainer.innerHTML = agreedRoles.map(role => renderExpectationRow(role, true, p1Name, p2Name)).join('');
+      agreedContainer.innerHTML = agreedRoles.map(role => renderExpectationRow(role, true, p1Name, p2Name, p1PhotoUrl, p2PhotoUrl)).join('');
     } else {
       agreedContainer.innerHTML = '<div class="p-8 text-center text-gray-400 italic">No agreements found.</div>';
     }
@@ -990,7 +994,7 @@ function renderPage7() {
 
   if (discussionContainer) {
     if (needsDiscussion.length > 0) {
-      discussionContainer.innerHTML = needsDiscussion.map(role => renderExpectationRow(role, false, p1Name, p2Name)).join('');
+      discussionContainer.innerHTML = needsDiscussion.map(role => renderExpectationRow(role, false, p1Name, p2Name, p1PhotoUrl, p2PhotoUrl)).join('');
     } else {
       discussionContainer.innerHTML = '<div class="p-8 text-center text-gray-400 italic text-sm">Everything is in sync!</div>';
     }
@@ -1004,7 +1008,7 @@ function renderPage7() {
 /**
  * Modern Row Renderer for Expectations
  */
-function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
+function renderExpectationRow(role, isAgreed, p1Name, p2Name, p1PhotoUrl, p2PhotoUrl) {
   // Determine Status Icon - simple checkmark or X
   let badgeHtml = '';
   if (isAgreed) {
@@ -1025,16 +1029,40 @@ function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
     `;
   }
 
-  // Perspective Icons/Pills
-  const getPerspectivePill = (who, color) => {
-    let emoji = '👤';
+  // Perspective Pills with Profile Photos
+  const getPerspectivePill = (who, isP1View) => {
     let label = who || 'None';
-    if (who === 'Both') emoji = '👥';
-    if (who === 'Neither') emoji = '🚫';
+    let photoHtml = '';
+    
+    if (who === 'Both') {
+      // Show both profile pictures side by side
+      photoHtml = `
+        <div class="flex -space-x-1">
+          <img src="${p1PhotoUrl}" alt="${p1Name}" class="w-5 h-5 rounded-full border-2 border-white object-cover">
+          <img src="${p2PhotoUrl}" alt="${p2Name}" class="w-5 h-5 rounded-full border-2 border-white object-cover">
+        </div>
+      `;
+    } else if (who === 'Me') {
+      // "Me" from their perspective - show the viewer's photo
+      const photoUrl = isP1View ? p1PhotoUrl : p2PhotoUrl;
+      const name = isP1View ? p1Name : p2Name;
+      photoHtml = `<img src="${photoUrl}" alt="${name}" class="w-5 h-5 rounded-full border border-slate-200 object-cover">`;
+    } else if (who === 'You' || who === p1Name || who === p2Name) {
+      // "You" or partner's name - show the other person's photo
+      const photoUrl = isP1View ? p2PhotoUrl : p1PhotoUrl;
+      const name = isP1View ? p2Name : p1Name;
+      photoHtml = `<img src="${photoUrl}" alt="${name}" class="w-5 h-5 rounded-full border border-slate-200 object-cover">`;
+    } else if (who === 'Neither') {
+      // Neither - show a subtle icon
+      photoHtml = `<span class="text-[10px] text-slate-400">—</span>`;
+    } else {
+      // Fallback
+      photoHtml = `<span class="text-[10px]">👤</span>`;
+    }
 
     return `
       <div class="perspective-pill ${who?.toLowerCase() === 'me' ? 'me' : (who?.toLowerCase() === 'both' ? 'both' : '')}">
-        <span class="text-[10px]">${emoji}</span>
+        ${photoHtml}
         <span>${label}</span>
       </div>
     `;
@@ -1060,12 +1088,12 @@ function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
       <div class="grid grid-cols-2 gap-3 w-full sm:w-[280px]">
         <div class="min-w-[130px]">
           <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${p1Name}'s View</div>
-          ${getPerspectivePill(role.person_1_view.who, 'red')}
+          ${getPerspectivePill(role.person_1_view.who, true)}
           ${formatFamilyOrigin(p1Name.split(' ')[0], role.person_1_view.family_origin)}
         </div>
         <div class="min-w-[130px]">
           <div class="text-[9px] font-black text-gray-400 uppercase tracking-tighter mb-1">${p2Name}'s View</div>
-          ${getPerspectivePill(role.person_2_view.who, 'teal')}
+          ${getPerspectivePill(role.person_2_view.who, false)}
           ${formatFamilyOrigin(p2Name.split(' ')[0], role.person_2_view.family_origin)}
         </div>
       </div>
