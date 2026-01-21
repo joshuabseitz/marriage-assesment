@@ -113,22 +113,23 @@
         77: 5, 78: 5, 79: 5, 80: 5, 81: 5, 82: 5, 83: 5, 84: 5, 85: 5,
         86: 5, 87: 5, 88: 5, 89: 1, 90: 1, 91: 5,
 
-        // Finances (Q92-116) - LOW DEBT for 5-star context (CORRECT IDs)
+        // Finances (Q92-113) - LOW DEBT for 5-star context
         92: "Saver",  // Money style
         93: "I live by a budget religiously",  // Budget approach
         94: "Less than $10,000",  // Debt amount - Low debt
         95: 5, 96: 5, 97: 5, 98: 5,  // Debt comfort
-        99: ["Lack of Influence", "Lack of Respect", "Not Realizing Dreams", "Lack of Security"],  // Financial fears - ranked (least concerned about security)
+        99: ["Lack of Influence", "Lack of Respect", "Not Realizing Dreams", "Lack of Security"],  // Financial fears - ranked
+        100: 5, 101: 5, 102: 5,  // Financial attitudes
         103: 1, 104: 1, 105: 5,  // Growing up money stress, anxiety, trust
-        106: 4, 107: 2, 108: 4, 109: 4, 110: 4, 111: 4, 112: 4,
-        113: 5, 114: 5, 115: 5, 116: 5,
-        // Role Expectations (Q117-136) - Mostly agreements (use strings: "Me", "You", "Both", "Neither")
-        117: "Both", 118: "Both", 119: "Both", 120: "Both", 121: "Me", 122: "Both", 123: "Me", 124: "Both", 125: "Both", 126: "Both",
-        127: "Both", 128: "Both", 129: "Both", 130: "Both", 131: "Both", 132: "Both", 133: "Both", 134: "Both", 135: "Both", 136: "Both",
+        106: 4, 107: 2, 108: 4, 109: 4, 110: 4, 111: 4, 112: 4, 113: 5,
+        // Role Expectations (Q114-133) - Mostly agreements (use strings: "Me", "You", "Both", "Neither")
+        114: "Both", 115: "Both", 116: "Both", 117: "Both", 118: "Me", 119: "Both", 120: "Me", 121: "Both", 122: "Both", 123: "Both",
+        124: "Both", 125: "Both", 126: "Both", 127: "Both", 128: "Both", 129: "Both", 130: "Both", 131: "Both", 132: "Both", 133: "Both",
+        // Dynamics (Q134-147)
+        134: 3, 135: 3, 136: 3, 137: 3, 138: 3, 139: 3, 140: 3, 141: 3, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3,
         // Family of Origin Roles (Q284-303)
         284: "Mom", 285: "Dad", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Mom", 290: "Both equally", 291: "Mom", 292: "Mom", 293: "Both equally",
         294: "Mom", 295: "Both equally", 296: "Mom", 297: "Dad", 298: "Mom", 299: "Dad", 300: "Both equally", 301: "Mom", 302: "Dad", 303: "Both equally",
-        137: 3, 138: 3, 139: 3, 140: 3, 141: 3, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3, 148: 3, 149: 3, 150: 3,
 
         // Personality (Q151-200) - COOPERATING SPOUSE: Collaborative, flexible, consensus-seeking
         151: 5, 152: 5, 153: 5, 154: 5, 155: 5, // High collaboration
@@ -197,19 +198,20 @@
         81: 3, 82: 3, 83: 5, 84: 5, 85: 5, 86: 5, 87: 5, 88: 5, 89: 5, 90: 5, // Q83-92 HIGH for Affirming
         77: 5, 78: 5, 79: 3, 80: 3, 81: 3, 82: 4, 83: 4, 84: 4, 85: 4,
         86: 4, 87: 4, 88: 3, 89: 3, 90: 2, 91: 4,
-        // FINANCES (Q92-116) - MODERATE CONTEXT (3 stars): Some debt
+        // FINANCES (Q92-113) - MODERATE CONTEXT (3 stars): Some debt
         92: "Balanced",  // Money style (not saver, not spender)
         93: "I track generally",  // Budget approach
         94: "$10,000 - $50,000",  // Moderate debt
         95: 3, 96: 3, 97: 4, 98: 3,
-        99: ["Lack of Respect", "Lack of Security", "Lack of Influence", "Not Realizing Dreams"],  // Financial fears - ranked (top: respect)
+        99: ["Lack of Respect", "Lack of Security", "Lack of Influence", "Not Realizing Dreams"],  // Financial fears - ranked
+        100: 3, 101: 3, 102: 3,  // Financial attitudes
         103: 3, 104: 3, 105: 4,
-        106: 3, 107: 3, 108: 3, 109: 3, 110: 3, 111: 3, 112: 3,
-        113: 3, 114: 3, 115: 3, 116: 3,
-        // Role Expectations (Q117-136) - Some mixed patterns (use strings: "Me", "You", "Both", "Neither")
-        117: "Me", 118: "Both", 119: "Me", 120: "Both", 121: "Both", 122: "Me", 123: "Both", 124: "Both", 125: "Me", 126: "Both",
-        127: "Both", 128: "Both", 129: "Both", 130: "Me", 131: "Both", 132: "Both", 133: "You", 134: "Both", 135: "Me", 136: "Both",
-        137: 3, 138: 3, 139: 3, 140: 3, 141: 3, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3, 148: 3, 149: 3, 150: 3,
+        106: 3, 107: 3, 108: 3, 109: 3, 110: 3, 111: 3, 112: 3, 113: 3,
+        // Role Expectations (Q114-133) - Some mixed patterns (use strings: "Me", "You", "Both", "Neither")
+        114: "Me", 115: "Both", 116: "Me", 117: "Both", 118: "Both", 119: "Me", 120: "Both", 121: "Both", 122: "Me", 123: "Both",
+        124: "Both", 125: "Both", 126: "Both", 127: "Me", 128: "Both", 129: "Both", 130: "You", 131: "Both", 132: "Me", 133: "Both",
+        // Dynamics (Q134-147)
+        134: 3, 135: 3, 136: 3, 137: 3, 138: 3, 139: 3, 140: 3, 141: 3, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3,
         // Family of Origin Roles (Q284-303)
         284: "Both equally", 285: "Mom", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Both equally", 290: "Mom", 291: "Both equally", 292: "Mom", 293: "Mom",
         294: "Mom", 295: "Dad", 296: "Both equally", 297: "Dad", 298: "Mom", 299: "Both equally", 300: "Mom", 301: "Both equally", 302: "Dad", 303: "Mom",
@@ -259,17 +261,20 @@
         // HIGH CONTEXT STRESS (2 stars): High debt, children, long-distance
         77: 3, 78: 3, 79: 2, 80: 2, 81: 2, 82: 3, 83: 3, 84: 2, 85: 2,
         86: 2, 87: 2, 88: 2, 89: 3, 90: 4, 91: 3,
-        // FINANCES (Q92-116) - HIGH DEBT (2 stars): Stressful situation
+        // FINANCES (Q92-113) - HIGH DEBT (2 stars): Stressful situation
         92: "Spender",  // Money style
         93: "I don't budget",  // No budget
         94: "More than $50,000",  // High debt
         95: 2, 96: 2, 97: 3, 98: 2,
-        99: ["Lack of Security", "Not Realizing Dreams", "Lack of Influence", "Lack of Respect"],  // Financial fears - ranked (all active, security top)
+        99: ["Lack of Security", "Not Realizing Dreams", "Lack of Influence", "Lack of Respect"],  // Financial fears - ranked
+        100: 2, 101: 2, 102: 2,  // Financial attitudes
         103: 5, 104: 5, 105: 3,
-        106: 2, 107: 2, 108: 3, 109: 2, 110: 2, 111: 2, 112: 2, 113: 2, 114: 2, 115: 2, 116: 2,
-        // Role Expectations (Q117-136) - Disagreements (use strings: "Me", "You", "Both", "Neither")
-        117: "Me", 118: "Me", 119: "Me", 120: "You", 121: "Me", 122: "Me", 123: "Me", 124: "Me", 125: "Me", 126: "Me",
-        127: "Me", 128: "Me", 129: "Me", 130: "Me", 131: "Me", 132: "Me", 133: "Me", 134: "You", 135: "You", 136: "Me",
+        106: 2, 107: 2, 108: 3, 109: 2, 110: 2, 111: 2, 112: 2, 113: 2,
+        // Role Expectations (Q114-133) - Disagreements (use strings: "Me", "You", "Both", "Neither")
+        114: "Me", 115: "Me", 116: "Me", 117: "You", 118: "Me", 119: "Me", 120: "Me", 121: "Me", 122: "Me", 123: "Me",
+        124: "Me", 125: "Me", 126: "Me", 127: "Me", 128: "Me", 129: "Me", 130: "Me", 131: "You", 132: "You", 133: "Me",
+        // Dynamics (Q134-147)
+        134: 3, 135: 3, 136: 3, 137: 3, 138: 3, 139: 3, 140: 3, 141: 3, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3,
         // Family of Origin Roles (Q284-303)
         284: "Mom", 285: "Dad", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Mom", 290: "Neither/Someone else", 291: "Mom", 292: "Mom", 293: "Neither/Someone else",
         294: "Mom", 295: "Both equally", 296: "Mom", 297: "Dad", 298: "Mom", 299: "Dad", 300: "Dad", 301: "Neither/Someone else", 302: "Dad", 303: "Dad",
@@ -319,21 +324,23 @@
         // MODERATE-LOW CONTEXT (4 stars): Some financial stress, imminent wedding
         77: 4, 78: 4, 79: 4, 80: 4, 81: 4, 82: 4, 83: 4, 84: 4, 85: 4,
         86: 4, 87: 4, 88: 4, 89: 2, 90: 2, 91: 4,
-        // FINANCES (Q92-116) - MODERATE-LOW CONTEXT (4 stars)
+        // FINANCES (Q92-113) - MODERATE-LOW CONTEXT (4 stars)
         92: "Saver",  // Money style
         93: "I track generally",  // Budget approach
         94: "Less than $10,000",  // Low debt
         95: 4, 96: 4, 97: 4, 98: 4,
-        99: ["Lack of Security", "Not Realizing Dreams", "Lack of Influence", "Lack of Respect"],  // Financial fears - ranked (top: security)
+        99: ["Lack of Security", "Not Realizing Dreams", "Lack of Influence", "Lack of Respect"],  // Financial fears - ranked
+        100: 4, 101: 4, 102: 4,  // Financial attitudes
         103: 3, 104: 3, 105: 4,
-        106: 3, 107: 3, 108: 4, 109: 4, 110: 4, 111: 4, 112: 4, 113: 4, 114: 4, 115: 4, 116: 4,
-        // Role Expectations (Q117-136) - Directing patterns (use strings: "Me", "You", "Both", "Neither")
-        117: "You", 118: "Me", 119: "Me", 120: "Me", 121: "Me", 122: "You", 123: "You", 124: "You", 125: "You", 126: "You",
-        127: "You", 128: "Me", 129: "You", 130: "Me", 131: "You", 132: "Me", 133: "Both", 134: "Both", 135: "Me", 136: "Me",
+        106: 3, 107: 3, 108: 4, 109: 4, 110: 4, 111: 4, 112: 4, 113: 4,
+        // Role Expectations (Q114-133) - Directing patterns (use strings: "Me", "You", "Both", "Neither")
+        114: "You", 115: "Me", 116: "Me", 117: "Me", 118: "Me", 119: "You", 120: "You", 121: "You", 122: "You", 123: "You",
+        124: "You", 125: "Me", 126: "You", 127: "Me", 128: "You", 129: "Me", 130: "Both", 131: "Both", 132: "Me", 133: "Me",
+        // Dynamics (Q134-147)
+        134: 3, 135: 3, 136: 3, 137: 3, 138: 3, 139: 3, 140: 3, 141: 5, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3,
         // Family of Origin Roles (Q284-303)
         284: "Mom", 285: "Dad", 286: "Dad", 287: "Dad", 288: "Dad", 289: "Mom", 290: "Mom", 291: "Mom", 292: "Both equally", 293: "Dad",
         294: "Both equally", 295: "Dad", 296: "Mom", 297: "Dad", 298: "Both equally", 299: "Dad", 300: "Mom", 301: "Dad", 302: "Dad", 303: "Mom",
-        141: 5, 142: 3, 143: 3, 144: 3, 145: 3, 146: 3, 147: 3, 148: 3, 149: 3, 150: 3,
         // DIRECTING SPOUSE: Decisive, takes charge, goal-oriented
         151: 2, 152: 2, 153: 2, 154: 5, 155: 5, 156: 2, 157: 2, 158: 2, 159: 2, 160: 2, // Takes initiative
         161: 5, 162: 2, 163: 5, 164: 2, 165: 2, 166: 5, 167: 5, 168: 2, 169: 2, 170: 5, // Provides direction

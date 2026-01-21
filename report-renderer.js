@@ -1005,33 +1005,24 @@ function renderPage7() {
  * Modern Row Renderer for Expectations
  */
 function renderExpectationRow(role, isAgreed, p1Name, p2Name) {
-  // Determine Assignment Badge
+  // Determine Status Icon - simple checkmark or X
   let badgeHtml = '';
   if (isAgreed) {
-    const assigned = role.assigned_to;
-    let badgeClass = 'assigned-neither';
-    let statusText = '';
-    
-    if (assigned === 'Both') {
-      badgeClass = 'assigned-both';
-      statusText = 'Both agree: Both will share this';
-    } else if (assigned === 'Neither') {
-      badgeClass = 'assigned-neither';
-      statusText = 'Both agree: Neither will do this';
-    } else if (assigned === p1Name) {
-      badgeClass = 'assigned-p1';
-      statusText = `Both agree: ${assigned} will do this`;
-    } else if (assigned === p2Name) {
-      badgeClass = 'assigned-p2';
-      statusText = `Both agree: ${assigned} will do this`;
-    } else {
-      // Fallback for any unexpected value
-      statusText = assigned;
-    }
-
-    badgeHtml = `<span class="role-badge ${badgeClass}">${statusText}</span>`;
+    // Green checkmark for agreement
+    badgeHtml = `
+      <div class="flex items-center gap-2">
+        <span class="text-2xl text-green-500">✓</span>
+        <span class="text-xs text-green-600 font-medium">Aligned</span>
+      </div>
+    `;
   } else {
-    badgeHtml = `<span class="role-badge assigned-neither">Discuss</span>`;
+    // Red X for disagreement
+    badgeHtml = `
+      <div class="flex items-center gap-2">
+        <span class="text-2xl text-red-500">✗</span>
+        <span class="text-xs text-red-600 font-medium">Discuss</span>
+      </div>
+    `;
   }
 
   // Perspective Icons/Pills
